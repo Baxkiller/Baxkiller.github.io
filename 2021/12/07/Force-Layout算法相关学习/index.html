@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/ico.ico >
+    <title>
+        Blog | Baxkiller
+    </title>
+    <meta name="description" content= Hey Bro! Here's Baxkiller's Blog Site. >
+    <meta name="keywords" content= Blog,Hexo,Theme,Baxkiller,Coder >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            Force-Layout算法相关学习
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="力导图"><a href="#力导图" class="headerlink" title="力导图"></a>力导图</h1><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><ul>
+<li><p>给定一个社交网络的例子.</p>
+<blockquote>
+<p>In the case of network visualization, we compute the layout using a similar physical simulation: nodes in the network act as charged particles that repel each other, while links act as springs that pull related nodes together.</p>
+</blockquote>
+<p>也就是,我们认为,在社交网络中,节点之间的相互作用是相当于<strong>带电粒子之间的相互斥力</strong>,而节点之间的连线是<strong>相当于弹簧的拉力,将两个节点聚拢引力.</strong></p>
+</li>
+<li><p>带来的缺点</p>
+<p>用这种方法需要计算任意两个点之间的相互作用力,花费时间更多.达到O(n^2^)级别.这样每次增加一个点,都需要进行大量的冗余计算.(因为存在一些点距离新添加点的距离非常相近,计算结果大致相同)</p>
+</li>
+</ul>
+<h2 id="Barnes-Hut-Approximation-BH近似"><a href="#Barnes-Hut-Approximation-BH近似" class="headerlink" title="Barnes-Hut Approximation(BH近似)"></a>Barnes-Hut Approximation(BH近似)</h2><ul>
+<li><p>具体想法是通过将一组远距离点看作一组,以其质心到给定点的力去近似这一组点的作用力.</p>
+<p>此方案将计算的时间复杂度由O(n^2^)提高到了O(n logn).</p>
+<blockquote>
+<p>The key idea is to approximate long-range forces by replacing a group of distant points with their center of mass. </p>
+</blockquote>
+<p>这种近似的核心是一个空间索引,将一组点抽象成一个单一的质点.在二维空间,使用四叉树去将二维空间递归分割,对应到三维空间,就是使用八叉树将空间递归分割.(想象三维坐标系中的三个坐标平面将整个空间八等分).</p>
+</li>
+<li><p>步骤(二维空间为例)</p>
+<ol>
+<li>通过四叉树,构建空间索引</li>
+<li>计算质心</li>
+<li>模拟力</li>
+</ol>
+</li>
+<li><p>接下来进行具体分析,具体链接参见<a target="_blank" rel="noopener" href="https://jheer.github.io/barnes-hut/">The Barnes-Hut Approximation (jheer.github.io)</a>,</p>
+<h3 id="构建四叉树"><a href="#构建四叉树" class="headerlink" title="构建四叉树"></a>构建四叉树</h3><p>构建四叉树具体参见上述链接中的其中<code>Step1</code>,拖动<code>bar</code>进行动态化演视</p>
+<p>总而言之可以分为如下的部分:</p>
+<ul>
+<li> 初始给定一个点,确定该点所在的位置(一定位于最开始的四大块之一)</li>
+<li> 后续给定点,判断其是否在当前已经划分好的方格内且自己独占一格不与其他点公用一格,如果不是,继续向下划分,直到这个新给定的点独自在一个方格内.</li>
+<li> 到最后,每个点都有独属于自己的小方格.小方格的大小代表该点在四叉树中的层数.小方格越小,层数越深.</li>
+</ul>
+<h3 id="计算质心"><a href="#计算质心" class="headerlink" title="计算质心"></a>计算质心</h3><p>一个单元格的质心,是它的四个子单元格质心的加权平均.     </p>
+<p>进行计算时,选择从最底层的叶子节点逐级向上进行遍历.</p>
+<p>当遍历结束,每个单元格都有了其自己的质心位置和大小(权重信息).</p>
+<h3 id="模拟N体力"><a href="#模拟N体力" class="headerlink" title="模拟N体力"></a>模拟N体力</h3><p>具体参见<a target="_blank" rel="noopener" href="https://jheer.github.io/barnes-hut/#:~:text=Rather%20than%20compute%20interactions%20among%20individual%20points%2C%20we%20can%20compute%20interactions%20with%20centers%20of%20mass%2C%20using%20smaller%20quadtree%20cells%20for%20nearer%20points%20and%20larger%20cells%20for%20more%20distant%20points.">链接</a></p>
+<blockquote>
+<p>Rather than compute interactions among individual points, we can compute interactions with centers of mass, <strong>using smaller quadtree cells for nearer points</strong> and <strong>larger cells for more distant points</strong>.</p>
+<p>At this point we’ve skipped a critical detail: what constitutes “long-range” versus “short-range” forces? We consider both the <em>distance</em> to the center of a quadtree cell and that cell’s <em>width</em>. If the ratio <em><strong>width / distance</strong></em> falls <strong>below</strong> a chosen threshold (a parameter named <em><strong>theta</strong></em>), we treat the quadtree cell as a source of **long-range **forces and use its center of mass. Otherwise, we will recursively visit the child cells in the quadtree.</p>
+</blockquote>
+<p>相较于计算个体之间的作用力,这里我们更倾向于通过质心进行计算.</p>
+<p>对于要进行计算的质心选择:例如给定一个任意点<code>A</code>,我们依次从最高层到下层去遍历单元格中心到给定点<code>A</code>的距离.将当前遍历到的单元格长度<code>width</code>与这个单元格中心到<code>A</code>的距离<code>distance</code>相除.</p>
+<ul>
+<li>如果<strong>小于</strong>一个给定参数<strong>theta</strong>,我们认为<code>distance</code>更大,因此要使用该单元格的质心去近似.并且不再对该单元进行更深层的子单元格递归判断.</li>
+<li>如果<strong>大于</strong>一个给定参数<strong>theta</strong>,认为<code>distance</code>较小,因此要继续向下,判断该单元格的子单元格.判断方式同上.直到到达一个点.</li>
+</ul>
+<p>判断远近的条件是通过判断 <strong>被遍历单元格中心/单元格到给定点的距离</strong>,当距离越近,这个值越大,就越容易被认为是相近点,越要向下细分.</p>
+</li>
+</ul>
+<h2 id="表现分析"><a href="#表现分析" class="headerlink" title="表现分析"></a>表现分析</h2><p>从运行时间和力模拟的精确度两个方向进行分析.</p>
+<ul>
+<li><p>运行时间</p>
+<ul>
+<li><p>数据集大小:500-10000.</p>
+</li>
+<li><p>更改参数:theta</p>
+</li>
+<li><p>每组数据集中测试次数:50次</p>
+</li>
+</ul>
+<img src="https://img-blog.csdnimg.cn/0da2177bc1bd459689a2ddfd2812b9ff.png" alt="image-20211029003544107" style="zoom:67%;" />
+
+<ul>
+<li><p>结论</p>
+<p>确实可以提高速度.并且随着参数<code>theta</code>增大,运行速度增快.</p>
+<p>初始的方法其实可以看做是<code>theta=inf</code>的特殊情况.这样每个点都要精确到本身而不是单元格.</p>
+</li>
+</ul>
+</li>
+<li><p>近似误差</p>
+<ul>
+<li><p>纵坐标代表初始算法结果与<code>BH近似</code>的结果之间的像素点位置差异值</p>
+<img src="https://img-blog.csdnimg.cn/f1ed97a559d24538a1f58c2d18599a5a.png?" alt="image-20211029004310133" style="zoom: 67%;" /></li>
+<li><p>结论</p>
+<p>上述给出的是平均误差,虽然最大之后5%左右,但具体到某个点上,误差可能很大.因此还应关注最大误差值.</p>
+<p>相对而言,<code>theta=1</code>的效果最好.(默认值)</p>
+<blockquote>
+<p>These results suggest that a good default value for theta — with low running time <em>and</em> low approximation error — is around 1.0. Indeed</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>最后的结论就是该算法相当棒!:thumbsup:</p>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <p><h4>© 2021 Baxkiller Powered By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
