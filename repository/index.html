@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Projects🏭</title>
     <link rel="shortcut icon" href="../img/ico.ico">
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -14,18 +14,19 @@
             /*width:80%;*/
             /*height: 100%;*/
             padding: 40px;
+            display: flex;
 
         }
 
         .img-container-href img {
-            width: 100%;
+            width: 20vw;
             height: 20vw;
             border-radius: 10px;
             z-index: -1;
         }
 
         .text-on-image {
-            width: 100%;
+            width: 20vw;
             height: 20vw;
             border-radius: 10px;
             text-align: center;
@@ -45,6 +46,14 @@
             margin: 0;
         }
 
+        .flex-container {
+            display: -webkit-flex; /* Safari */
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
     </style>
 </head>
 <body>
@@ -53,9 +62,7 @@
     <h2>参与的一些项目🎉</h2>
 </div>
 <div style="text-align: center;z-index: -1;font-weight: bold;">
-    <table style="width: 80%; margin:0 10%;position: absolute">
-        <tr style="height: 50%">
-            <td>
+    <div class="flex-container">
                 <div class="img-container-href">
                     <a href="../repos/vis3" target="_blank">
                         <div class="text-on-image">
@@ -65,8 +72,6 @@
                         </div>
                     </a>
                 </div>
-            </td>
-            <td>
                 <div class="img-container-href">
                     <a href="./" target="_blank">
                         <div class="text-on-image">
@@ -74,8 +79,6 @@
                         </div>
                     </a>
                 </div>
-            </td>
-            <td>
                 <div class="img-container-href">
                     <a href="" target="_blank">
                         <div class="text-on-image">
@@ -83,10 +86,6 @@
                         </div>
                     </a>
                 </div>
-            </td>
-        </tr>
-        <tr style="height: 50%">
-            <td>
                 <div class="img-container-href">
                     <a href="" target="_blank">
                         <div class="text-on-image">
@@ -95,8 +94,6 @@
                         </div>
                     </a>
                 </div>
-            </td>
-            <td>
                 <div class="img-container-href">
                     <a href="" target="_blank">
                         <div class="text-on-image">
@@ -104,8 +101,6 @@
                         </div>
                     </a>
                 </div>
-            </td>
-            <td>
                 <div class="img-container-href">
                     <a href="" target="_blank">
                         <div class="text-on-image">
@@ -113,9 +108,7 @@
                         </div>
                     </a>
                 </div>
-            </td>
-        </tr>
-    </table>
+    </div>
 </div>
 <script>
     $(document).ready(function () {

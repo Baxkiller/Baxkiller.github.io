@@ -111,7 +111,7 @@ function DrawBar(d,barName,province,minYear,maxYear)
         // 获取画布
         BarSVG.selectAll('rect').remove()
         BarSVG
-            .attr("width",width)
+            .attr("width","100%")
             .attr("hegiht",height)
             .attr("viewbox",[0,0,width,height]);
 
