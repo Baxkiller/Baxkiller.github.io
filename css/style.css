@@ -19,6 +19,7 @@ a:hover {
   text-align: center;
   margin-top: 30px;
   color: #ccc;
+  font-size: 10px;
 }
 .clear {
   clear: both;
