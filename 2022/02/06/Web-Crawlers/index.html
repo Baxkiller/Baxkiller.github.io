@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/ico.ico >
+    <title>
+        Blog | Baxkiller
+    </title>
+    <meta name="description" content= Hey Bro! Here's Baxkiller's Blog Site. >
+    <meta name="keywords" content= Blog,Hexo,Theme,Baxkiller,Coder >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            Web_Crawlers
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="Crawler"><a href="#Crawler" class="headerlink" title="Crawler"></a>Crawler</h1><h2 id="1-准备工作-查看对应的url"><a href="#1-准备工作-查看对应的url" class="headerlink" title="1. 准备工作 查看对应的url."></a>1. 准备工作 查看对应的<code>url</code>.</h2><p>发送请求路径后,返回的是一个<code>html</code>网页得源代码,将信息从网页源代码中提取出来.</p>
+<p>对于网页资源得请求是持续得,而不是一下子就能够返回整个网页得.</p>
+<p>使用谷歌浏览器,在控制台界面选择<code>NetWork</code>,选择时间轴上的信息,然后点击<code>Name</code>中选定的内容,出现的<code>Headers</code>就是<strong>我们发送给服务器</strong>的内容.具体<strong>服务器发送给本地</strong>的内容存在于<code>Headers</code>旁边的<code>Response</code>模块.</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P1.png" alt="P1"></p>
+<p>其中的<code>Headers</code>中的内容,拉到最后,有一个<code>User-Agent</code>指代用户代理,也就是浏览器版本内容等等.</p>
+<ul>
+<li>表明当前浏览器可接受的界面类型对应的浏览器版本.例如上图中的<code>Mozilla</code>指代当前谷歌浏览器可以接受适配于<code>Mozila</code>浏览器的内容.</li>
+<li>还可以表明当前计算机相关的内容,例如<code>Windows NT 10.0</code>代表当前使用的是<code>Win10</code>操作系统,64位版本.</li>
+<li><code>Cookie</code>:想要爬取登录后才能查看的内容,必须先设置操作好<code>Cookie</code>.</li>
+</ul>
+<h2 id="2-层级结构"><a href="#2-层级结构" class="headerlink" title="2. 层级结构"></a>2. 层级结构</h2><p>根据控制台界面上特定元素的定位信息,来确定要爬取内容的层级结构.</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P2.png" alt="P2"></p>
+<h2 id="3-编码规范"><a href="#3-编码规范" class="headerlink" title="3. 编码规范"></a>3. 编码规范</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br></pre></td></tr></table></figure>
+
+<p>Python文件中可以加入main函数用于测试程序:</p>
+<p>用来定义程序的入口地址或者说程序开始运行的第一个函数位置.相对更加清楚地看到程序地流程.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	<span class="comment"># 巴拉巴拉</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>引入外部库</p>
+<p>引入本地生成的函数文件.</p>
+<p>应当是从文件夹中引入文件.例如下图中,从文件夹<code>test1</code>中引入文件<code>t1</code>.</p>
+<p>使用文件中的函数直接通过<code>.</code>运算符计科完成.</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P3.png" alt="P3"></p>
+<p>常用的是引入外部模块</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> bs4 <span class="comment"># 网页解析获取数据</span></span><br><span class="line"><span class="keyword">import</span> re  <span class="comment"># 正则表达式,文字匹配</span></span><br><span class="line"><span class="keyword">import</span> urllib.request,urllib.error <span class="comment"># 指定url,获取网络数据</span></span><br><span class="line"><span class="keyword">import</span> xlwt <span class="comment"># 进行excel操作</span></span><br><span class="line"><span class="keyword">import</span> sqlite3 <span class="comment"># 进行SQLite 数据库操作</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="4-整体流程"><a href="#4-整体流程" class="headerlink" title="4. 整体流程"></a>4. 整体流程</h2><ol>
+<li><p>爬取网页</p>
+</li>
+<li><p>解析数据</p>
+<p>数据解析通常是逐一解析数据,与爬取网页通常是共同存在的,同步地</p>
+</li>
+<li><p>保存数据</p>
+</li>
+</ol>
+<h2 id="5-爬虫伪装"><a href="#5-爬虫伪装" class="headerlink" title="5. 爬虫伪装"></a>5. 爬虫伪装</h2><p>发送请求时对对象封装.</p>
+<p>通常选择将发送<code>Request</code>对象中的<code>headers</code>设置为浏览器的样式.</p>
+<h2 id="6-函数详解"><a href="#6-函数详解" class="headerlink" title="6. 函数详解"></a>6. 函数详解</h2><ul>
+<li><p><code>askURL(url)</code> </p>
+<p>返回单个<code>url</code>的页面内容.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 爬取指定一个url的网页信息</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">askURL</span>(<span class="params">url, method = <span class="string">&quot;GET&quot;</span></span>):</span></span><br><span class="line">    header = &#123;</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 &quot;</span></span><br><span class="line">                      <span class="string">&quot;Safari/537.36&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    req = urllib.request.Request(url = url, headers = header, method = method)</span><br><span class="line">    html = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        responce = urllib.request.urlopen(req)</span><br><span class="line">        html = responce.read().decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> urllib.error.URLError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 判断是否含有属性`code`,也就是查看返回的错误信息是否是有代码例如`404`</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(e, <span class="string">&quot;code&quot;</span>):</span><br><span class="line">            <span class="built_in">print</span>(e, <span class="string">&quot;code&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(e, <span class="string">&quot;reason&quot;</span>):</span><br><span class="line">            <span class="built_in">print</span>(e, <span class="string">&quot;reason&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> html</span><br></pre></td></tr></table></figure>
+
+<p>返回的相当于是字符串.</p>
+<p>该函数需要调用25次,来爬取25个范围.</p>
+</li>
+<li><p><code>getData(baseurl)</code></p>
+<p>给定基本的<code>url</code>,例如本实验中是<code>&quot;https://movie.douban.com/top250?start=&quot;</code>,每次增加都只需要更改<code>start</code>的内容.</p>
+<p>通过循环,爬取多个页面,每次都对爬取到的页面内容进行解码解析,将需要的内容存放在容器中,然后返回这个容器.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首先是爬取每一个网页的内容</span></span><br><span class="line"><span class="comment"># 因为时循环爬取,所以这里仅给定循环中的内容</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">	url=baseurl+<span class="built_in">str</span>(i*<span class="number">25</span>)</span><br><span class="line">	<span class="comment"># 获取url对应内容</span></span><br><span class="line">	pagecontent=askurl(url)</span><br><span class="line">	<span class="comment"># 对内容进行解析</span></span><br><span class="line">	soup=BeautifulSoup(pagecontentm<span class="string">&quot;html.parser&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>此时获取到的是<code>soup</code>,可以对内容进行解析筛选,得到我们想要的数据了.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 筛选内容</span></span><br><span class="line"><span class="comment"># 首先将所有要找的信息所在的大框架找到</span></span><br><span class="line"><span class="comment"># 例如本实例中,找到的信息都存在于&lt;div class=&quot;item&quot;&gt;中</span></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;div&#x27;</span>, class_ = <span class="string">&quot;item&quot;</span>):</span><br><span class="line">    data = []  <span class="comment"># 一部电影的所有信息</span></span><br><span class="line">    item = <span class="built_in">str</span>(item)</span><br><span class="line">    <span class="comment"># 然后通过创建正则匹配模式,对想要的内容进行匹配</span></span><br><span class="line">    link = re.findall(findLink, item)[<span class="number">0</span>]  <span class="comment"># 此时找到的就是电影的详情页链接</span></span><br><span class="line">    imgSrc = re.findall(findImgSrc, item)[<span class="number">0</span>]</span><br><span class="line">    name = re.findall(findName, item)[<span class="number">0</span>]</span><br><span class="line">    otherName = re.findall(findOtherName, item)[<span class="number">0</span>].replace(<span class="string">&#x27;\xa0&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    rating = re.findall(findRating, item)[<span class="number">0</span>]</span><br><span class="line">    cnt = re.findall(findCnt, item)[<span class="number">0</span>]</span><br><span class="line">    info = re.findall(findInfo, item)[<span class="number">0</span>].strip().replace(<span class="string">&#x27;\xa0&#x27;</span>,<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    quote = re.findall(findQuote, item)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(quote) == <span class="number">0</span>:</span><br><span class="line">    	quote = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        quote = quote[<span class="number">0</span>]</span><br><span class="line">    data.extend([link, imgSrc, name, otherName, rating, cnt, info, quote])</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 创造正则匹配表达,用来确定链接的位置</span></span><br><span class="line">findLink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot;&gt;&#x27;</span>)</span><br><span class="line">findImgSrc = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;img.*src=&quot;(.*?)&quot;&#x27;</span>, re.S)  <span class="comment"># re.S,匹配模式,包含换行符</span></span><br><span class="line">findName = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;title&quot;&gt;(.*?)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findOtherName = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;other&quot;&gt;(.*?)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findRating = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;rating_num&quot; property=&quot;v:average&quot;&gt;(.*?)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findCnt = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span&gt;(\d*)人评价&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findQuote = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;inq&quot;&gt;(.*)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findInfo = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;p class=&quot;&quot;&gt;.*&lt;br/&gt;(.*?)&lt;/p&gt;&#x27;</span>, re.S)</span><br></pre></td></tr></table></figure>
+
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P8.png" alt="P8"></p>
+</li>
+</ul>
+<h1 id="关于用到的库"><a href="#关于用到的库" class="headerlink" title="关于用到的库"></a>关于用到的库</h1><h2 id="整体库"><a href="#整体库" class="headerlink" title="整体库"></a>整体库</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="comment"># 网页解析获取数据</span></span><br><span class="line"><span class="keyword">import</span> re  <span class="comment"># 正则表达式,文字匹配</span></span><br><span class="line"><span class="keyword">import</span> urllib.request,urllib.error <span class="comment"># 指定url,获取网络数据</span></span><br><span class="line"><span class="keyword">import</span> xlwt <span class="comment"># 进行excel操作</span></span><br><span class="line"><span class="keyword">import</span> sqlite3 <span class="comment"># 进行SQLite 数据库操作</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a><code>urllib</code></h2><p><code>urllib</code>的作用是向另一端的服务器发送一个request,然后得到一个<code>responce</code>,这个收到的响应通常等价于上面提到的控制台中的<code>Responce</code>内容.</p>
+<ul>
+<li><p>一般用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用一个get的方式直接获得一个网址</span></span><br><span class="line">baseurl=<span class="string">&quot;http://www.baidu.com&quot;</span></span><br><span class="line">responce=urllib.request().openurl(baseurl)</span><br><span class="line">temp=responce.read().decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最好是先解码(decode,decode会将原本的杂乱信息解码成一个比较规矩的信息)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 通过post方式发送请求获得响应</span></span><br><span class="line"><span class="comment"># 使用网站 httpbin.org</span></span><br><span class="line"><span class="comment"># 需要先提前引入 urllib.parse库</span></span><br><span class="line">data = <span class="built_in">bytes</span>(urllib.parse.urlencode(&#123;<span class="string">&quot;Hello&quot;</span>: <span class="string">&quot;world&quot;</span>&#125;), encoding = <span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">responce = urllib.request.urlopen(<span class="string">&quot;http://httpbin.org/post&quot;</span>, data = data)</span><br><span class="line"><span class="built_in">print</span>(responce.read().decode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>使用post 方式发送请求必须首先设置表单信息(二进制形式)</p>
+<p>也就是信息的转换需要满足:</p>
+<p>首先将内容通过编码,得到<code>utf-8</code>格式的数据,然后通过<code>bytes</code>转换成二进制.</p>
+<p>信息-&gt;编码(通过<code>urllib.parse.urlencode(dict,encoding=)</code>,这里的encoding默认<code>utf-8</code>)-&gt;转换成二进制(通过<code>bytes(info,encoding=)</code>,这里的<code>encoding</code>显示说明且与前面的一致)</p>
+<p>然后再调用<code>urllib.request.urlopen(baseurl,data=)</code></p>
+<p>通过这种方式访问网站得到的信息,并没有经过伪装,因为此时的服务器接收到的内容仍然会显示当前的用户代理为<code>Python-urllib/3.9</code>而不是浏览器的信息.</p>
+<p>伪装方法:发送请求时伪装<code>request.headers(User-Agent=)</code></p>
+</li>
+<li><p>超时控制</p>
+<p>在<code>urllib.request.openurl(baseurl,timeout=)</code></p>
+<p>设置时间上限,如果请求时间超过这个上限而没有接收到应答,停止接受和请求,直接返回一个错误.</p>
+<p>如果在此时间到达之前就返回了响应结果,则没有啥问题.</p>
+<p>在设置爬虫时,需要准备好如何面对超时的问题.例如如果超时,就不去爬取对应的页面.</p>
+<p>可以等到最后再针对性处理</p>
+</li>
+<li><p>请求头解析</p>
+<p>对于返回的<code>responce</code>,先不去直接<code>read</code>全部内容,而是直接选择性读取.</p>
+<p>例如读取状态码:<code>responce.status</code>会输出获得到的返回状态码.</p>
+<p>使用<code>responce.getheaders()</code>获得<strong>响应头</strong>信息,以列表形式返回.</p>
+<p>获得状态头中的特定部分的信息:例如获取服务器信息<code>responce.getheaders(&quot;Server&quot;)</code></p>
+<p>发送请求头:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">&quot;http://www.baidu.com&quot;</span></span><br><span class="line">data = <span class="built_in">bytes</span>(urllib.parse.urlencode(&#123;<span class="string">&quot;USER&quot;</span>: <span class="string">&quot;ME&quot;</span>&#125;), encoding = <span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">req = urllib.request.Request(url = url, data = data, headers = header, method = <span class="string">&quot;POST&quot;</span>)</span><br><span class="line">response</span><br></pre></td></tr></table></figure>
+
+<p>其中的<code>headers</code>中的用户代理信息来自与浏览器控制台</p>
+<p>一般发送请求信息时,如果要伪装成了浏览器,只需要将用户头信息中的<code>Agent</code>改掉即可.</p>
+<p>在这里的实验中,尝试通过更改<code>header</code>访问豆瓣,成功得到了所有的信息,然后将其进行解码并写入文件,可以得到最终的网页.</p>
+<p><strong>注:</strong></p>
+<p>在得到网页时,想要将其写入一个文件,但是报错:</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20211130093347980.png" alt="image-20211130093347980"></p>
+<p>搜索解决办法后,发现<a href="%5B%E3%80%90python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E3%80%91%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E6%8C%87%E5%AE%9A%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F%EF%BC%8C%E4%BE%8B%E5%A6%82utf-8_%E8%8B%A5%E6%B0%B42018%E7%9A%84%E5%8D%9A%E5%AE%A2-CSDN%E5%8D%9A%E5%AE%A2%5D(https://blog.csdn.net/qq_42152399/article/details/80996451)">传送门</a>,然后进行了修改:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;Douban.html&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>更改为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f = codecs.<span class="built_in">open</span>(<span class="string">&quot;Douban.html&quot;</span>, <span class="string">&quot;w&quot;</span>, encoding = <span class="string">&quot;utf-8&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果完全可行,将爬取到的内容全部写入了文件中.</p>
+</li>
+</ul>
+<h2 id="bs4"><a href="#bs4" class="headerlink" title="bs4"></a><code>bs4</code></h2><ul>
+<li><p><code>bs4.BeautifulSoup</code></p>
+<p>按照选择的解析器,解析给定的二进制文件的内容.</p>
+<p>例如当前有一个二进制文件<code>content</code></p>
+<p>使用时:<code>bs=BeautifulSoup(content,&quot;html.parser&quot;)</code></p>
+<p>其中的<code>&quot;html.parser&quot;</code>是指定解析器为解析<code>html</code>的内容.</p>
+<p>使用时返回的<code>bs</code>是一个树形对象.</p>
+<p>例如要获取其中的title信息,则使用<code>bs.title</code>,返回值为<code>&lt;title&gt;豆瓣&lt;/title&gt;</code></p>
+<p>如果不想要标签存在的话,增加一个<code>bs.title.string</code>,返回<code>豆瓣</code></p>
+<p>问题是,<strong>每次都只会返回找到的第一个给定类型的标签</strong>.</p>
+<ul>
+<li><p>获取title信息</p>
+<p><code>bs.title</code></p>
+</li>
+<li><p>获取某标签的属性信息</p>
+<p><code>bs.a.attrs</code></p>
+<p>返回的是字典类型,每一个名称对应一个键值,例如:</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20211130103643634.png" alt="image-20211130103643634"></p>
+</li>
+<li><p>获得字符串</p>
+<p><code>bs.title.string</code></p>
+<p>这里实际的返回值类型并不是字符串,而是其bs中的对象</p>
+</li>
+<li><p>注释类型</p>
+<p><code>bs4.element.Comment</code></p>
+<p>自动去除注释的左右封闭标签,只保留文本内容.</p>
+<p>与<code>bs4.element.NavigatableString</code>的区别在于类型不同</p>
+</li>
+<li><p>文档的遍历</p>
+<p>传送门:</p>
+<p><a target="_blank" rel="noopener" href="https://beautifulsoup.readthedocs.io/zh_CN/v4.4.0/#id18">Beautiful Soup 4.4.0 文档 — Beautiful Soup 4.2.0 中文 文档</a></p>
+</li>
+<li><p><strong>文档的搜索</strong></p>
+<p>定位想要的内容.</p>
+<p><code>find_all</code>的返回值通常是数组类型.</p>
+<ul>
+<li><p><code>find_all(index)</code></p>
+<p>字符串过滤,会查找与字符串完全匹配的内容</p>
+<p><code>bs.find_all(&quot;a&quot;)</code></p>
+</li>
+<li><p><code>search(正则表达式)</code></p>
+<p>实际上还是使用<code>find_all(re.compile(&quot;a&quot;))</code></p>
+<p>相当于符合正则匹配的内容,例如含有<code>&quot;a&quot;</code></p>
+</li>
+<li><p>方法搜索(传入函数,根据函数要求搜索)</p>
+<p>例如查找所有含有<code>name</code>属性的内容:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">name_is_exists</span>(<span class="params">tag</span>):</span></span><br><span class="line">	<span class="keyword">return</span> tag.has_attr(<span class="string">&quot;name&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>使用如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bs.find_all(name_is_exists)</span><br></pre></td></tr></table></figure></li>
+<li><p>参数搜索</p>
+<p><code>kwargs</code>方法</p>
+<p>相当于传入参数,寻找指定参数的所有东西.</p>
+<ol>
+<li><p>返回符合条件的标签及其子内容.</p>
+<p><code>bs.find_all(id=&quot;head&quot;)</code></p>
+</li>
+<li><p>例如查找含有<code>href</code>的标签:</p>
+<p><code>bs.find_all(href=True)</code></p>
+</li>
+<li><p>查找<code>text参数</code>(文本参数)</p>
+<p><code>bs.find_all(text=&quot;hao123&quot;)</code></p>
+<p>返回的是<code>list</code></p>
+<p>也可以查找不止一个文本,即<code>text=[&quot;hao123&quot;,&quot;abc&quot;]</code></p>
+</li>
+<li><p><code>limit</code>限制查找返回的个数</p>
+<p><code>bs.find_all(&quot;a&quot;,limit=6)</code></p>
+<p>返回查找到的前六个<code>a</code>标签</p>
+</li>
+</ol>
+</li>
+<li><p>选择器搜索</p>
+<p><code>bs.select(&#39;&#39;)</code></p>
+<p>返回指<strong>仍然是列表</strong>的形式</p>
+<p>也可以嵌套搜索,即查找<code>a</code>标签中的类为<code>name</code>的标签,即需要</p>
+<p><code>bs.select(&quot;a[class=&#39;name&#39;]&quot;)</code></p>
+<p>以及</p>
+<p><code>bs.select(&quot;head &gt; title&quot;)</code> </p>
+<p>相当于在树中确定根节点然后找子结点的操作</p>
+<p><code>bs.select(&quot;.abc ~ .aaa&quot;)</code></p>
+<p>查找与<code>abc</code>类同属兄弟节点的<code>aaa</code>类的内容.通过返回值<code>t_list[0].get_text</code>获取其中的文本信息.</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>常用的搜索方式</p>
+<p>在爬虫中主要使用的搜索方式:</p>
+<ul>
+<li><p><code>find_all(&quot;tag&quot;,属性=&quot;属性值&quot;)</code></p>
+<p>需要注意的是,Beatuiful为了避免属性中的<code>class</code>与Python的关键字的<code>class</code>的重合,规定在使用属性中的<code>class</code>时写作<code>class_</code>,举例如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url=<span class="string">&quot;...&quot;</span></span><br><span class="line">resp=requests.get(url)</span><br><span class="line">page=BeautifulSoup(resp.text,<span class="string">&quot;html.parse&quot;</span>)</span><br><span class="line">page.find_all(<span class="string">&quot;div&quot;</span>,class_=<span class="string">&quot;title&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>返回的内容是标签内包含的<strong>所有内容</strong>.</p>
+</li>
+<li><p><code>find_all(&quot;tag&quot;,attrs=&#123;&quot;属性&quot;:&quot;属性值&quot;,[...]&#125;)</code></p>
+<p>通过这种方式,可以进一步定义到更加精确的多属性标签.</p>
+</li>
+<li><p><code>find_all()</code>的返回值可以继续进行嵌套使用<code>find_all()</code></p>
+<p>使用过程中应当注意其对应的返回值,正常情况下返回的结果是一个列表形式.</p>
+<p>通过for循环进行遍历,进一步搜索和提取.</p>
+</li>
+<li><p>获取到想要的属性值和内容</p>
+<ol>
+<li>如果想要获取到标签中的text,可以通过<code>.text</code>获取.</li>
+<li>如果想要得到标签中的属性值例如<code>href</code>,通过<code>.get(&quot;href&quot;)</code>获取</li>
+</ol>
+</li>
+<li><p>如果想要获取到兄弟标签,可以通过调用<code>element.next_sibling</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="re正则表达式"><a href="#re正则表达式" class="headerlink" title="re正则表达式"></a><code>re</code>正则表达式</h2><p>字符串模式.</p>
+<p><strong>建议在正则表达式中,被比较的字符串前面加上<code>r</code>  不用担心转义字符</strong></p>
+<p>常用参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zxin/archive/2013/01/26/2877765.html">传送门</a></p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P4.png" alt="P4"></p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P5.png" alt="P5"></p>
+<hr>
+<p><code>Re</code>库主要功能:</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P6.png" alt="P6"></p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P7.png" alt="P7"></p>
+<p>常用功能:</p>
+<p><code>re.compile(pattern)</code></p>
+<p>预加载,相当于先编译一下匹配的pattern.</p>
+<p>那么在后续的函数使用时,是使用该函数返回的obj进行match.</p>
+<p><code>re.match()</code></p>
+<p>通常只返回找到的<strong>第一个</strong>符合条件的<strong>位置</strong>,并且是从头开始匹配</p>
+<ul>
+<li><p>先创造匹配模式(正则表达式),再对字符串进行匹配</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创造模式对象</span></span><br><span class="line">pat = re.<span class="built_in">compile</span>(<span class="string">&quot;AA&quot;</span>)  <span class="comment"># 这里相当于创造正则表达式  让其他东西来匹配</span></span><br><span class="line">m = pat.search(<span class="string">&quot;ADDCAA&quot;</span>)  <span class="comment"># 返回值对象,其中的span代表位置 返回找到的第一个位置</span></span><br><span class="line"><span class="built_in">print</span>(m)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回值:&lt;re.Match object; span=(4, 6), match=&#x27;AA&#x27;&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>不需要创造匹配模式,只应用于一个字符串</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果不创建模式对象 相对简略</span></span><br><span class="line"><span class="comment"># 前面的是规则,是正则表达式</span></span><br><span class="line">m = re.search(<span class="string">&quot;AA&quot;</span>, <span class="string">&quot;AsdaaAA&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(m)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出:&lt;re.Match object; span=(5, 7), match=&#x27;AA&#x27;&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><code>re.findall()</code></p>
+<p>返回<strong>所有</strong>符合条件的<strong>内容</strong>,返回形式为列表</p>
+<ul>
+<li><p>举例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># findall</span></span><br><span class="line"><span class="comment"># 找到所有的元素返回到列表中</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(<span class="string">&quot;[A-Z]&quot;</span>, <span class="string">&quot;ThisisWords&quot;</span>))  <span class="comment"># 返回所有的大写字母</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(<span class="string">&quot;[A-Z]+&quot;</span>, <span class="string">&quot;DOES this MatchING?&quot;</span>))  <span class="comment"># 返回所有至少有一个的大写字母簇</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><code>re.sub()</code></p>
+<p>将给定的字符串中符合表达式的目标内容替换成给定的内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sub</span></span><br><span class="line"><span class="comment"># 将前面的换成后面的</span></span><br><span class="line"><span class="built_in">print</span>(re.sub(<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;What are you talking?&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>re.finditer(pattern,string)</code></p>
+<p>返回的是一个迭代器指针,通过for循环可以一次访问指针的内容,包括匹配结果字符串<code>match</code>和位置<code>span</code></p>
+<p><code>re.search(pattern,string)</code></p>
+<p>返回的相当于是<code>finditer</code>函数返回的迭代器指针指向的内容,且是第一个.</p>
+<p>这种东西称之为match对象,从match对象中拿数据,需要使用<code>.group()</code>方法,但返回的可能不是我们想要的,而是存在冗余信息.那么如果获取我们想要的特定内容,可以在想要获取的内容前面增加以下代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(?P&lt;varName&gt;.*?)</span><br></pre></td></tr></table></figure>
+
+<p>这样,匹配的内容将会被放在<code>varName</code>中,然后在使用时,可以通过<code>.group(&quot;varName&quot;)</code>进行获取.</p>
+<p>例子:<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220224235237631.png" alt="image-20220224235237631" style="zoom:67%;" /></p>
+<p><code>re.S</code>等状态位</p>
+<p>可以在编译也就是预加载的时候进行处理,用来防止换行的出现</p>
+<h2 id="XPATH"><a href="#XPATH" class="headerlink" title="XPATH"></a><code>XPATH</code></h2><p>是在XML文档中搜索内容的一门语言,相对简单,爬虫多用.</p>
+<p>节点关系与树形结构类似.含有父结点,子结点,同胞节点的概念.</p>
+<p>采用类文件夹路径的方式进行查找.</p>
+<blockquote>
+<p>pip install lxml</p>
+</blockquote>
+<p>进行内容获取时,通过调用其中的<code>etree</code></p>
+<p>例如:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line">xml=<span class="string">&quot;&quot;</span></span><br><span class="line">tree=etree.XML(xml[,parser,base_url])</span><br></pre></td></tr></table></figure>
+
+<p>其中除了可以应用于<code>XML</code>之外,还可以</p>
+<ul>
+<li>直接指定<code>etree.HTML(text,parser,base_url)</code>解析<code>HTML</code></li>
+<li>指定<code>etree.parse(source,parser,base_url)</code>解析文件</li>
+</ul>
+<p>层级结构:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result=tree.xpath(<span class="string">&quot;/book/author/nick/text()&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>text()</code>进行内容的提取,只完全根据路径信息进行提取,返回的是一个列表list.</p>
+<p>如果想要获取某个层级下的所有的后代节点,通过</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result=tree.xpath(<span class="string">&quot;/book/author//nick/text()&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果是找到<code>author</code>下的所有后代<code>nick</code>节点</p>
+<p>如果想要进行层级的跳跃,例如我不关心儿子节点是什么,我只关心孙子节点,那么使用通配符<code>*</code></p>
+<p>举例:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result=tree.xpath(<span class="string">&quot;/book/author/*/nick/text()&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果我只想要获取到的若干中间节点<code>x</code>中的第n个**(从1开始计数)**,那么可以写作:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result=tree.xpath(<span class="string">&quot;/a/b/.../x[n]/...&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果想要获取到中间节点<code>x</code>的某个属性值<code>attr</code>为<code>value</code>的中间节点.那么可以写作:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result=tree.xpath(<span class="string">&quot;/a/b/.../x[@attr=&#x27;value&#x27;]/...&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>想要在对获得到的所有标签进行遍历时,进一步进行相关搜索,可以通过:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result=tree.xpath(<span class="string">&quot;/html/.../&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> per_line <span class="keyword">in</span> result:</span><br><span class="line">	per_line.xpath(<span class="string">&quot;./li/...&quot;</span>) <span class="comment"># 关键点就在于.</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>获取拿到的标签的属性值:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">per_line.xpath(<span class="string">&quot;./a/@href&quot;</span>) <span class="comment"># 获取到a标签中的href值</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>综合来说</strong></p>
+<ul>
+<li><code>/text()</code>获取内容</li>
+<li><code>//</code>所有后代</li>
+<li><code>/*/</code>不关心孩子节点</li>
+<li><code>[n]</code>顺序的筛选</li>
+<li><code>[@xxx=]</code>属性的筛选</li>
+<li><code>./</code>继续进行搜索</li>
+<li><code>/@xxx</code>获取对应的属性值</li>
+</ul>
+<p><strong>小技巧:</strong></p>
+<p>可以通过抓包工具中获取一个标签的XPATH路径,然后进行微调即可获取同级的内容.</p>
+<h2 id="requests"><a href="#requests" class="headerlink" title="requests"></a><code>requests</code></h2><ul>
+<li><p>该库的使用中,需要注意在完成一个请求,得到返回值后,要及时关闭响应.</p>
+<p>通过使用<code>responce.close()</code>关闭当前响应</p>
+</li>
+<li><p>常使用的函数内容包括<code>request.get(url,header,params)</code>以及<code>request.post(url,data,cookies)</code></p>
+</li>
+</ul>
+<p><strong>进阶使用</strong></p>
+<ol>
+<li><p>cookie处理    </p>
+<p>可以通过<code>session</code>进行请求.(会话)</p>
+<p><code>session</code>的特点是,可以发送一连串的请求且这一连串的请求中的cookie不会丢失.</p>
+<p>因此我们的步骤是:</p>
+<ol>
+<li>登录-&gt;得到cookie</li>
+<li>带着cookie请求后续内容</li>
+</ol>
+<p>需要首先创建一个session对象,该对象具有<code>get</code>和<code>post</code>方法</p>
+</li>
+<li><p>防盗链处理</p>
+</li>
+<li><p>代理(IP)</p>
+</li>
+</ol>
+<h1 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h1><h2 id="web请求解析全过程"><a href="#web请求解析全过程" class="headerlink" title="web请求解析全过程"></a>web请求解析全过程</h2><ol>
+<li><p>服务器渲染</p>
+<p>在服务器方将数据与html整合,统一返回给浏览器.</p>
+</li>
+<li><p>客户端渲染(浏览器方)</p>
+<p>如果显示时含有某些内容,而在html的源代码中并没有直接出现该内容,属于客户端渲染.</p>
+<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220207171859471.png" alt="image-20220207171859471" style="zoom:67%;" />
+
+<p>在浏览器方,将html骨架与数据结合在一起.</p>
+<p>第一次请求只需要一个html股价,然后其中包含脚本,再次向服务器段请求数据.</p>
+<p>第二次的请求可以得到数据,然后将数据与脚本结合,展示出来.</p>
+<p>以豆瓣电影中的喜剧片排行榜为例:</p>
+<blockquote>
+<p>第一次请求得到的html框架如下所示:</p>
+<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220207173033659.png" alt="image-20220207173033659" style="zoom: 80%;" />
+
+
+
+<p>第二次请求得到的数据,通过json文件的形式返回:</p>
+<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220207173157863.png" alt="image-20220207173157863" style="zoom:67%;" />
+</blockquote>
+<p>第一次请求得到的骨架并不是我们所期望得到的.    </p>
+</li>
+</ol>
+<h2 id="http协议"><a href="#http协议" class="headerlink" title="http协议"></a>http协议</h2><p>全称超文本传输协议. </p>
+<p>http协议的请求和响应都是分为三大块.</p>
+<p>请求:</p>
+<blockquote>
+<p>请求行-&gt; 请求方式,请求url地址,协议.</p>
+<p>请求头-&gt; 放一些服务器要使用的附加信息</p>
+<p>请求体-&gt; 放一些请求参数.</p>
+</blockquote>
+<p>响应:</p>
+<blockquote>
+<p>状态行-&gt; 协议,状态码</p>
+<p>响应头-&gt; 放一些客户端要使用的一些附加信息.(密钥/cookie)</p>
+<p>响应体-&gt; 服务器返回的真正客户端要用的内容.(HTML,JSON等)</p>
+</blockquote>
+<p>请求头中常见的重要内容:</p>
+<ol>
+<li>user-agent:请求载体的身份信息.</li>
+<li>referer: 防盗链(这次请求是从哪个页面来的.用于反爬虫).</li>
+<li>cookie:本地字符串数据信息(用户登录信息,反爬的token)</li>
+</ol>
+<p>响应头中的重要信息:</p>
+<ol>
+<li>cookie: 本地字符串数据信息(用户登录信息,反爬虫的token)</li>
+<li>各种莫名其妙的字符串(一般都是token字样,防止各种攻击和反爬)</li>
+</ol>
+<p>请求方式:</p>
+<ul>
+<li><p>get:显示提交</p>
+<p>例如查询.地址栏的内容变动获取到的东西不同,统一属于<code>GET</code>方式提交.</p>
+<p>关键点在于,获取内容时传递的参数是通过url进行传递的.比如这里的<code>query=</code></p>
+<p><strong>小妙招:通过f’<a target="_blank" rel="noopener" href="https://www.sougou.com/query=%7Bquery%7D&#39;%E5%8F%AF%E4%BB%A5%E8%BF%9B%E8%A1%8C%E5%8F%82%E6%95%B0%E7%9A%84%E4%BC%A0%E9%80%92,%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%9C%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC">https://www.sougou.com/query={query}&#39;可以进行参数的传递,也就是在字符串中使用变量的值</a></strong></p>
+<blockquote>
+<p>给定一个地址url,通过get方式发送请求request.</p>
+<p>这里使用到了request库中的get(url),返回值是响应responce</p>
+<p>可以通过responce.text获取到网页的源代码.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>():</span></span><br><span class="line"> url = <span class="string">&#x27;https://www.sogou.com/web?query=周杰伦&#x27;</span></span><br><span class="line"> headers = &#123;</span><br><span class="line">     <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.56&quot;</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> resp = requests.get(url, headers = headers)</span><br><span class="line"> <span class="built_in">print</span>(resp) <span class="comment"># 返回的是状态码</span></span><br><span class="line"> <span class="built_in">print</span>(<span class="string">&quot;------------------------&quot;</span>)</span><br><span class="line"> <span class="built_in">print</span>(resp.text) <span class="comment"># 查看的是网页得源代码</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"> test()</span><br><span class="line"> <span class="built_in">print</span>(<span class="string">&quot;Finished!&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p>post:隐示提交</p>
+<p>请求提交时,发送的数据是通过表单中的数据进行传递的.</p>
+<p>对于POST类型的参数传递,通过<code>requset.post(url=,data=)</code></p>
+<p>返回结果通过<code>responce.json()</code>可以直接得到.</p>
+<p>想要获得什么数据,就去浏览器抓包工具中找到想要获得的数据.然后查看该数据的标头,得到<strong>请求url和请求方法</strong>,然后通过爬虫进行爬取.</p>
+<blockquote>
+<p>百度翻译中的单个单词翻译为例:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># post内容发送时,一定要放在字典中进行参数的传递</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">translateBaidu</span>(<span class="params">content</span>):</span></span><br><span class="line"> <span class="keyword">if</span> <span class="built_in">len</span>(content) &lt;= <span class="number">1</span>:</span><br><span class="line">     <span class="built_in">print</span>(<span class="string">&quot;请重新输入翻译内容:&quot;</span>)</span><br><span class="line">     <span class="keyword">return</span></span><br><span class="line"> url = <span class="string">&#x27;https://fanyi.baidu.com/sug&#x27;</span></span><br><span class="line"> dat = &#123;</span><br><span class="line">     <span class="string">&quot;kw&quot;</span>: content</span><br><span class="line"> &#125;</span><br><span class="line"> header = &#123;</span><br><span class="line">     <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.56&quot;</span></span><br><span class="line"> &#125;</span><br><span class="line"> reps = requests.post(url = url, data = dat)</span><br><span class="line"> <span class="built_in">print</span>(reps.json()) <span class="comment"># 返回的内容直接处理成json</span></span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p>两者的区分</p>
+<p>两种方式的区分可以通过浏览器的<code>F12</code>窗口的抓包工具进行区分.</p>
+<p>这里举例:</p>
+<blockquote>
+<p>以百度翻译为例.</p>
+<p>当输入一个英文单词时,查看F12中的网络选项,在输入之前通过下图按钮清楚请求得到的响应内容.</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220145923300.png" alt="image-20220220145923300"></p>
+<p>然后输入,输入完成后查看网络中得到的数据.</p>
+<p>这里以输入单词后的单词翻译和提示来讲,可以找到<strong>xhr</strong>类型的返回值,确定是我们要找的单词的翻译.</p>
+<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220150116312.png" alt="image-20220220150116312" style="zoom:80%;" />
+
+<p>点击内容,查看预览.与目标内容相符</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220150217352.png" alt="image-20220220150217352"></p>
+<p>点击标头,查看发送请求的url.</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220151045559.png" alt="image-20220220151045559"></p>
+<p>可以发现URL中并没有我们请求的参数.并且在请求方法中已经明确了是<code>POST</code>.接下来去<code>Payload</code>或者标头页面的最底下找到参数传递:</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220151228517.png" alt="image-20220220151228517"></p>
+<p>注意字典格式.根据这个格式进行数据传递.</p>
+<p>返回值如果要打印,可以直接使用<code>resp.json()</code>打印获得的<strong>xhr</strong>类型数据</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="实战举例"><a href="#实战举例" class="headerlink" title="实战举例"></a>实战举例</h1><h2 id="爬取豆瓣某分类的榜单"><a href="#爬取豆瓣某分类的榜单" class="headerlink" title="爬取豆瓣某分类的榜单"></a>爬取豆瓣某分类的榜单</h2><ol>
+<li><p>首先从抓包工具中查找是否具有相关的内容,确定渲染类型.</p>
+<p>根据下图可以发现,该榜单内容属于浏览器端渲染.因此可以直接截取到相关的json文件.</p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220192119486.png" alt="image-20220220192119486"></p>
+</li>
+<li><p>其次,根据上图,查看对应文件的标头,得知请求方法.根据下图来看,可以知道是<code>GET</code>类型.因此可以直接通过向对应链接使用<code>request.get(url=url,headers=headers)</code></p>
+<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220192431545.png" alt="image-20220220192431545"></p>
+</li>
+<li><p>查看是否存在参数的传递</p>
+<p>查看对应的<code>Payload</code>,可以发现这里存在着参数传递.</p>
+<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220192711638.png" alt="image-20220220192711638" style="zoom:80%;" /></li>
+<li><p>综合</p>
+<p>综上来看,确定要获取内容形式如下:</p>
+<p>以<code>https://movie.douban.com/j/chart/top_list</code>作为基础链接,问号后的内容实际上是参数的传递.因此可以确定我们要使用的函数为:</p>
+<p><code>request.get(url=baseurl,param=para,headers=headers)</code></p>
+<p>其中的para以及headers为参数<strong>字典</strong>.</p>
+<p>以上图为例,其参数字典如下:</p>
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">para = &#123;</span><br><span class="line">    <span class="string">&quot;type&quot;</span>: <span class="string">&quot;11&quot;</span>,</span><br><span class="line">    <span class="string">&quot;interval_id&quot;</span>: <span class="string">&quot;100:90&quot;</span>,</span><br><span class="line">    <span class="string">&quot;action&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">    <span class="string">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;limit&quot;</span>: <span class="number">20</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p>结果</p>
+<p>发送请求后得到的结果,通过<code>resp.json()</code>直接提取返回的内容值.提取到的是字典类型的数据<code>dict</code>.</p>
+<p>这里将请求结果存储在文件中,但是在存储之前要注意将原本的返回结果中的单引号<code>&#39;</code>更换为json文件常使用的双引号<code>&quot;</code></p>
+</li>
+<li><p>代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GetRank</span>():</span></span><br><span class="line">    url = <span class="string">&quot;https://movie.douban.com/j/chart/top_list&quot;</span>  <span class="comment"># 原url链接问号后的内容为参数</span></span><br><span class="line">    para = &#123;</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;11&quot;</span>,</span><br><span class="line">        <span class="string">&quot;interval_id&quot;</span>: <span class="string">&quot;100:90&quot;</span>,</span><br><span class="line">        <span class="string">&quot;action&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;start&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;limit&quot;</span>: <span class="number">20</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.56&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># 通过url与para的结合  可以生成我们想要的url</span></span><br><span class="line">    resp = requests.get(url = url, params = para, headers = headers)</span><br><span class="line">    resp.close()</span><br><span class="line">    <span class="keyword">return</span> resp.json()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    fhandle = <span class="built_in">open</span>(<span class="string">&quot;rangeOfPlot.json&quot;</span>, mode = <span class="string">&quot;w&quot;</span>, encoding = <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    res = Douban.GetRank()</span><br><span class="line">    strRes = <span class="built_in">str</span>(res)</span><br><span class="line">    strRes = strRes.replace(__old = <span class="string">&#x27;\&#x27;&#x27;</span>, __new = <span class="string">&#x27;\&quot;&#x27;</span>)</span><br><span class="line">    fhandle.write(<span class="built_in">str</span>(res))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Finished!&quot;</span>) </span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="数据解析"><a href="#数据解析" class="headerlink" title="数据解析"></a>数据解析</h1><p>适用条件:对于服务器渲染方式的网页,通过数据解析直接获取到网页的数据内容.</p>
+<p>这里介绍三种方 式:<strong>RE(正则表达式),BS4(BeautifulSoup) ,XPATH(应用范围最广)</strong></p>
+<ul>
+<li><p>RE</p>
+<p>详情可以查看上面提到的”re正则表达式”模块的介绍.</p>
+<p>测试正则表达式的在线网站工具:<a target="_blank" rel="noopener" href="https://tool.oschina.net/regex">在线正则表达式测试</a></p>
+<p>(虽然之前已经给出了匹配符号的规则等等,这里还是再给一遍)</p>
+<ul>
+<li><p>常用元字符(具有固定含义的特殊符号)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.		匹配除换行符以外的任意字符</span><br><span class="line">\w		匹配字母数字下划线</span><br><span class="line">\s		匹配任意的空白符(例如换行,空格)</span><br><span class="line">\d		匹配数字</span><br><span class="line">\n		匹配一个换行符</span><br><span class="line">\t		匹配一个制表符</span><br><span class="line"></span><br><span class="line">^		匹配字符串的开始</span><br><span class="line">$		匹配字符串的结尾</span><br><span class="line">\W		匹配非字母数字下划线</span><br><span class="line">\D		匹配非数字</span><br><span class="line">\S		匹配非空白字符</span><br><span class="line"></span><br><span class="line">a|b		匹配a或b</span><br><span class="line">()		匹配括号内的表达式,也表示一个组</span><br><span class="line">[...]	匹配字符组中的字符</span><br><span class="line">[^...]	匹配非字符组中的字符</span><br></pre></td></tr></table></figure></li>
+<li><p>量词:控制前面的元字符出现的次数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">*		重复0次或者无数次</span><br><span class="line">+		重复1次或者无数次</span><br><span class="line">?		重复0次或者1次</span><br><span class="line">&#123;n&#125;		重复n次</span><br><span class="line">&#123;n,&#125;	重复n次或者更多次</span><br><span class="line">&#123;n,m&#125;	重复n到m次</span><br></pre></td></tr></table></figure></li>
+<li><p>贪婪匹配和惰性匹配</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.*		贪婪匹配</span><br><span class="line">.*?		惰性匹配</span><br></pre></td></tr></table></figure>
+
+<p>其中爬虫中常用的是**惰性匹配.**意义为:令前面这个<code>*</code>少一点,尽可能让这个<code>*</code>匹配到少一点东西.</p>
+<p>原理在于,首先进行贪婪匹配,找到最远的符合条件的尾部,然后再从尾部向前找到尾部最后一次出现的结果.</p>
+<p>举例:</p>
+<blockquote>
+<p>原字符串:<code>玩儿吃鸡游戏,晚上一起玩游戏.干啥呢?打游戏啊</code></p>
+<p>符合正则表达式:<code>玩儿.*游戏</code>的字符串包括:</p>
+<ol>
+<li>玩儿吃鸡游戏</li>
+<li>玩儿吃鸡游戏,晚上一起玩游戏</li>
+<li>玩儿吃鸡游戏,晚上一起玩游戏.干啥呢?打游戏</li>
+</ol>
+<p>通过<code>玩儿.*?游戏</code>,那么匹配的结果为1.</p>
+<p>如果<code>玩儿.*游戏</code>,那么匹配结果为3.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="其他内容"><a href="#其他内容" class="headerlink" title="其他内容"></a>其他内容</h1><ul>
+<li><p>对于编码问题</p>
+<p>encode指代的是将普通字符串转化为机器可识别的bytes</p>
+<p>decode指代的是将bytes转化成字符串</p>
+<p>因此对于Python3来说,str类型的数据不存在decode方法,只能进行encode.</p>
+<p>如果在爬取网站时,网站的内容编码方式不是常见的<code>utf-8</code>,而是其他编码方式,例如<code>gbk</code>或者<code>gb2312</code></p>
+<ul>
+<li><p>对于<code>requests</code>库,通过发送请求后的返回值设定</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">resp=requests.get(url=url)</span><br><span class="line">resp.encoding=<span class="string">&#x27;gbk&#x27;</span> <span class="comment"># 或resp.encoding=&#x27;gb2312&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>对于<code>urllib</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">resp=urllib.request.urlopen(request)</span><br><span class="line">html=resp.read().decode(<span class="string">&#x27;gbk&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>针对网站的防火墙问题</p>
+<p><strong>报错</strong>:<code>Max retries exceeded with url:(Caused by SSLError(&quot;bad handshake:Error([(&#39;SSL routines&#39;,&#39;tls_process_server_certificate&#39;,&#39;certificate verify failed&#39;)])&quot;))</code></p>
+<p>通过增加参数:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">resp=requests.get(url=url,verify=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p>数据保存</p>
+<p>对于通过<code>requests</code>库获取到的内容,如果要以二进制的形式进行保存(例如我们需要对下载到的图片进行保存)</p>
+<p>通过获取</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">resp=requests.get(url)</span><br><span class="line">resp.content   <span class="comment">##这就是我们要获得到的二进制文件</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <p><h4>© 2021 Baxkiller Powered By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
