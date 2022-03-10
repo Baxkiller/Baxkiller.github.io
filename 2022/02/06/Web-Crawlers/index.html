@@ -36,7 +36,7 @@
         <h1 id="Crawler"><a href="#Crawler" class="headerlink" title="Crawler"></a>Crawler</h1><h2 id="1-准备工作-查看对应的url"><a href="#1-准备工作-查看对应的url" class="headerlink" title="1. 准备工作 查看对应的url."></a>1. 准备工作 查看对应的<code>url</code>.</h2><p>发送请求路径后,返回的是一个<code>html</code>网页得源代码,将信息从网页源代码中提取出来.</p>
 <p>对于网页资源得请求是持续得,而不是一下子就能够返回整个网页得.</p>
 <p>使用谷歌浏览器,在控制台界面选择<code>NetWork</code>,选择时间轴上的信息,然后点击<code>Name</code>中选定的内容,出现的<code>Headers</code>就是<strong>我们发送给服务器</strong>的内容.具体<strong>服务器发送给本地</strong>的内容存在于<code>Headers</code>旁边的<code>Response</code>模块.</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P1.png" alt="P1"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P1.png" alt="P1"></p>
 <p>其中的<code>Headers</code>中的内容,拉到最后,有一个<code>User-Agent</code>指代用户代理,也就是浏览器版本内容等等.</p>
 <ul>
 <li>表明当前浏览器可接受的界面类型对应的浏览器版本.例如上图中的<code>Mozilla</code>指代当前谷歌浏览器可以接受适配于<code>Mozila</code>浏览器的内容.</li>
@@ -44,7 +44,7 @@
 <li><code>Cookie</code>:想要爬取登录后才能查看的内容,必须先设置操作好<code>Cookie</code>.</li>
 </ul>
 <h2 id="2-层级结构"><a href="#2-层级结构" class="headerlink" title="2. 层级结构"></a>2. 层级结构</h2><p>根据控制台界面上特定元素的定位信息,来确定要爬取内容的层级结构.</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P2.png" alt="P2"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P2.png" alt="P2"></p>
 <h2 id="3-编码规范"><a href="#3-编码规范" class="headerlink" title="3. 编码规范"></a>3. 编码规范</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br></pre></td></tr></table></figure>
 
 <p>Python文件中可以加入main函数用于测试程序:</p>
@@ -58,7 +58,7 @@
 <p>引入本地生成的函数文件.</p>
 <p>应当是从文件夹中引入文件.例如下图中,从文件夹<code>test1</code>中引入文件<code>t1</code>.</p>
 <p>使用文件中的函数直接通过<code>.</code>运算符计科完成.</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P3.png" alt="P3"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P3.png" alt="P3"></p>
 <p>常用的是引入外部模块</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> bs4 <span class="comment"># 网页解析获取数据</span></span><br><span class="line"><span class="keyword">import</span> re  <span class="comment"># 正则表达式,文字匹配</span></span><br><span class="line"><span class="keyword">import</span> urllib.request,urllib.error <span class="comment"># 指定url,获取网络数据</span></span><br><span class="line"><span class="keyword">import</span> xlwt <span class="comment"># 进行excel操作</span></span><br><span class="line"><span class="keyword">import</span> sqlite3 <span class="comment"># 进行SQLite 数据库操作</span></span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -89,7 +89,7 @@
 <p>此时获取到的是<code>soup</code>,可以对内容进行解析筛选,得到我们想要的数据了.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 筛选内容</span></span><br><span class="line"><span class="comment"># 首先将所有要找的信息所在的大框架找到</span></span><br><span class="line"><span class="comment"># 例如本实例中,找到的信息都存在于&lt;div class=&quot;item&quot;&gt;中</span></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">&#x27;div&#x27;</span>, class_ = <span class="string">&quot;item&quot;</span>):</span><br><span class="line">    data = []  <span class="comment"># 一部电影的所有信息</span></span><br><span class="line">    item = <span class="built_in">str</span>(item)</span><br><span class="line">    <span class="comment"># 然后通过创建正则匹配模式,对想要的内容进行匹配</span></span><br><span class="line">    link = re.findall(findLink, item)[<span class="number">0</span>]  <span class="comment"># 此时找到的就是电影的详情页链接</span></span><br><span class="line">    imgSrc = re.findall(findImgSrc, item)[<span class="number">0</span>]</span><br><span class="line">    name = re.findall(findName, item)[<span class="number">0</span>]</span><br><span class="line">    otherName = re.findall(findOtherName, item)[<span class="number">0</span>].replace(<span class="string">&#x27;\xa0&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    rating = re.findall(findRating, item)[<span class="number">0</span>]</span><br><span class="line">    cnt = re.findall(findCnt, item)[<span class="number">0</span>]</span><br><span class="line">    info = re.findall(findInfo, item)[<span class="number">0</span>].strip().replace(<span class="string">&#x27;\xa0&#x27;</span>,<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    quote = re.findall(findQuote, item)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(quote) == <span class="number">0</span>:</span><br><span class="line">    	quote = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        quote = quote[<span class="number">0</span>]</span><br><span class="line">    data.extend([link, imgSrc, name, otherName, rating, cnt, info, quote])</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 创造正则匹配表达,用来确定链接的位置</span></span><br><span class="line">findLink = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;a href=&quot;(.*?)&quot;&gt;&#x27;</span>)</span><br><span class="line">findImgSrc = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;img.*src=&quot;(.*?)&quot;&#x27;</span>, re.S)  <span class="comment"># re.S,匹配模式,包含换行符</span></span><br><span class="line">findName = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;title&quot;&gt;(.*?)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findOtherName = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;other&quot;&gt;(.*?)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findRating = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;rating_num&quot; property=&quot;v:average&quot;&gt;(.*?)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findCnt = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span&gt;(\d*)人评价&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findQuote = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;span class=&quot;inq&quot;&gt;(.*)&lt;/span&gt;&#x27;</span>)</span><br><span class="line">findInfo = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;p class=&quot;&quot;&gt;.*&lt;br/&gt;(.*?)&lt;/p&gt;&#x27;</span>, re.S)</span><br></pre></td></tr></table></figure>
 
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P8.png" alt="P8"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P8.png" alt="P8"></p>
 </li>
 </ul>
 <h1 id="关于用到的库"><a href="#关于用到的库" class="headerlink" title="关于用到的库"></a>关于用到的库</h1><h2 id="整体库"><a href="#整体库" class="headerlink" title="整体库"></a>整体库</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="comment"># 网页解析获取数据</span></span><br><span class="line"><span class="keyword">import</span> re  <span class="comment"># 正则表达式,文字匹配</span></span><br><span class="line"><span class="keyword">import</span> urllib.request,urllib.error <span class="comment"># 指定url,获取网络数据</span></span><br><span class="line"><span class="keyword">import</span> xlwt <span class="comment"># 进行excel操作</span></span><br><span class="line"><span class="keyword">import</span> sqlite3 <span class="comment"># 进行SQLite 数据库操作</span></span><br></pre></td></tr></table></figure>
@@ -132,7 +132,7 @@
 <p>在这里的实验中,尝试通过更改<code>header</code>访问豆瓣,成功得到了所有的信息,然后将其进行解码并写入文件,可以得到最终的网页.</p>
 <p><strong>注:</strong></p>
 <p>在得到网页时,想要将其写入一个文件,但是报错:</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20211130093347980.png" alt="image-20211130093347980"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20211130093347980.png" alt="image-20211130093347980"></p>
 <p>搜索解决办法后,发现<a href="%5B%E3%80%90python%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E3%80%91%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6%E6%8C%87%E5%AE%9A%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F%EF%BC%8C%E4%BE%8B%E5%A6%82utf-8_%E8%8B%A5%E6%B0%B42018%E7%9A%84%E5%8D%9A%E5%AE%A2-CSDN%E5%8D%9A%E5%AE%A2%5D(https://blog.csdn.net/qq_42152399/article/details/80996451)">传送门</a>,然后进行了修改:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;Douban.html&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br></pre></td></tr></table></figure>
 
@@ -159,7 +159,7 @@
 <li><p>获取某标签的属性信息</p>
 <p><code>bs.a.attrs</code></p>
 <p>返回的是字典类型,每一个名称对应一个键值,例如:</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20211130103643634.png" alt="image-20211130103643634"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20211130103643634.png" alt="image-20211130103643634"></p>
 </li>
 <li><p>获得字符串</p>
 <p><code>bs.title.string</code></p>
@@ -258,12 +258,12 @@
 <h2 id="re正则表达式"><a href="#re正则表达式" class="headerlink" title="re正则表达式"></a><code>re</code>正则表达式</h2><p>字符串模式.</p>
 <p><strong>建议在正则表达式中,被比较的字符串前面加上<code>r</code>  不用担心转义字符</strong></p>
 <p>常用参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zxin/archive/2013/01/26/2877765.html">传送门</a></p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P4.png" alt="P4"></p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P5.png" alt="P5"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P4.png" alt="P4"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P5.png" alt="P5"></p>
 <hr>
 <p><code>Re</code>库主要功能:</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P6.png" alt="P6"></p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_P7.png" alt="P7"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P6.png" alt="P6"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_P7.png" alt="P7"></p>
 <p>常用功能:</p>
 <p><code>re.compile(pattern)</code></p>
 <p>预加载,相当于先编译一下匹配的pattern.</p>
@@ -296,7 +296,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(?P&lt;varName&gt;.*?)</span><br></pre></td></tr></table></figure>
 
 <p>这样,匹配的内容将会被放在<code>varName</code>中,然后在使用时,可以通过<code>.group(&quot;varName&quot;)</code>进行获取.</p>
-<p>例子:<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220224235237631.png" alt="image-20220224235237631" style="zoom:67%;" /></p>
+<p>例子:<img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220224235237631.png" alt="image-20220224235237631" style="zoom:67%;" /></p>
 <p><code>re.S</code>等状态位</p>
 <p>可以在编译也就是预加载的时候进行处理,用来防止换行的出现</p>
 <h2 id="XPATH"><a href="#XPATH" class="headerlink" title="XPATH"></a><code>XPATH</code></h2><p>是在XML文档中搜索内容的一门语言,相对简单,爬虫多用.</p>
@@ -390,7 +390,7 @@
 </li>
 <li><p>客户端渲染(浏览器方)</p>
 <p>如果显示时含有某些内容,而在html的源代码中并没有直接出现该内容,属于客户端渲染.</p>
-<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220207171859471.png" alt="image-20220207171859471" style="zoom:67%;" />
+<img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220207171859471.png" alt="image-20220207171859471" style="zoom:67%;" />
 
 <p>在浏览器方,将html骨架与数据结合在一起.</p>
 <p>第一次请求只需要一个html股价,然后其中包含脚本,再次向服务器段请求数据.</p>
@@ -398,12 +398,12 @@
 <p>以豆瓣电影中的喜剧片排行榜为例:</p>
 <blockquote>
 <p>第一次请求得到的html框架如下所示:</p>
-<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220207173033659.png" alt="image-20220207173033659" style="zoom: 80%;" />
+<img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220207173033659.png" alt="image-20220207173033659" style="zoom: 80%;" />
 
 
 
 <p>第二次请求得到的数据,通过json文件的形式返回:</p>
-<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220207173157863.png" alt="image-20220207173157863" style="zoom:67%;" />
+<img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220207173157863.png" alt="image-20220207173157863" style="zoom:67%;" />
 </blockquote>
 <p>第一次请求得到的骨架并不是我们所期望得到的.    </p>
 </li>
@@ -460,17 +460,17 @@
 <blockquote>
 <p>以百度翻译为例.</p>
 <p>当输入一个英文单词时,查看F12中的网络选项,在输入之前通过下图按钮清楚请求得到的响应内容.</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220145923300.png" alt="image-20220220145923300"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220145923300.png" alt="image-20220220145923300"></p>
 <p>然后输入,输入完成后查看网络中得到的数据.</p>
 <p>这里以输入单词后的单词翻译和提示来讲,可以找到<strong>xhr</strong>类型的返回值,确定是我们要找的单词的翻译.</p>
-<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220150116312.png" alt="image-20220220150116312" style="zoom:80%;" />
+<img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220150116312.png" alt="image-20220220150116312" style="zoom:80%;" />
 
 <p>点击内容,查看预览.与目标内容相符</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220150217352.png" alt="image-20220220150217352"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220150217352.png" alt="image-20220220150217352"></p>
 <p>点击标头,查看发送请求的url.</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220151045559.png" alt="image-20220220151045559"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220151045559.png" alt="image-20220220151045559"></p>
 <p>可以发现URL中并没有我们请求的参数.并且在请求方法中已经明确了是<code>POST</code>.接下来去<code>Payload</code>或者标头页面的最底下找到参数传递:</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220151228517.png" alt="image-20220220151228517"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220151228517.png" alt="image-20220220151228517"></p>
 <p>注意字典格式.根据这个格式进行数据传递.</p>
 <p>返回值如果要打印,可以直接使用<code>resp.json()</code>打印获得的<strong>xhr</strong>类型数据</p>
 </blockquote>
@@ -479,14 +479,14 @@
 <h1 id="实战举例"><a href="#实战举例" class="headerlink" title="实战举例"></a>实战举例</h1><h2 id="爬取豆瓣某分类的榜单"><a href="#爬取豆瓣某分类的榜单" class="headerlink" title="爬取豆瓣某分类的榜单"></a>爬取豆瓣某分类的榜单</h2><ol>
 <li><p>首先从抓包工具中查找是否具有相关的内容,确定渲染类型.</p>
 <p>根据下图可以发现,该榜单内容属于浏览器端渲染.因此可以直接截取到相关的json文件.</p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220192119486.png" alt="image-20220220192119486"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220192119486.png" alt="image-20220220192119486"></p>
 </li>
 <li><p>其次,根据上图,查看对应文件的标头,得知请求方法.根据下图来看,可以知道是<code>GET</code>类型.因此可以直接通过向对应链接使用<code>request.get(url=url,headers=headers)</code></p>
-<p><img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220192431545.png" alt="image-20220220192431545"></p>
+<p><img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220192431545.png" alt="image-20220220192431545"></p>
 </li>
 <li><p>查看是否存在参数的传递</p>
 <p>查看对应的<code>Payload</code>,可以发现这里存在着参数传递.</p>
-<img src="D:\Github_Hexo_test\source\imgs\Crawler_image-20220220192711638.png" alt="image-20220220192711638" style="zoom:80%;" /></li>
+<img src="https://github.com/Baxkiller/Baxkiller.github.io/blob/main/imgs/Crawler_image-20220220192711638.png" alt="image-20220220192711638" style="zoom:80%;" /></li>
 <li><p>综合</p>
 <p>综上来看,确定要获取内容形式如下:</p>
 <p>以<code>https://movie.douban.com/j/chart/top_list</code>作为基础链接,问号后的内容实际上是参数的传递.因此可以确定我们要使用的函数为:</p>
