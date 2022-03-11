@@ -33,7 +33,8 @@
         <hr>
     </div>
     <div class="post-content">
-        <h1 id="Crawler"><a href="#Crawler" class="headerlink" title="Crawler"></a>Crawler</h1><h2 id="1-准备工作-查看对应的url"><a href="#1-准备工作-查看对应的url" class="headerlink" title="1. 准备工作 查看对应的url."></a>1. 准备工作 查看对应的<code>url</code>.</h2><p>发送请求路径后,返回的是一个<code>html</code>网页得源代码,将信息从网页源代码中提取出来.</p>
+        <p>[TOC]</p>
+<h1 id="Crawler"><a href="#Crawler" class="headerlink" title="Crawler"></a>Crawler</h1><h2 id="1-准备工作-查看对应的url"><a href="#1-准备工作-查看对应的url" class="headerlink" title="1. 准备工作 查看对应的url."></a>1. 准备工作 查看对应的<code>url</code>.</h2><p>发送请求路径后,返回的是一个<code>html</code>网页得源代码,将信息从网页源代码中提取出来.</p>
 <p>对于网页资源得请求是持续得,而不是一下子就能够返回整个网页得.</p>
 <p>使用谷歌浏览器,在控制台界面选择<code>NetWork</code>,选择时间轴上的信息,然后点击<code>Name</code>中选定的内容,出现的<code>Headers</code>就是<strong>我们发送给服务器</strong>的内容.具体<strong>服务器发送给本地</strong>的内容存在于<code>Headers</code>旁边的<code>Response</code>模块.</p>
 <p><img src="https://s2.loli.net/2022/03/10/m7rnzebiwokZMTd.png" alt="P1"></p>
@@ -367,8 +368,7 @@
 <li><p>常使用的函数内容包括<code>request.get(url,header,params)</code>以及<code>request.post(url,data,cookies)</code></p>
 </li>
 </ul>
-<p><strong>进阶使用</strong></p>
-<ol>
+<h1 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h1><ol>
 <li><p>cookie处理    </p>
 <p>可以通过<code>session</code>进行请求.(会话)</p>
 <p><code>session</code>的特点是,可以发送一连串的请求且这一连串的请求中的cookie不会丢失.</p>
@@ -378,7 +378,8 @@
 <li>带着cookie请求后续内容</li>
 </ol>
 <p>需要首先创建一个session对象,该对象具有<code>get</code>和<code>post</code>方法</p>
-</li>
+<p>举例:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首先创建一个session对象</span></span><br><span class="line">session=requests.session</span><br><span class="line">loginData=&#123;</span><br><span class="line">    <span class="string">&quot;&quot;</span>:<span class="string">&quot;&quot;</span>,</span><br><span class="line">    <span class="string">&quot;&quot;</span>:<span class="string">&quot;&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">loginURL=<span class="string">&quot;...&quot;</span></span><br><span class="line">session.post(loginURL,data=loginData)</span><br><span class="line">targetURL=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="comment"># 此时得到的resp就是携带了cookie得到的相应内容</span></span><br><span class="line">resp=session.post(targetURL)</span><br></pre></td></tr></table></figure></li>
 <li><p>防盗链处理</p>
 </li>
 <li><p>代理(IP)</p>
