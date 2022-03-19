@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/ico.ico >
+    <title>
+        Blog | Baxkiller
+    </title>
+    <meta name="description" content= Hey Bro! Here's Baxkiller's Blog Site. >
+    <meta name="keywords" content= Blog,Hexo,Theme,Baxkiller,Coder >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            WebCrawler_music163_comments
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="网易云音乐评论爬取"><a href="#网易云音乐评论爬取" class="headerlink" title="网易云音乐评论爬取"></a>网易云音乐评论爬取</h1><h2 id="确定信息来源"><a href="#确定信息来源" class="headerlink" title="确定信息来源"></a>确定信息来源</h2><p>查看网页中任意一首音乐的评论来源:网页本身/数据包</p>
+<p>通过浏览器工具,可以确定数据来源于网络传输的数据包.</p>
+<img src="https://s2.loli.net/2022/03/19/MpONxdQut13jwBT.png" alt="image-20220319104619073" style="zoom: 67%;" />
+
+<h2 id="尝试进行抓取"><a href="#尝试进行抓取" class="headerlink" title="尝试进行抓取"></a>尝试进行抓取</h2><ul>
+<li><p>首先查看该数据包对应的标头中请求的URL以及请求方式.</p>
+<p><code>POST</code>请求,给定了URL.</p>
+</li>
+<li><p>内容负载</p>
+<p>其内容负载包含两个方面:</p>
+<img src="https://s2.loli.net/2022/03/19/srJWAhgoONfTUPC.png" style="zoom: 80%;" >
+
+<p>很明显,这个内容负载是经过了加密.因此为了将我们的数据进行同样的加密以获取评论内容,我们要知道<strong>被加密内容</strong>是什么以及<strong>怎样加密</strong>的.</p>
+</li>
+<li><p>获取加密方式</p>
+<p>查看浏览器工具中的<code>Network-&gt;Initator</code>,其中包含有<code>Request call stack</code></p>
+<p>在Edge的调试工具中两者命名分别是<code>发起程序</code>和<code>请求调用堆栈</code>.</p>
+<p>记录当发送请求到我们想要的URL时,经历过了哪些<strong>JS脚本的执行过程</strong>,由于是堆栈,因此<strong>越靠下的部分越先被调用</strong>.</p>
+<p>查看最后被调用的代码.由于代码比较凌乱,因此我们点击其左下角的大括号,可以看到比较规矩的代码.</p>
+<p>通过在代码处设置断点,并再次运行整个网页对函数运行进行拦截,可以看到每一次调用该函数时所设置/用到的相关变量.通过查看拦截后的右侧<code>Local</code>内容,查看每次调用时发送请求时的url,与我们之前确定好的url对比,如果相同,则查看相关变量,看是否有我们想要的变量.如果该变量被加密,则继续通过调用堆栈中的函数回溯找,直到找到加密前的我们想要的变量.</p>
+</li>
+<li><p>以福禄寿歌曲《我用什么把你留住》为例</p>
+<p>首先通过抓包工具截取到歌曲的评论数据包请求的url地址为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;https://music.163.com/weapi/comment/resource/comments/get?csrf_token=&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后找到堆栈调用的位置,在函数出口处打断点,然后重新加载请求网页.每次查看被中断的请求的请求地址是否与上面的地址相同.</p>
+<p>经过大概四次/五次的中断,找到目的请求:</p>
+<p><img src="https://s2.loli.net/2022/03/19/UApKREgwJmv4eH3.png" alt="image-20220319145543440"></p>
+<p>经过查看不难发现此时的参数仍然是被加密后的,因此我们去找堆栈中调用该层函数的函数,也就是其父结点,继续进行如上操作,直到找到未被加密的程序.如下图所示,为了后续使用方便,我们将该数据下面的i4m数据,也就是加密前的字典类型的<strong>数据暂存</strong>.</p>
+<img src="https://s2.loli.net/2022/03/19/xO2kEsLQCt1ioye.png" alt="image-20220319151721202" style="zoom:80%;" />
+
+
+
+<p>由此可以确定,加密应该是在函数<code>tax.be4i</code>函数中完成的.因此我们转去查看``tax.be4i`函数中的加密过程.</p>
+<p>通过查看函数内部的代码,可以发现下图中,下方的红框内的数据是待加密的数据,而上方的红框内为加密完成后的数据.</p>
+<img src="https://s2.loli.net/2022/03/19/KuLBJU8OzQTAjhE.png" alt="image-20220319152316123" style="zoom:80%;" />
+
+
+
+<p>在函数内部中对内容<code>e4i</code>赋值的相关位置打断点,重新加载页面,确定内容加密的具体位置.</p>
+<img src="https://s2.loli.net/2022/03/19/8PlZyW95wFQ4mbi.png" alt="image-20220319152500291" style="zoom:80%;" />
+
+
+
+<p>可以发现在断点1处的数据仍然未被加密.</p>
+<p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20220319154125733.png" alt="image-20220319154125733"></p>
+<p>到断点3,可以发现数据已经被加密</p>
+<img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20220319155734133.png" alt="image-20220319155734133" style="zoom: 80%;" />
+
+
+
+<p>到断点4,发现数据已经完全被加密完成:</p>
+<img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20220319155849279.png" alt="image-20220319155849279" style="zoom:80%;" />
+
+
+
+<p>那么通过查看上面的断点3处的代码,可以发现,在断点3处为数据进行了赋值,成员包括<code>encSevKey</code>和<code>params</code>,两者正是我们要找到的参数,并且两者都来自于变量<code>bVj8b</code>.而变量<code>bVj8b</code>的数据又是通过函数<code>Windows.asrsea</code>产生的.因此我们在整个页面中查找该函数.</p>
+<p>找到该函数的赋值位置,然后进一步确定该函数的内部参数的含义:</p>
+<p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20220319160516620.png" alt="image-20220319160516620"></p>
+<p>解析如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 参数通过调用此处的函数产生</span></span><br><span class="line"><span class="keyword">var</span> bVj8b = <span class="built_in">window</span>.asrsea(<span class="built_in">JSON</span>.stringify(i4m), bsR5W([<span class="string">&quot;流泪&quot;</span>, <span class="string">&quot;强&quot;</span>]), bsR5W(Xp0x.md), bsR5W([<span class="string">&quot;爱心&quot;</span>, <span class="string">&quot;女孩&quot;</span>, <span class="string">&quot;惊恐&quot;</span>, <span class="string">&quot;大笑&quot;</span>]));</span><br><span class="line">e4i.data = j4n.cq4u(&#123;</span><br><span class="line">    <span class="attr">params</span>: bVj8b.encText,  <span class="comment">// 负载参数之一</span></span><br><span class="line">    <span class="attr">encSecKey</span>: bVj8b.encSecKey  <span class="comment">// 负载参数之二</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// asrsea函数外部</span></span><br><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params">a</span>) </span>&#123;  <span class="comment">// 进行a次循环,每次循环产生一个字符,共产生a个字符.</span></span><br><span class="line">        <span class="keyword">var</span> d, e, b = <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;</span>, c = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">for</span> (d = <span class="number">0</span>; a &gt; d; d += <span class="number">1</span>)</span><br><span class="line">            e = <span class="built_in">Math</span>.random() * b.length,</span><br><span class="line">            e = <span class="built_in">Math</span>.floor(e),</span><br><span class="line">            c += b.charAt(e);</span><br><span class="line">        <span class="keyword">return</span> c</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params">a, b</span>) </span>&#123; <span class="comment">// 也就是加密函数,以b为密钥,对a进行加密</span></span><br><span class="line">        <span class="keyword">var</span> c = CryptoJS.enc.Utf8.parse(b)  <span class="comment">// 密匙编码</span></span><br><span class="line">          , d = CryptoJS.enc.Utf8.parse(<span class="string">&quot;0102030405060708&quot;</span>) <span class="comment">// 偏移量编码</span></span><br><span class="line">          , e = CryptoJS.enc.Utf8.parse(a)  <span class="comment">// 编码转换</span></span><br><span class="line">          <span class="comment">// AES 加密</span></span><br><span class="line">          , f = CryptoJS.AES.encrypt(e, c, &#123;</span><br><span class="line">            <span class="attr">iv</span>: d,                          <span class="comment">// 偏移量</span></span><br><span class="line">            <span class="attr">mode</span>: CryptoJS.mode.CBC         <span class="comment">// 加密模式</span></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> f.toString()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 参数为随机字符串i,固定值e(?)和固定值f</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">c</span>(<span class="params">a, b, c</span>) </span>&#123;                   <span class="comment">// encSecKey的生成函数</span></span><br><span class="line">        <span class="keyword">var</span> d, e;</span><br><span class="line">        <span class="keyword">return</span> setMaxDigits(<span class="number">131</span>),</span><br><span class="line">        d = <span class="keyword">new</span> RSAKeyPair(b,<span class="string">&quot;&quot;</span>,c),         <span class="comment">// 对不同歌曲的固定值e进行加密</span></span><br><span class="line">        e = encryptedString(d, a)           <span class="comment">// 同样是进行加密,用加密后的RSA密钥对对随机字符串i进行加密</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="comment">// f=&#x27;00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7&#x27;\</span></span><br><span class="line"><span class="comment">//    g=&#x27;0CoJUm6Qyw8W8jud&#x27;</span></span><br><span class="line"><span class="comment">//    e=&#x27;01001&#x27;</span></span><br><span class="line"><span class="comment">//    d=tostring(data),e=bsR5W([&quot;流泪&quot;, &quot;强&quot;]),也即`01001`,f=bsR5W(Xp0x.md),g=bsR5W([&quot;爱心&quot;, &quot;女孩&quot;, &quot;惊恐&quot;, &quot;大笑&quot;])</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">d</span>(<span class="params">d, e, f, g</span>) </span>&#123;    <span class="comment">// 产生加密的函数  此处的唯一变动实际上是d的值,也就是取决于data的内容</span></span><br><span class="line">        <span class="keyword">var</span> h = &#123;&#125;</span><br><span class="line">          , i = a(<span class="number">16</span>);          <span class="comment">// 产生16个随机字符</span></span><br><span class="line">        <span class="keyword">return</span> h.encText = b(d, g),</span><br><span class="line">        h.encText = b(h.encText, i),    <span class="comment">// 也就是对数据内容进行两次加密,第一次加密使用的密钥为固定值g</span></span><br><span class="line">                                        <span class="comment">// 第二次加密使用的密钥为随机数i</span></span><br><span class="line">        h.encSecKey = c(i, e, f),</span><br><span class="line">        h</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">e</span>(<span class="params">a, b, d, e</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> f = &#123;&#125;;</span><br><span class="line">        <span class="keyword">return</span> f.encText = c(a + e, b, d),</span><br><span class="line">        f</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">window</span>.asrsea = d, <span class="comment">// asrsea函数的真正本体</span></span><br><span class="line">    <span class="built_in">window</span>.ecnonasr = e</span><br><span class="line">&#125;();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- codeing = utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Time      : 2022/3/19 10:34</span></span><br><span class="line"><span class="comment"># @Author    : Baxkiller</span></span><br><span class="line"><span class="comment"># @File      : netease_music163_comments.py</span></span><br><span class="line"><span class="comment"># @Software  : PyCharm</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">padding</span>(<span class="params">strs</span>):</span></span><br><span class="line">    l = <span class="number">16</span> - (<span class="built_in">len</span>(strs) % <span class="number">16</span>)</span><br><span class="line">    strs += <span class="built_in">chr</span>(l) * l</span><br><span class="line">    <span class="keyword">return</span> strs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;rid&quot;</span>: <span class="string">&quot;R_SO_4_1306923998&quot;</span>,</span><br><span class="line">    <span class="string">&quot;threadId&quot;</span>: <span class="string">&quot;R_SO_4_1306923998&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pageNo&quot;</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pageSize&quot;</span>: <span class="string">&quot;20&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cursor&quot;</span>: <span class="string">&quot;-1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;offset&quot;</span>: <span class="string">&quot;0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;orderType&quot;</span>: <span class="string">&quot;1&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f = <span class="string">&#x27;00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7&#x27;</span></span><br><span class="line">g = <span class="string">&quot;0CoJUm6Qyw8W8jud&quot;</span></span><br><span class="line">e = <span class="string">&#x27;01001&#x27;</span></span><br><span class="line">i = <span class="string">&quot;GAmFwie2XTGvncAy&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_encSecKey</span>():</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;23ffcf188f9a56c6917dc47e8ff9c07f1837723ed57ed45d639e182c387c57293ccd37c3e0e20603a7818456b3e4730be3a429187129fedf600851d0b7d74db24916a2f47693a3a6cb95f502d2b4d6dcb1db78fa59f4fc0bfaf8cf5d999b4eaf9ab0a0506876449a8bff2d6530ace6c00bcf8ea80d3db7bd9b7cdee640c6ca02&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对传入的字符串进行加密</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encWords</span>(<span class="params">strs, key</span>):</span></span><br><span class="line">    iv = <span class="string">&quot;0102030405060708&quot;</span>.encode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    strs = padding(strs)  <span class="comment"># 先填充padding</span></span><br><span class="line">    strs = strs.encode(<span class="string">&quot;utf-8&quot;</span>)  <span class="comment"># 再进行编码</span></span><br><span class="line">    key = key.encode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    cryptos = AES.new(key = key, iv = iv, mode = AES.MODE_CBC)  <span class="comment"># 创建加密</span></span><br><span class="line">    res = cryptos.encrypt(strs)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(base64.b64encode(res), <span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_params</span>(<span class="params">strs</span>):</span></span><br><span class="line">    res = encWords(strs, g)</span><br><span class="line">    res = encWords(res, i)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    url = <span class="string">&quot;https://music.163.com/weapi/comment/resource/comments/get?csrf_token=&quot;</span></span><br><span class="line">    datas = &#123;</span><br><span class="line">        <span class="string">&quot;params&quot;</span>: get_params(json.dumps(data)),</span><br><span class="line">        <span class="string">&quot;encSecKey&quot;</span>: get_encSecKey()</span><br><span class="line">    &#125;</span><br><span class="line">    resp = requests.post(url = url, data = datas)</span><br><span class="line">    <span class="built_in">print</span>(resp.json())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="成功结果"><a href="#成功结果" class="headerlink" title="成功结果"></a>成功结果</h2><p><img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20220319173436731.png" alt="image-20220319173436731"></p>
+<p>​    </p>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <p><h4>© 2021 Baxkiller Powered By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="">
+<input type="hidden" id="valine_appKey" value="">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
