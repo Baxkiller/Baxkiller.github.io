@@ -996,7 +996,7 @@
 <p>相关的形式语言了解.</p>
 <ul>
 <li><p>0型文法(限制最宽松,常见的都是0型),对应0型语言都是递归可枚举的,能力相当于图灵机,半可判定</p>
-<img src="D:\Github_Hexo_test\source\_posts\Compile-Principle-Review.assets\image-20220612004714652.png" alt="image-20220612004714652" style="zoom: 80%;" /></li>
+<img src="https://s2.loli.net/2022/06/14/jdqasSA4r1uyzBn.png" alt="image-20220612004714652" style="zoom: 80%;" /></li>
 <li><p>1型文法,又被称之为<strong>上下文有关文法</strong>.线性有界自动机.在0型文法基础之上的每个$\alpha \rarr \beta$ ,都有$|\beta| \ge |\alpha|$ ,即由小生大, ($S \rarr \epsilon $ 除外),且S不能出现在产生式的右部.</p>
 <p>$L(G)={a^nb^nc^n | n\ge 1}$只能由本文法产生</p>
 </li>
@@ -1013,7 +1013,7 @@
 <li><p><input disabled="" type="checkbox">  正规式到正规文法的改写规则以及正规文法的概念</p>
 <ul>
 <li><p>正规式的递归定义</p>
-<img src="D:\Github_Hexo_test\source\_posts\Compile-Principle-Review.assets\image-20220612152430625.png" alt="image-20220612152430625" style="zoom:80%;" /></li>
+<img src="https://s2.loli.net/2022/06/14/SrRUMTVdJKWEXnc.png" alt="image-20220612152430625" style="zoom:80%;" /></li>
 <li></li>
 </ul>
 <img src="https://s2.loli.net/2022/06/14/1TFi89LaJdQwSVu.png" alt="image-20220612142039208" style="zoom: 50%;" />
@@ -1070,7 +1070,7 @@
 <p>相关的形式语言了解.</p>
 <ul>
 <li><p>0型文法(限制最宽松,常见的都是0型),对应0型语言都是递归可枚举的,能力相当于图灵机,半可判定</p>
-<img src="D:\Github_Hexo_test\source\_posts\Compile-Principle-Review.assets\image-20220612004714652.png" alt="image-20220612004714652" style="zoom: 80%;" /></li>
+<img src="https://s2.loli.net/2022/06/14/jdqasSA4r1uyzBn.png" alt="image-20220612004714652" style="zoom: 80%;" /></li>
 <li><p>1型文法,又被称之为<strong>上下文有关文法</strong>.线性有界自动机.在0型文法基础之上的每个$\alpha \rarr \beta$ ,都有$|\beta| \ge |\alpha|$ ,即由小生大, ($S \rarr \epsilon $ 除外),且S不能出现在产生式的右部.</p>
 <p>$L(G)={a^nb^nc^n | n\ge 1}$只能由本文法产生</p>
 </li>
