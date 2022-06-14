@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/ico.ico >
+    <title>
+        Blog | Baxkiller
+    </title>
+    <meta name="description" content= Hey Bro! Here's Baxkiller's Blog Site. >
+    <meta name="keywords" content= Blog,Hexo,Theme,Baxkiller,Coder >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            Compile_Principle_Review
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h2 id="概念题-不考"><a href="#概念题-不考" class="headerlink" title="概念题(不考"></a>概念题(不考</h2><ul>
+<li><p><input disabled="" type="checkbox">  什么是编译程序</p>
+<p>翻译程序:</p>
+</li>
+</ul>
+<ul>
+<li><p><input disabled="" type="checkbox">  表达式得形成规则</p>
+<p>➢ 变量（包括下标变量）、常数是<strong>表达式</strong>；</p>
+<p>➢ 若E1、E2为表达式，θ是一个二元算符，则$E_1\ θ\ E_2$是一个表达式；</p>
+<p>➢ 若E是表达式，θ为一元算符，则$θE（或Eθ）$是表达式；</p>
+<p>➢ 若E是表达式，则(E)是表达式。</p>
+</li>
+<li><p><input disabled="" type="checkbox">  运算顺序和结合性(关于<strong>运算符优先级</strong>的知识)</p>
+</li>
+<li><p><strong>闭包</strong></p>
+<p>某个符号串的闭包运算规则是,但是经过的是有限次的链接而成的,也就是闭包中的每个字符串的长度有限.<br>$$<br>V^{<em>}=V^{0} \or V^{1} \or V^{2} \or V^{3} \or \cdots<br>$$<br><strong>正则闭包</strong><br>$$<br>V^{+}=VV^{</em>}<br>$$</p>
+</li>
+<li><p><input disabled="" type="checkbox">  关于空集与空字的区分!</p>
+<p>空集,即$\varnothing$,代表的是${}$,是集合</p>
+<p>空字,用$\epsilon$表示,代表的是不含有任何符号的序列,是一个集合中的元素</p>
+<p>而${\epsilon}$往往用来代表某个符号串的0次连接积,也就是$V^{0}$</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>关于推导</strong></p>
+<p>最右推导: 推导过程中,总是最先替换最右的非终结符,称之为<strong>最右推导</strong></p>
+<p>最右规约:规约时,总是最先规约最右的非终结符,称之为最右规约.</p>
+<p><strong>规范推导(最右推导)</strong></p>
+<p><strong>规范规约(最左规约)</strong></p>
+</li>
+</ul>
+<ul>
+<li><p><input disabled="" type="checkbox">  知道常见的状态转换图</p>
+</li>
+<li><p><input disabled="" type="checkbox">  正规式之间的运算规则以及常见的等价正规式</p>
+<ul>
+<li><p>等价的正规式    </p>
+<p>例如比较常见的是b(a|b)^<em>^=(ba)^</em>^b  , (a|b)^<em>^=(a^</em>^b^<em>^)^</em>^</p>
+</li>
+<li><p>常用的正规式</p>
+<img src="https://s2.loli.net/2022/06/14/4bjIEawFm3APiQG.png" alt="image-20220612141509718" style="zoom:80%;" /></li>
+<li><p>正规式运算规则</p>
+<p>连接不满足交换律.</p>
+<img src="https://s2.loli.net/2022/06/14/keN8bymAXfIVUiL.png" alt="image-20220612141624199" style="zoom:80%;" /></li>
+</ul>
+</li>
+</ul>
+<h2 id="可能会考到"><a href="#可能会考到" class="headerlink" title="可能会考到"></a><strong>可能会考到</strong></h2><ul>
+<li><p><input disabled="" type="checkbox">  对于<strong>上下文无关文法的定义</strong>和一些约定</p>
+<p>具体概念表示为:<strong>它所定义的文法范畴（或语法单位）是完全独立于这种范畴可能出现的环境的。</strong></p>
+<p>通过一个四元式进行定义:<br>$$<br>G=(V_T,V_N,S,P)<br>$$<br>其中从前到后的意义分别是:</p>
+<p>终结符号\非终结符号\开始符号\ <strong>产生式集合</strong></p>
+<p>其中产生式集合中元素的形式如下:<br>$$<br>P\rarr \alpha<br>$$<br>其中的P是属于非终结符号,\alpha属于<strong>非终结符号与终结符号的闭包.</strong></p>
+<p><strong>一些约定内容:</strong></p>
+<p>使用<strong>大写字母</strong>代表非终结符</p>
+<p>使用<strong>小写字母</strong>代表终结符</p>
+<p>使用<strong>希腊字母</strong>代表终结符和非终结符组成的字符串.</p>
+<p><strong>对于语言的描述</strong>: 使用一种形式将文法G所产生的句子的全体是一个语言,表示为<strong>集合的形式</strong><br>$$<br>L(G)={a|S<br>\stackrel{+}{\Rarr}<br>\alpha }<br>$$<br>或者也可以使用描述的方式进行书写.</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>形式语言</strong></p>
+<p>相关的形式语言了解.</p>
+<ul>
+<li><p>0型文法(限制最宽松,常见的都是0型),对应0型语言都是递归可枚举的,能力相当于图灵机,半可判定</p>
+<img src="D:\Github_Hexo_test\source\_posts\Compile-Principle-Review.assets\image-20220612004714652.png" alt="image-20220612004714652" style="zoom: 80%;" /></li>
+<li><p>1型文法,又被称之为<strong>上下文有关文法</strong>.线性有界自动机.在0型文法基础之上的每个$\alpha \rarr \beta$ ,都有$|\beta| \ge |\alpha|$ ,即由小生大, ($S \rarr \epsilon $ 除外),且S不能出现在产生式的右部.</p>
+<p>$L(G)={a^nb^nc^n | n\ge 1}$只能由本文法产生</p>
+</li>
+<li><p>2型文法,又称为<strong>上下文无关文法</strong>,对应下推自动机.使用下推表(先进后出栈)的有限自动机是分析的基本手段.满足条件为,在0型基础之上,满足$𝐴 → 𝛽, 𝐴 ∈ 𝑉_𝑁, 𝛽 ∈ (𝑉_𝑁 ∪ 𝑉_𝑇 )^*$</p>
+<p>可以产生S-&gt;aSb | ab</p>
+</li>
+<li><p>3型文法,又称<strong>右线性文法/左线性文法</strong>.等价于正规式,所以也称为正规文法.在0型基础之上,满足:$𝐴 → 𝛼𝐵或𝐴 → 𝛼，其中，𝛼 ∈ 𝑉_𝑇^∗, 𝐴 ∈ 𝑉_𝑁,𝐵 ∈ 𝑉_N$.</p>
+<p>不能产生语言a^n^b^n^</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><input disabled="" type="checkbox">  正规式到正规文法的改写规则以及正规文法的概念</p>
+<ul>
+<li><p>正规式的递归定义</p>
+<img src="D:\Github_Hexo_test\source\_posts\Compile-Principle-Review.assets\image-20220612152430625.png" alt="image-20220612152430625" style="zoom:80%;" /></li>
+<li></li>
+</ul>
+<img src="https://s2.loli.net/2022/06/14/1TFi89LaJdQwSVu.png" alt="image-20220612142039208" style="zoom: 50%;" />
+
+<img src="https://s2.loli.net/2022/06/14/BgwJ8lN36oPzxWO.png" alt="image-20220612142210536" style="zoom:50%;" /></li>
+</ul>
+<h2 id="必考知识点"><a href="#必考知识点" class="headerlink" title="必考知识点"></a>必考知识点</h2><ul>
+<li><p><strong>画图表示编译过程的各阶段</strong></p>
+<img src="https://s2.loli.net/2022/06/14/F5u84fbTcx62qQa.png" alt="image-20220610232132366" style="zoom:67%;" />
+
+<p>或许有可能要我们<strong>解释这个图的具体含义?</strong></p>
+<ul>
+<li><p><strong>词法分析器:</strong></p>
+<p>又称<strong>扫描器</strong>,输入源程序,从左到右逐个字符地对源程序扫描,进行词法分析,输出单词符号.</p>
+</li>
+<li><p><strong>语法分析器:</strong></p>
+<p>又称分析器，对单词符号串进行语法分析，识别出各类语法单位，最终判断输入串是否构成语法上正确的“程序”。</p>
+</li>
+<li><p><strong>语义分析和中间代码生成器:</strong></p>
+<p>按照语义规则对语法分析器归约（或推导）出的语法单位进行语义分析，并把它们翻译成一定形式的<strong>中间代码</strong>。</p>
+</li>
+<li><p><strong>优化器:</strong></p>
+<p>对中间代码进行优化处理</p>
+</li>
+<li><p><strong>目标代码生成器:</strong></p>
+<p>把中间代码翻译成目标代码。</p>
+</li>
+</ul>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  二义文法</p>
+<ul>
+<li><p>概念</p>
+<p>如果一个文法的某个句子对应两棵不同的语法树，<strong>即其最左（最右）推导不唯一</strong>，称该文法为二义文法。</p>
+</li>
+<li><p>文法的二义性与语言的二义性是不同的概念.</p>
+<p>具体而言:</p>
+<ul>
+<li>可能存在两个不同的文法G和G’,其中一个是二义的,一个是无二义的,但是有L(G)=L(G’);</li>
+<li>对于一个语言,我们常常希望其文法是无二义的,因为我们希望对它每个语句的分析是唯一的；</li>
+</ul>
+</li>
+<li><p>考点</p>
+<p>证明某个文法是二义的,具体需要自己找出一个例子,推导出两棵不同的语法树.</p>
+</li>
+<li><p>求解</p>
+<p><strong>(优先级越高越远离开始符号)</strong></p>
+</li>
+<li><p>例题</p>
+<p>𝐸 → 𝐸 + 𝐸 | 𝐸 ∗ 𝐸 | (𝐸) | 𝑖，构造该文法的无二义文法，使它们表示的语言相同，并给出句子 i*i+i的最右推导。</p>
+<img src="https://s2.loli.net/2022/06/14/nX2BCMYvtqpT3Em.png" alt="image-20220611235922378" style="zoom:67%;" /></li>
+</ul>
+</li>
+<li><p><strong>形式语言</strong></p>
+<p>相关的形式语言了解.</p>
+<ul>
+<li><p>0型文法(限制最宽松,常见的都是0型),对应0型语言都是递归可枚举的,能力相当于图灵机,半可判定</p>
+<img src="D:\Github_Hexo_test\source\_posts\Compile-Principle-Review.assets\image-20220612004714652.png" alt="image-20220612004714652" style="zoom: 80%;" /></li>
+<li><p>1型文法,又被称之为<strong>上下文有关文法</strong>.线性有界自动机.在0型文法基础之上的每个$\alpha \rarr \beta$ ,都有$|\beta| \ge |\alpha|$ ,即由小生大, ($S \rarr \epsilon $ 除外),且S不能出现在产生式的右部.</p>
+<p>$L(G)={a^nb^nc^n | n\ge 1}$只能由本文法产生</p>
+</li>
+<li><p>2型文法,又称为<strong>上下文无关文法</strong>,对应下推自动机.使用下推表(先进后出栈)的有限自动机是分析的基本手段.满足条件为,在0型基础之上,满足$𝐴 → 𝛽, 𝐴 ∈ 𝑉_𝑁, 𝛽 ∈ (𝑉_𝑁 ∪ 𝑉_𝑇 )^*$</p>
+<p>可以产生S-&gt;aSb | ab</p>
+</li>
+<li><p>3型文法,又称<strong>右线性文法/左线性文法</strong>.等价于正规式,所以也称为正规文法.在0型基础之上,满足:$𝐴 → 𝛼𝐵或𝐴 → 𝛼，其中，𝛼 ∈ 𝑉_𝑇^∗, 𝐴 ∈ 𝑉_𝑁,𝐵 ∈ 𝑉_N$.</p>
+<p>不能产生语言a^n^b^n^</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><input disabled="" type="checkbox">  短语和句柄</p>
+</li>
+<li><p><strong>FA写正规式</strong></p>
+<p>根据自动机合并为正规式的方式,实际上是对正规式转化为非确定有限自动机的逆过程.</p>
+<img src="https://s2.loli.net/2022/06/14/ObU3QqcZwIEmRur.png" alt="image-20220612185846837" style="zoom:67%;" /></li>
+<li><p><input disabled="" type="checkbox">  消除左递归</p>
+<p><strong>常见的</strong>/根本的措施就是通过添加非终结符:<br>$$<br>P \rarr P\alpha | \beta \<br>\Darr \<br>P \Rarr \beta \alpha ^*\<br>\Darr \<br>P\rarr \beta P’ \<br>P’ \rarr \alpha P’ | \epsilon<br>$$<br>利用正规式作为媒介,转换为右递归文法.</p>
+<p>同样的道理,可以将上述内容进行推广.<br>$$<br>P\rarr P\alpha_1 | P\alpha_2|\cdots | P\alpha_n |\beta_1 | \beta_2 | \cdots|\beta_m \<br>\Darr\<br>P\rarr P(\alpha_1 | \alpha_2| \cdots| \alpha_n)|(\beta_1 | \beta_2| \cdots|\beta_m) \<br>\Darr \<br>P\rarr (\beta_1 | \beta_2| \cdots|\beta_m) P’ \<br>P’\rarr (\alpha_1 | \alpha_2| \cdots| \alpha_n)P’|\epsilon<br>$$</p>
+</li>
+</ul>
+<p>  除了上述显示的左递归之外,还存在着隐式的左递归,对应于如果从A1推导到A2,那么绘制其对应的图中,节点A1和A2之间存在着一条有向边.</p>
+<p>  消除隐含左递归的方法就是:</p>
+<ol>
+<li>给定一个非终结符号的排序,例如A1,A2 … </li>
+<li>保证每个推导公式中右侧的A_i的对应位置在左侧A_j的右侧.也就是必须从排序较小着推导到排序较大者.</li>
+<li>对满足第2条的,且包含了左递归的进行左递归消除.</li>
+</ol>
+<p>  如果想要使产生的产生式最少,那么:</p>
+<blockquote>
+<p>如果从开始符号获取到的值依次是A1,A2,…An,</p>
+<p>那么排序时最好是按照这个顺序的逆序进行排列,即An,…,A2,A1</p>
+<p><strong>????</strong></p>
+</blockquote>
+<ul>
+<li><p><input disabled="" type="checkbox">  提取公因子</p>
+<p>目的就是消除回溯.</p>
+<p>这里我们使用的提取左公因子的方法如下:<br>$$<br>P \rarr \alpha A_1 | \alpha A_2 | \cdots | \alpha A_n | \beta_1 | \beta_2 |\dots|\beta_m \<br>\Darr \<br>P\rarr \alpha (A_1 | A_2 |\cdots| A_n )| \beta_1 | \beta_2 |\dots|\beta_m \<br>\Darr\<br>P\rarr \alpha A | \beta_1 | \beta_2 |\dots|\beta_m \ ,\<br>A\rarr A_1 | A_2 |\cdots| A_n<br>$$</p>
+</li>
+<li><p><input disabled="" type="checkbox">  后缀表达式</p>
+</li>
+<li><p><input disabled="" type="checkbox">  符号表</p>
+</li>
+<li><p><input disabled="" type="checkbox">  运行时空间组织</p>
+</li>
+</ul>
+<h2 id="综合题"><a href="#综合题" class="headerlink" title="综合题"></a>综合题</h2><h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><ul>
+<li><p><strong>词法分析,给定正规式</strong></p>
+<blockquote>
+<p>构造NFA<br>确定化<br>最小化</p>
+</blockquote>
+<h2 id="状态转化图"><a href="#状态转化图" class="headerlink" title="状态转化图"></a>状态转化图</h2><ul>
+<li><p>经常用到的表现形式: <strong>状态转换图</strong></p>
+<ul>
+<li><p>使用<strong>结点表示状态</strong>,用<strong>圆圈</strong>表示</p>
+</li>
+<li><p>状态之间使用箭弧链接,上面的数字代表射出节点状态下可能出现的状态.</p>
+</li>
+<li><p>一张转换图只包含有限个状态,<strong>必然有一个为初态</strong>,<strong>至少有一个终态</strong>.</p>
+</li>
+<li><p><strong>初态要添加箭头</strong>指向表示,<strong>终态使用双圆圈</strong>表示.</p>
+</li>
+<li><p>注意到,如果判定时需要添加一个额外的符号来表示转换到终结态,那终结态应该还要退还这个多输入的额外的符号给输入串.使用<strong>终态节点上打星号</strong>代表多读入了一个不属于标识符的字符.</p>
+<img src="https://s2.loli.net/2022/06/14/9ZLupBGYzcJRC6i.png" alt="image-20220612133236416" style="zoom:80%;" /></li>
+</ul>
+</li>
+</ul>
+<h2 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h2><ul>
+<li><p>什么是DFA</p>
+<p>一个确定有限自动机使用五元式来表示 $M=(S,\Sigma,\delta,s_0,F)$</p>
+<p>其中各个内容的含义:</p>
+<ul>
+<li><p>S: 一个有限集,每个元素代表一个状态</p>
+</li>
+<li><p>$\Sigma$: 有穷字母表,每个元素代表一个输入字符</p>
+</li>
+<li><p>$\delta$: 是从$S \times \Sigma$到$S$的单值映射,$\delta (s,a)=s’$代表当 当前状态为s,输入为a时,将转换到下一个状态s’, s’又被称为后继状态.</p>
+</li>
+<li><p>$s_0 \in S$, 代表<strong>唯一的初态</strong>.(<strong>确定有限自动机初态唯一</strong>)</p>
+</li>
+<li><p>$F\subseteq S$,是一个终态集,(<strong>可以为空集</strong>)</p>
+</li>
+</ul>
+<p>综合来说,就是(状态集,输入集,转换关系,初态,终态集)</p>
+</li>
+<li><p>一个DFA可以表示为一张状态转换图(最左侧列代表状态),最上面行代表输入.</p>
+<p>若M的初态结点同时又是终态结点，则空字𝜀可为M所识别（或接受）</p>
+</li>
+<li><p><strong>DFA的构造问题:给定一个正规式,将其转化DFA</strong></p>
+</li>
+<li><p>优缺点:</p>
+<p>编程实现容易,效率高,但是构造困难</p>
+</li>
+</ul>
+<h2 id="NFA"><a href="#NFA" class="headerlink" title="NFA"></a>NFA</h2><ul>
+<li><p>关于非确定有限自动机NFA</p>
+<p>基本同上,同样使用五元式进行表示,不过不同的是:</p>
+<ul>
+<li><p>原本的$\delta$代表的单值映射,这里是$S \times \Sigma^* 到S$的<strong>子集</strong>的映射.也就是<br>$$<br>\delta:S \times \Sigma^{*} \rarr 2^{S}<br>$$</p>
+</li>
+<li><p>原本的初态是唯一的,这里的初态是<strong>非空初态集</strong></p>
+</li>
+<li><p>另外,在这里的弧上可以出现空字**$\epsilon$**</p>
+</li>
+</ul>
+</li>
+<li><p><strong>从一个正规式转化为NFA</strong></p>
+</li>
+<li><p><strong>给定一个NFA,如何将其转化为正规式</strong></p>
+</li>
+<li><p>优缺点</p>
+<p>NFA构造比较容易,但是编程实现有回溯</p>
+</li>
+</ul>
+<h2 id="NFA的确定化-转变为DFA"><a href="#NFA的确定化-转变为DFA" class="headerlink" title="NFA的确定化(转变为DFA)"></a>NFA的确定化(转变为DFA)</h2><ul>
+<li><p>使得初态和终态唯一(引入新的初态X和终态Y).</p>
+<p>从𝑋 到𝑆0 的任意状态结点连一条𝜀箭弧；</p>
+<p>从𝐹中的任意状态结点连一条𝜀箭弧到𝑌。</p>
+</li>
+<li><p>分裂</p>
+<p>使得每条箭弧上或为$\epsilon$ ,或者是$\Sigma$中的单个字符</p>
+<img src="https://s2.loli.net/2022/06/14/azZdQeVgf3Kbnos.png" alt="image-20220612160632690" style="zoom:67%;" /></li>
+<li><p>寻找可合并状态</p>
+<p>引入闭包的概念,定义I的ε闭包ε_Closure(I)为：</p>
+<p>➢ 若𝑞 ∈ 𝐼，则𝑞 ∈ 𝜀_𝐶𝑙𝑜𝑠𝑢𝑟𝑒(𝐼)； </p>
+<p>➢ 若𝑞 ∈ 𝐼, 𝛿(𝑞, 𝜀) = 𝑞′，则𝑞′ ∈ 𝜀_𝐶𝑙𝑜𝑠𝑢𝑟𝑒(𝐼)。(也即是从闭包内的状态接受空字可以转移到的状态)</p>
+<p><strong>具体过程步骤:</strong></p>
+<img src="https://s2.loli.net/2022/06/14/YwEpAqB8FsrJCRW.png" alt="image-20220612161011278" style="zoom:67%;" /></li>
+<li><p>状态合并</p>
+<p>➢ 每个状态子集视为新的状态； </p>
+<p>➢ <strong>初态为首行首列；</strong> (而不是含有初态的就是初态!)</p>
+<p>➢ <strong>终态是含有原终态的状态子集。</strong></p>
+</li>
+</ul>
+<h2 id="DFA的化简"><a href="#DFA的化简" class="headerlink" title="DFA的化简"></a>DFA的化简</h2><ul>
+<li><p>定义等价状态</p>
+<ul>
+<li><p>如果从𝑠出发能读出某个字𝑤而停在终态，那么从𝑡出发也能读出字𝑤停在终态；</p>
+</li>
+<li><p>如果从𝑡出发能读出某个字𝑤而停在终态，那么从𝑠出发也能读出字𝑤停在终态。</p>
+</li>
+</ul>
+</li>
+<li><p>可区别状态</p>
+<ul>
+<li>终态和非终态 可区别的</li>
+<li>射出弧不同(一个有a,一个没有a) 可区别的</li>
+<li>通过同样的输入得到的输出是可区别的  可区别的</li>
+<li>通过某个输入到达的状态及其等价状态,对另一个来说使用某个输入是不可到达的  可区别的</li>
+</ul>
+</li>
+<li><p>化简时,首先从<strong>终态与非终态的区分</strong>开始</p>
+<p>每次都要检查原本同一个集合中的元素得到相同的输入后的输出是否在同一个集合中.如果不,将两者剥离.</p>
+</li>
+<li><p>化简后的弧的创建:</p>
+<img src="https://s2.loli.net/2022/06/14/e9wCyIgutAvmrJY.png" alt="image-20220612171255023" style="zoom:67%;" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="LL-1-文法"><a href="#LL-1-文法" class="headerlink" title="LL(1)文法"></a>LL(1)文法</h3><ul>
+<li><p><strong>LL(1)分析,给出文法</strong></p>
+<blockquote>
+<p>构造First集合<br>否则Follow集合<br>构造LL(1)分析表（可能涉及消除二义文法冲突）<br>识别句子</p>
+</blockquote>
+<p>LL(1)文法中最重要的两个概念:</p>
+<ul>
+<li>终结首符集 (头符号集)</li>
+<li>后继终结符号集(后继符号集)产生原因在于对空字进行匹配时,需要依据这里的判断来决定是否要进行匹配.</li>
+</ul>
+<p>进行LL(1)分析时,需要满足的条件如下,满足以下条件,才称之为LL(1)文法:</p>
+<blockquote>
+<p>L: From <code>L</code>eft to Right</p>
+<p>L: 最左推导</p>
+<p>1: 分析一步,看右侧的一个符号</p>
+</blockquote>
+<ul>
+<li>文法不含左递归；  –<code>不含有左递归</code></li>
+<li>对𝐴 → 𝛼1| … |𝛼𝑛的每对候选式，有𝐹𝑖𝑟𝑠𝑡 (𝛼𝑖) ∩ 𝐹𝑖𝑟𝑠𝑡(𝛼𝑗) = ∅，其中𝑖 ≠ 𝑗；  <code>同一个推导式的右侧首符集无公用元素</code></li>
+<li>对非终结符号𝐴，若𝜀 ∈ 𝐹𝑖𝑟𝑠𝑡(𝐴)，有𝐹𝑖𝑟𝑠𝑡 (𝐴) ∩ 𝐹𝑜𝑙𝑙𝑜𝑤 (𝐴) = ∅。 <code>同一个非终结符的首符集与后继符号集不相交</code></li>
+</ul>
+<p>分析时:</p>
+<img src="https://s2.loli.net/2022/06/14/5M6sg8SJtnvGRap.png" alt="image-20220614093624431" style="zoom:67%;" />
+
+
+
+<p><strong>First集合的求解:</strong></p>
+<img src="https://s2.loli.net/2022/06/14/GE6m7nKSahcukLA.png" alt="image-20220614093824988" style="zoom:80%;" />
+
+<p>向首符集中添加空字\epsilon的条件: </p>
+<ul>
+<li>明确说明了从X能直接推导 epsilon</li>
+<li>对于X推导出的某一串连续的非终结符,这一串非终结符都含有空字epsilon</li>
+</ul>
+<p>对于<strong>Follow集合</strong>:</p>
+<ul>
+<li><p>特别地一个终结符<code>#</code>,在S所在的推导式的右侧添加<code>#</code>,进而为对应的非终结符提供Follow集合中的<code>#</code></p>
+</li>
+<li><p>具体求解</p>
+<img src="https://s2.loli.net/2022/06/14/jEIOKosknHblWA1.png" alt="image-20220614094603428" style="zoom:80%;" /></li>
+</ul>
+<p><strong>构造LL(1)分析表</strong></p>
+<img src="https://s2.loli.net/2022/06/14/cOg9BvlFPeHo2S4.png" alt="image-20220614095418380" style="zoom:80%;" />
+
+ 
+
+<p><strong>分析过程</strong></p>
+<img src="https://s2.loli.net/2022/06/14/2T7zDNJRMOHaklq.png" alt="image-20220614095609097" style="zoom: 80%;" /></li>
+</ul>
+<ul>
+<li><p><strong>LR分析,给出文法</strong></p>
+<blockquote>
+<p>构造拓广文法<br>构造拓广文法的LR(0)/LR(1)项目集规范族<br>构造LR(0)/LR(1)分析表（可能涉及消除二义文法冲突）<br>识别句子</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p><strong>给出翻译模式和高级语言程序，翻译句子</strong></p>
+<blockquote>
+<p>一般涉及多种类型句子的综合，也可能涉及声明语句填写符号表。</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p><strong>给出基本代码块</strong></p>
+<blockquote>
+<p>构造DAG<br>写出优化后的中间代码<br>写出DAG目标优化后的中间代码<br>根据变量活跃性和寄存器信息，写出目标代码</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h3><ul>
+<li><p>构造语言</p>
+<p>给出语言$L(G)={a^{m}b^{n}|1&lt;=n&lt;=m&lt;=2n}$,  请构造对应文法.</p>
+<p>答:<br>$$<br>G(S):\<br>S=ab | aab\<br>S=aSb | aaSb<br>$$</p>
+</li>
+<li><p>作业题</p>
+<img src="https://s2.loli.net/2022/06/14/oYXO7H5rIswWVJm.png" alt="image-20220612004824158" style="zoom:67%;" /></li>
+</ul>
+<h3 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h3>
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <p><h4>© 2021 Baxkiller Powered By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="db91ONAaJE7csgIBIIeWxEXK-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="V4ivekKhnC8pvzwTKL40Pnx8">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
