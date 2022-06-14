@@ -978,6 +978,80 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>关于自上而下的分析方法存在的问题</strong><ul>
+<li>可能存在的左递归导致的无线循环</li>
+<li>分析过程成,多个候选式导致的回溯,产生一定的开销</li>
+<li>虚假匹配问题</li>
+<li>使用自上而下的语法分析无法确定具体的出错位置</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><input disabled="" type="checkbox">  属性文法的杂碎知识</p>
+<ul>
+<li><p>语义规则</p>
+<p>语义规则的形式为$b=f(c_1,c_2,\cdots,c_k)$ </p>
+</li>
+<li><p>综合属性</p>
+<p>综合属性来源于产生式右边的文法符号的属性</p>
+<blockquote>
+<p>终结符只有综合属性,由词法分析器来提供</p>
+<p><strong>只使用综合属性的文法称为S-属性文法.</strong></p>
+<p>通常通过自底向上的方法计算综合属性值.</p>
+</blockquote>
+</li>
+<li><p>继承属性</p>
+<p>继承属性是指产生式右边的文法符号的某个属性,是取决于其兄弟节点后者产生式左侧的非终结符的属性</p>
+<blockquote>
+<p>文法开始符号的所有继承属性作为属性计算前的初始值</p>
+</blockquote>
+</li>
+<li><p><strong>语法制导翻译</strong>(软院往年考过!)</p>
+<blockquote>
+<p><strong>由源程序的语法结构所驱动的处理方法,称为语法制导翻译.</strong></p>
+<p>其语义规则计算可能会产生代码\在符号表中存放信息\给出错误信息\执行<strong>任何其他动作</strong>.</p>
+</blockquote>
+<blockquote>
+<p>为文法的每个产生式配上一组语义规则，并且在语法分析的同时执行这些语义规则，完成有关语义分析和代码生成的工作。</p>
+<p>➢ 在<strong>自上而下</strong>的分析中，当一个产生式<strong>匹配输入串成功时执行</strong>；</p>
+<p>➢ 在<strong>自下而上</strong>的分析中，当一个<strong>产生式被用于归约时执行</strong>。</p>
+</blockquote>
+</li>
+<li><p>依赖图</p>
+<p>如果一个节点的属性b依赖于属性c,则从c绘制向b的有向边.</p>
+<p>注意,这里的节点不是文法符号,而是每个文法符号的每个属性.</p>
+</li>
+<li><p>一遍扫描的处理方法</p>
+</li>
+<li><p>S-属性文法（只使用综合属性）</p>
+<p>其属性的计算遵循从下到上的计算方法，通常借助<strong>LR分析器</strong>实现。表现为在LR分析器的【状态栈 | 符号栈】的符号栈中添加符号的属性值。</p>
+</li>
+<li><p>L-属性文法</p>
+<blockquote>
+<p>概念：如果对于每个产生式𝐴 → 𝑋1𝑋2 … 𝑋𝑛，其语义规则中的每个属性或者是综合属性，或者是𝑋𝑖(1 ≤ 𝑖 ≤ 𝑛)的一个继承属性且这个继承属性仅依赖于：</p>
+<p>➢ 产生式右部𝑋𝑖 的<strong>左边符号</strong>𝑋1, 𝑋2, … , 𝑋𝑖−1的属性； </p>
+<p>➢ 产生式左部𝐴的继承属性。 </p>
+</blockquote>
+<p>S属性文法一定是L属性文法。可以采用自上而下的翻译，也可以采用自下而上的翻译。</p>
+</li>
+<li><p>翻译模式的设计：</p>
+<ul>
+<li><p>自上而下</p>
+<p>对于既有综合属性又有继承属性的情况：</p>
+<p>① 产生式右部符号的继承属性，必须在这个符号以前的动作中计算出来；</p>
+<p>② 一个动作不能引用这个动作右边符号的综合属性； </p>
+<p>③ 产生式左部的𝑉𝑁的综合属性，只有在它所引用的所有属性都计算出来以后才能计算（放到右边末尾）。</p>
+</li>
+<li><p>自下而上</p>
+<p>要求语义动作放在产生式末尾</p>
+<p>解决方案：引入空符号产生式（只需要处理动作，不需要处理属性计算）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="可能会考到"><a href="#可能会考到" class="headerlink" title="可能会考到"></a><strong>可能会考到</strong></h2><ul>
 <li><p><input disabled="" type="checkbox">  对于<strong>上下文无关文法的定义</strong>和一些约定</p>
 <p>具体概念表示为:<strong>它所定义的文法范畴（或语法单位）是完全独立于这种范畴可能出现的环境的。</strong></p>
@@ -1019,6 +1093,23 @@
 <img src="https://s2.loli.net/2022/06/14/1TFi89LaJdQwSVu.png" alt="image-20220612142039208" style="zoom: 50%;" />
 
 <img src="https://s2.loli.net/2022/06/14/BgwJ8lN36oPzxWO.png" alt="image-20220612142210536" style="zoom:50%;" /></li>
+<li><p><input disabled="" type="checkbox">  翻译句子相关的知识点</p>
+<ul>
+<li><p>后缀式</p>
+</li>
+<li><p>三地址代码(例如X=A+B) 四元式</p>
+</li>
+<li><p>说明语句的翻译  例如<code>int a,b;</code> 应该得到的名字表中应存储<code>a,b:int</code> (符号表的填写)</p>
+<img src="https://s2.loli.net/2022/06/15/7LpoxVv9K4XyFDl.png" style="zoom:80%;" /></li>
+<li><p>int与real的转换? 课后题</p>
+</li>
+<li><p>布尔表达式和控制条件?</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><input disabled="" type="checkbox"> 运行时空间组织PPT</li>
 </ul>
 <h2 id="必考知识点"><a href="#必考知识点" class="headerlink" title="必考知识点"></a>必考知识点</h2><ul>
 <li><p><strong>画图表示编译过程的各阶段</strong></p>
@@ -1084,31 +1175,40 @@
 </li>
 </ul>
 <ul>
-<li><p><input disabled="" type="checkbox">  短语和句柄</p>
+<li><p><input checked="" disabled="" type="checkbox">  短语和句柄</p>
+<ul>
+<li><p>短语定义:</p>
+<p>对文法𝐺[𝑆]，如果有$𝑆\stackrel{*}{\Rarr}𝛼𝐴𝛿$ 且 $𝐴 \stackrel{+}{\Rarr}𝛽$ ，则称𝛽是句型𝛼𝛽𝛿相对于非终结符号𝐴的短语。</p>
+</li>
+<li><p>直接短语</p>
+<p>如果有$A\Rarr\beta$,称𝛽是句型𝛼𝛽𝛿相对于𝐴的<strong>直接短语</strong></p>
+<p>通常对于直接短语的判断方式是通过对给定的句型,依照文法绘制对应的语法树。如果想要判断短语$\alpha$是不是直接短语，就看其父节点$A$的所有<strong>孩子节点</strong>（包含$\alpha$ 在内），是否都是<strong>叶子节点</strong>，如果是，则这里的叶子节点们组成的短语就是直接短语。</p>
+</li>
+<li><p>句柄</p>
+<p>一个句型的<strong>最左直接短语</strong>称为该句型的句柄</p>
+</li>
+</ul>
 </li>
 <li><p><strong>FA写正规式</strong></p>
 <p>根据自动机合并为正规式的方式,实际上是对正规式转化为非确定有限自动机的逆过程.</p>
 <img src="https://s2.loli.net/2022/06/14/ObU3QqcZwIEmRur.png" alt="image-20220612185846837" style="zoom:67%;" /></li>
-<li><p><input disabled="" type="checkbox">  消除左递归</p>
+<li><p><input checked="" disabled="" type="checkbox">  消除左递归</p>
 <p><strong>常见的</strong>/根本的措施就是通过添加非终结符:<br>$$<br>P \rarr P\alpha | \beta \<br>\Darr \<br>P \Rarr \beta \alpha ^*\<br>\Darr \<br>P\rarr \beta P’ \<br>P’ \rarr \alpha P’ | \epsilon<br>$$<br>利用正规式作为媒介,转换为右递归文法.</p>
 <p>同样的道理,可以将上述内容进行推广.<br>$$<br>P\rarr P\alpha_1 | P\alpha_2|\cdots | P\alpha_n |\beta_1 | \beta_2 | \cdots|\beta_m \<br>\Darr\<br>P\rarr P(\alpha_1 | \alpha_2| \cdots| \alpha_n)|(\beta_1 | \beta_2| \cdots|\beta_m) \<br>\Darr \<br>P\rarr (\beta_1 | \beta_2| \cdots|\beta_m) P’ \<br>P’\rarr (\alpha_1 | \alpha_2| \cdots| \alpha_n)P’|\epsilon<br>$$</p>
-</li>
-</ul>
-<p>  除了上述显示的左递归之外,还存在着隐式的左递归,对应于如果从A1推导到A2,那么绘制其对应的图中,节点A1和A2之间存在着一条有向边.</p>
-<p>  消除隐含左递归的方法就是:</p>
-<ol>
-<li>给定一个非终结符号的排序,例如A1,A2 … </li>
-<li>保证每个推导公式中右侧的A_i的对应位置在左侧A_j的右侧.也就是必须从排序较小着推导到排序较大者.</li>
-<li>对满足第2条的,且包含了左递归的进行左递归消除.</li>
-</ol>
-<p>  如果想要使产生的产生式最少,那么:</p>
+<p>除了上述显示的左递归之外,还存在着隐式的左递归,对应于如果从A1推导到A2,那么绘制其对应的图中,节点A1和A2之间存在着一条有向边.</p>
+<p>消除隐含左递归的方法就是:</p>
+<pre><code>1. 给定一个非终结符号的排序,例如A1,A2 ... 
+2. 保证每个推导公式中右侧的A_i的对应位置在左侧A_j的右侧.也就是必须从排序较小着推导到排序较大者.
+3. 对满足第2条的,且包含了左递归的进行左递归消除.
+</code></pre>
+<p>如果想要使产生的产生式最少,那么:</p>
 <blockquote>
 <p>如果从开始符号获取到的值依次是A1,A2,…An,</p>
 <p>那么排序时最好是按照这个顺序的逆序进行排列,即An,…,A2,A1</p>
 <p><strong>????</strong></p>
 </blockquote>
-<ul>
-<li><p><input disabled="" type="checkbox">  提取公因子</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  提取公因子</p>
 <p>目的就是消除回溯.</p>
 <p>这里我们使用的提取左公因子的方法如下:<br>$$<br>P \rarr \alpha A_1 | \alpha A_2 | \cdots | \alpha A_n | \beta_1 | \beta_2 |\dots|\beta_m \<br>\Darr \<br>P\rarr \alpha (A_1 | A_2 |\cdots| A_n )| \beta_1 | \beta_2 |\dots|\beta_m \<br>\Darr\<br>P\rarr \alpha A | \beta_1 | \beta_2 |\dots|\beta_m \ ,\<br>A\rarr A_1 | A_2 |\cdots| A_n<br>$$</p>
 </li>
@@ -1117,6 +1217,22 @@
 <li><p><input disabled="" type="checkbox">  符号表</p>
 </li>
 <li><p><input disabled="" type="checkbox">  运行时空间组织</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  静态链和动态链</p>
+<p>这里主要是关于静态链内容的确定方式:</p>
+<p>静态链内容填写分为三种情况:</p>
+<ul>
+<li><p>第N层调用第N+1层,也就相当于父亲节点调用孩子节点</p>
+<p>第N+1层的静态链填写调用过程 ( 第 N层过程 ) 的最新活动记录的起始地址 .也就相当于被调用者的静态链=<strong>调用者的SP</strong></p>
+</li>
+<li><p>第N层调用第N层,相当于兄弟节点调用其对应的兄弟节点</p>
+<p>被调用者的静态链内容填写为 调用过程 ( 第 N层过程 ) 的静态链的值。也就是被调用者静态链=<strong>调用者的静态链.</strong></p>
+</li>
+<li><p>第N层调用第N-X层</p>
+<p>相当于第某一个后代节点调用其祖先节点.</p>
+<p>被调用者的静态链填写需要<strong>沿着调用者的静态链跳转X次</strong>到达的活动记录的静态链内容,即被调用者的静态链内容.</p>
+</li>
+</ul>
 </li>
 </ul>
 <h2 id="综合题"><a href="#综合题" class="headerlink" title="综合题"></a>综合题</h2><h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><ul>
@@ -1237,7 +1353,7 @@
 <blockquote>
 <p>构造First集合<br>否则Follow集合<br>构造LL(1)分析表（可能涉及消除二义文法冲突）<br>识别句子</p>
 </blockquote>
-<p>LL(1)文法中最重要的两个概念:</p>
+<p>LL(1)文法中<strong>最重要的两个概念</strong>:</p>
 <ul>
 <li>终结首符集 (头符号集)</li>
 <li>后继终结符号集(后继符号集)产生原因在于对空字进行匹配时,需要依据这里的判断来决定是否要进行匹配.</li>
@@ -1276,29 +1392,145 @@
 <p><strong>构造LL(1)分析表</strong></p>
 <img src="https://s2.loli.net/2022/06/14/cOg9BvlFPeHo2S4.png" alt="image-20220614095418380" style="zoom:80%;" />
 
- 
-
+<p>表格的格式如下所示:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$V_{T1}$</th>
+<th>$V_{T2}$</th>
+<th>$\cdots$</th>
+<th>#</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$V_{N1}$</td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>千万不要忘记!</strong></td>
+</tr>
+<tr>
+<td>$V_{N2}$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>$V_{N3}$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 <p><strong>分析过程</strong></p>
-<img src="https://s2.loli.net/2022/06/14/2T7zDNJRMOHaklq.png" alt="image-20220614095609097" style="zoom: 80%;" /></li>
+<img src="https://s2.loli.net/2022/06/14/2T7zDNJRMOHaklq.png" alt="image-20220614095609097" style="zoom: 80%;" />
+
+<p>进行分析时的表格格式如下所示:</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>文法符号栈</th>
+<th>输入串</th>
+<th>所用产生式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
 </ul>
-<ul>
+<h3 id="LR分析"><a href="#LR分析" class="headerlink" title="LR分析"></a>LR分析</h3><ul>
 <li><p><strong>LR分析,给出文法</strong></p>
 <blockquote>
 <p>构造拓广文法<br>构造拓广文法的LR(0)/LR(1)项目集规范族<br>构造LR(0)/LR(1)分析表（可能涉及消除二义文法冲突）<br>识别句子</p>
 </blockquote>
+<p>分析法的优点:</p>
+<ul>
+<li>多数上下文无关文法描述的语言都可以使用LR分析器识别.</li>
+<li>LR能分析的文法包括LL(1)能分析的文法.</li>
+<li>扫描输入串时可以发现任何错误,并能准确指出出错地点.</li>
+</ul>
+<p>常见的LR分析四种方法包括:</p>
+<ul>
+<li>LR(0)分析法,局限性大</li>
+<li>简单LR(SLR)</li>
+<li>规范LR</li>
+<li>向前LR(LALR)</li>
+</ul>
+<h3 id="定义LR文法以及相关概念"><a href="#定义LR文法以及相关概念" class="headerlink" title="定义LR文法以及相关概念"></a>定义LR文法以及相关概念</h3><ul>
+<li><p>LR文法:文法能够构造一个LR分析表,使得其每一个入口都唯一</p>
+</li>
+<li><p>规范句型: 包含句柄的可规约句型</p>
 </li>
 </ul>
+<h3 id="LR（0）分析法"><a href="#LR（0）分析法" class="headerlink" title="LR（0）分析法"></a>LR（0）分析法</h3><p>需要注意一点: $A\rarr \epsilon$只有一个状态$A\rarr \dot{}$</p>
+<p>分析过程:</p>
+<ol>
+<li><p>首先构造拓广文法</p>
+<p>也就是$G_1=(V_T,V_N,S,P)$构造为$G_2=(V_T,V_N ∪{S’},S’,P∪{S’ \rarr S})$</p>
+<p>我们称G2是G1的拓广文法.</p>
+</li>
+<li><p>构造拓广文法的LR(0)项目集规范族</p>
+<p>这里需要使用到闭包的相关概念.</p>
+</li>
+<li><p>构造分析表</p>
+</li>
+<li><p>识别句子</p>
+</li>
+</ol>
+<p>认为SLR与LR(1)的主要区别在于:</p>
+<p>SLR避免冲突的方式,是对整个文法中每个非终结符求取其对应的FOLLOW集合内容,从而得到对应的后继终结符,根据决定规约/移进时,对应规约式规约后的非终结符的FOLLOW集合中是否含有下一个要移入的终结符来判断是否选择规约.</p>
+<p>而LR(1)的方法相较于SLR更加细化,也就是其根据的不是宽泛的整个语法中的FOLLOW集合,而是单纯根据对应推导式的FOLLOW集合,具体是指对应<code>·</code>所在的位置后面,看作一个整体,看其整体的FIRST集合.</p>
+<p>三者的差别反映在分析表的构造上:</p>
 <ul>
+<li><p>对于LR(0),如果<code>·</code>到达了式子的末尾,那么对应在分析表的所有终结符对应位置都要填写规约式.</p>
+</li>
+<li><p>对于SLR,只在规约后的非终结符的FOLLOW对应的终结符的位置填写规约式.</p>
+<p><img src="https://s2.loli.net/2022/06/14/SOoJrq8fWihBDCK.png" alt="image-20220614223033464"></p>
+</li>
+<li><p>对于LR(1),在对应<code>·</code>在式子末尾时,式子的<code>前瞻符号</code>的位置填写规约式.</p>
+<p><img src="https://s2.loli.net/2022/06/14/QAOpidHvRF6oqnD.png" alt="image-20220614223001637"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="翻译"><a href="#翻译" class="headerlink" title="翻译"></a>翻译</h3><ul>
 <li><p><strong>给出翻译模式和高级语言程序，翻译句子</strong></p>
 <blockquote>
 <p>一般涉及多种类型句子的综合，也可能涉及声明语句填写符号表。</p>
 </blockquote>
 </li>
 </ul>
-<ul>
+<h3 id="DAG优化"><a href="#DAG优化" class="headerlink" title="DAG优化"></a>DAG优化</h3><ul>
 <li><p><strong>给出基本代码块</strong></p>
 <blockquote>
-<p>构造DAG<br>写出优化后的中间代码<br>写出DAG目标优化后的中间代码<br>根据变量活跃性和寄存器信息，写出目标代码</p>
+<p><strong>对于给定的基本块构造DAG</strong></p>
+<p><strong>按照构造DAG的节点顺序重新写中间代码</strong></p>
+<p><strong>利用节点排序算法对节点排序,并根据排序后的节点顺序写中间代码</strong></p>
+<p><strong>对上一步的中间代码利用简单代码生成算法生成目标代码</strong></p>
+<blockquote>
+<p>写出优化后的中间代码<br>写出DAG目标优化后的中间代码<br>根据变量活跃性和寄存器信息，写出目标代码</p>
+</blockquote>
 </blockquote>
 </li>
 </ul>
