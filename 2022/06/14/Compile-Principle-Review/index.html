@@ -198,20 +198,52 @@
 <li><p><input disabled="" type="checkbox">  翻译句子相关的知识点</p>
 <ul>
 <li><p>后缀式</p>
+<p>运算符在后面</p>
 </li>
 <li><p>三地址代码(例如X=A+B) 四元式</p>
+<p>种类: 二元算数运算符/逻辑算符;一元算符;赋值语句;无条件转移;条件转移;过程调用;索引赋值;地址与指针赋值;</p>
+<p>四元式=$(op,arg1,arg2,result)$</p>
 </li>
 <li><p>说明语句的翻译  例如<code>int a,b;</code> 应该得到的名字表中应存储<code>a,b:int</code> (符号表的填写)</p>
 <img src="https://s2.loli.net/2022/06/15/7LpoxVv9K4XyFDl.png" style="zoom:80%;" /></li>
 <li><p>int与real的转换? 课后题</p>
+<p>两者相加的课后题，主要是利用了后缀式。</p>
+<ul>
+<li><p>第一问，求出类型：</p>
+<p>直接写就可以。</p>
+</li>
+<li><p>第二问，生成代码：</p>
+<p>要注意的是：程序输出时，<code>int2real</code>如果被看作是单个运算符，也需要按照后缀式的形式，先输出具体的值，在输出运算符<code>int2real</code>.</p>
+<img src="https://s2.loli.net/2022/06/16/imtNjFVZhQgyX5I.png" alt="image-20220616094105658" style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/16/OJvDZ2Yyjsgcah4.png" alt="image-20220616094120661" style="zoom:80%;" /></li>
+<li><p>课件给定的例子:</p>
+<img src="https://s2.loli.net/2022/06/16/fGaz56JQEATrKeM.png" alt="image-20220616103244140" style="zoom:80%;" /></li>
+</ul>
 </li>
 <li><p>布尔表达式和控制条件?</p>
-</li>
-</ul>
-</li>
-</ul>
+<p>关于布尔表达式中的运算符优先级说明:</p>
+<p>优先级从高到低:<code>非</code> &gt; <code>与</code> &gt;  <code>或</code></p>
+<p>关系运算符,例如<code>&lt; &gt; &lt;= ...</code> ,内部优先级相同,整体高于布尔算符,低于算数算符.</p>
+<p><strong>布尔表达式的翻译模式:</strong></p>
+<img src="https://s2.loli.net/2022/06/16/TEpq2mUQYDFeob8.png" alt="image-20220616105340116" style="zoom:80%;" />
+
+<p><strong>作为条件控制的布尔表达式:</strong></p>
+<p>对于真假出口对应的链表:</p>
 <ul>
-<li><input disabled="" type="checkbox"> 运行时空间组织PPT</li>
+<li>当遇到<code>与</code>时,需要将两个非终结符的falseList合并,</li>
+<li>当遇到<code>或</code>时,需要将两个非终结符的trueList合并.</li>
+</ul>
+<p>对于回填函数backpatch:</p>
+<ul>
+<li>当遇到<code>与</code>,E2可以确定E1的truelist需要回填的地址</li>
+<li>当遇到<code>或</code>,E2可以确定E1的falseList需要回填的地址</li>
+</ul>
+<img src="https://s2.loli.net/2022/06/16/g5QFf6qPMlWeYLm.png" alt="image-20220616112005473" style="zoom:80%;" /></li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox">  运行时空间组织PPT</p>
+</li>
 </ul>
 <h2 id="必考知识点"><a href="#必考知识点" class="headerlink" title="必考知识点"></a>必考知识点</h2><ul>
 <li><p><strong>画图表示编译过程的各阶段</strong></p>
@@ -227,6 +259,9 @@
 </li>
 <li><p><strong>语义分析和中间代码生成器:</strong></p>
 <p>按照语义规则对语法分析器归约（或推导）出的语法单位进行语义分析，并把它们翻译成一定形式的<strong>中间代码</strong>。</p>
+<blockquote>
+<p>静态语义检查通常包括: 类型检查,控制流检查,一致性检查,相关名字检查,名字的作用域分析</p>
+</blockquote>
 </li>
 <li><p><strong>优化器:</strong></p>
 <p>对中间代码进行优化处理</p>
@@ -297,28 +332,133 @@
 <li><p><input checked="" disabled="" type="checkbox">  消除左递归</p>
 <p><strong>常见的</strong>/根本的措施就是通过添加非终结符:<br>$$<br>P \rarr P\alpha | \beta \<br>\Darr \<br>P \Rarr \beta \alpha ^*\<br>\Darr \<br>P\rarr \beta P’ \<br>P’ \rarr \alpha P’ | \epsilon<br>$$<br>利用正规式作为媒介,转换为右递归文法.</p>
 <p>同样的道理,可以将上述内容进行推广.<br>$$<br>P\rarr P\alpha_1 | P\alpha_2|\cdots | P\alpha_n |\beta_1 | \beta_2 | \cdots|\beta_m \<br>\Darr\<br>P\rarr P(\alpha_1 | \alpha_2| \cdots| \alpha_n)|(\beta_1 | \beta_2| \cdots|\beta_m) \<br>\Darr \<br>P\rarr (\beta_1 | \beta_2| \cdots|\beta_m) P’ \<br>P’\rarr (\alpha_1 | \alpha_2| \cdots| \alpha_n)P’|\epsilon<br>$$</p>
-<p>除了上述显示的左递归之外,还存在着隐式的左递归,对应于如果从A1推导到A2,那么绘制其对应的图中,节点A1和A2之间存在着一条有向边.</p>
-<p>消除隐含左递归的方法就是:</p>
-<pre><code>1. 给定一个非终结符号的排序,例如A1,A2 ... 
-2. 保证每个推导公式中右侧的A_i的对应位置在左侧A_j的右侧.也就是必须从排序较小着推导到排序较大者.
-3. 对满足第2条的,且包含了左递归的进行左递归消除.
+</li>
+</ul>
+<p>  除了上述显示的左递归之外,还存在着隐式的左递归,对应于如果从A1推导到A2,那么绘制其对应的图中,节点A1和A2之间存在着一条有向边.</p>
+<p>  消除隐含左递归的方法就是:</p>
+<pre><code>  1. 给定一个非终结符号的排序,例如A1,A2 ... 
+  2. 保证每个推导公式中右侧的A_i的对应位置在左侧A_j的右侧.也就是必须从排序较小着推导到排序较大者.
+  3. 对满足第2条的,且包含了左递归的进行左递归消除.
 </code></pre>
-<p>如果想要使产生的产生式最少,那么:</p>
+<p>  如果想要使产生的产生式最少,那么:</p>
 <blockquote>
 <p>如果从开始符号获取到的值依次是A1,A2,…An,</p>
 <p>那么排序时最好是按照这个顺序的逆序进行排列,即An,…,A2,A1</p>
 <p><strong>????</strong></p>
 </blockquote>
-</li>
+<ul>
 <li><p><input checked="" disabled="" type="checkbox">  提取公因子</p>
 <p>目的就是消除回溯.</p>
 <p>这里我们使用的提取左公因子的方法如下:<br>$$<br>P \rarr \alpha A_1 | \alpha A_2 | \cdots | \alpha A_n | \beta_1 | \beta_2 |\dots|\beta_m \<br>\Darr \<br>P\rarr \alpha (A_1 | A_2 |\cdots| A_n )| \beta_1 | \beta_2 |\dots|\beta_m \<br>\Darr\<br>P\rarr \alpha A | \beta_1 | \beta_2 |\dots|\beta_m \ ,\<br>A\rarr A_1 | A_2 |\cdots| A_n<br>$$</p>
 </li>
 <li><p><input disabled="" type="checkbox">  后缀表达式</p>
-</li>
+<p>后缀表达式就是逆波兰表示法.这种方法采用的是:将运算量写在前面,将算符写在后面.满足三种:<br>$$<br><a>=a \<br>&lt;\theta e&gt;=<e>\theta \<br>&lt;E_1 \theta E_2&gt; = <E_1><E_2>\theta \<br>&lt;(E)&gt;=<E> \<br>$$<br><strong>后缀式存在的优点:</strong></p>
+<p><strong>➢ 无括号，形式简洁；</strong> </p>
+<p><strong>➢ 运算符的顺序与运算次序完全相同。</strong></p>
+<p>对应语义规则:</p>
+<img src="https://s2.loli.net/2022/06/17/IWVFYmuCh18Rokz.png" alt="image-20220616001950225" style="zoom:80%;" /></li>
 <li><p><input disabled="" type="checkbox">  符号表</p>
+<ul>
+<li><p>符号表起到的作用?</p>
+<ul>
+<li>收集符号属性</li>
+<li>上下文语义的合法性检查</li>
+<li>目标代码生成阶段地址分配的依据</li>
+</ul>
 </li>
+<li><p>三种组织方式</p>
+<ul>
+<li><p>构造多个符号表,将具有相同属性的种类的符号组织在一起</p>
+<blockquote>
+<p>优点: 每个符号表中存放符号的属性个数和结构完全相同</p>
+<p>缺点: 一遍编译程序要同时管理若干个符号表</p>
+</blockquote>
+</li>
+<li><p>把所有符号都组织在一张符号表中</p>
+<blockquote>
+<p>优点: 管理集中单一</p>
+<p>缺点: 增加了空间开销</p>
+</blockquote>
+</li>
+<li><p>根据符号属性相似程度分类组织成若干张表</p>
+<blockquote>
+<p>优点: 减少空间开销</p>
+<p>缺点: 增加了表格管理的复杂性</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>符号表表项的排列</p>
+<ul>
+<li><p>线性组织</p>
+<blockquote>
+<p>优点：插入快，空间效率高；</p>
+<p>缺点：查询慢，时间效率差。</p>
+</blockquote>
+</li>
+<li><p>排序组织及二分法</p>
+<blockquote>
+<p>优点：查询效率高，<strong>空间效率高</strong>；</p>
+<p>缺点：插入效率低，算法复杂一些。</p>
+</blockquote>
+</li>
+<li><p>Hash表</p>
+<blockquote>
+<p>优点：插入、查询效率都高；</p>
+<p>缺点：空间效率有所降低。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>​    </p>
+<ul>
 <li><p><input disabled="" type="checkbox">  运行时空间组织</p>
+<ul>
+<li><p>实参传递给形参</p>
+<ul>
+<li>地址(变量传递地址,常数/表达式创建临时单元,传递临时单元的地址</li>
+<li>传值(将值拿出来,放进被调用过程的形式单元中,使用时类似于使用局部变量</li>
+<li>传名字</li>
+</ul>
+</li>
+<li><p>函数值的返回</p>
+<ul>
+<li><p>将某个函数值保留在某个累加器中</p>
+</li>
+<li><p>/传递结果?</p>
+<p>形参对应两个单元,实参地址+实参值.使用形式参数,对应使用第二个单元;</p>
+</li>
+</ul>
+</li>
+<li><p>活动记录的内容</p>
+<ul>
+<li>链接数据(返回地址/动态链/静态链)</li>
+<li>形式单元(形式单元个数与内容)</li>
+<li>局部数据区(局部变量/内情向量,即数组有关信息/临时工作单元)</li>
+</ul>
+</li>
+<li><p>嵌套过程语言的栈式实现</p>
+<ul>
+<li><p>从下到上,内容依次是:</p>
+<p>动态链(老SP),返回地址,静态链,形参个数,形参单元,局部变量,内情向量,临时单元</p>
+</li>
+<li><p>如果使用了嵌套层次显示表,其内容应该是:</p>
+<p>动态链,返回地址,全局Display,形参个数,形参单元,display表,局部变量,内情向量,临时单元</p>
+</li>
+</ul>
+</li>
+<li><p>堆式内存分配</p>
+<p>分配策略:</p>
+<ul>
+<li>首次满足法</li>
+<li>最优满足法</li>
+<li>最差满足法</li>
+</ul>
+</li>
+</ul>
 </li>
 <li><p><input checked="" disabled="" type="checkbox">  静态链和动态链</p>
 <p>这里主要是关于静态链内容的确定方式:</p>
@@ -467,9 +607,13 @@
 <p>1: 分析一步,看右侧的一个符号</p>
 </blockquote>
 <ul>
-<li>文法不含左递归；  –<code>不含有左递归</code></li>
-<li>对𝐴 → 𝛼1| … |𝛼𝑛的每对候选式，有𝐹𝑖𝑟𝑠𝑡 (𝛼𝑖) ∩ 𝐹𝑖𝑟𝑠𝑡(𝛼𝑗) = ∅，其中𝑖 ≠ 𝑗；  <code>同一个推导式的右侧首符集无公用元素</code></li>
-<li>对非终结符号𝐴，若𝜀 ∈ 𝐹𝑖𝑟𝑠𝑡(𝐴)，有𝐹𝑖𝑟𝑠𝑡 (𝐴) ∩ 𝐹𝑜𝑙𝑙𝑜𝑤 (𝐴) = ∅。 <code>同一个非终结符的首符集与后继符号集不相交</code></li>
+<li><p>文法不含左递归；  –<code>不含有左递归</code></p>
+</li>
+<li><p>对𝐴 → 𝛼1| … |𝛼𝑛的每对候选式，有𝐹𝑖𝑟𝑠𝑡 (𝛼𝑖) ∩ 𝐹𝑖𝑟𝑠𝑡(𝛼𝑗) = ∅，其中𝑖 ≠ 𝑗；  <code>同一个推导式的右侧首符集无公用元素</code></p>
+</li>
+<li><p>对非终结符号𝐴，**若𝜀 ∈ 𝐹𝑖𝑟𝑠𝑡(𝐴)**，有𝐹𝑖𝑟𝑠𝑡 (𝐴) ∩ 𝐹𝑜𝑙𝑙𝑜𝑤 (𝐴) = ∅。 <code>同一个非终结符的首符集与后继符号集不相交</code>。</p>
+<p><strong>对与First集合中不含有空字的，无论其First集合与Follow集合相交是否为空，都不影响判断这个文法是否是LL(1)文法。</strong></p>
+</li>
 </ul>
 <p>分析时:</p>
 <img src="https://s2.loli.net/2022/06/14/5M6sg8SJtnvGRap.png" alt="image-20220614093624431" style="zoom:67%;" />
@@ -619,8 +763,41 @@
 <h3 id="翻译"><a href="#翻译" class="headerlink" title="翻译"></a>翻译</h3><ul>
 <li><p><strong>给出翻译模式和高级语言程序，翻译句子</strong></p>
 <blockquote>
-<p>一般涉及多种类型句子的综合，也可能涉及声明语句填写符号表。</p>
+<p>一般涉及<strong>多种类型句子</strong>的综合，也可能涉及<strong>声明语句填写符号表</strong>。</p>
 </blockquote>
+<p>进行翻译时,这里给出几种方法:</p>
+<ul>
+<li><p>第一种就是按部就班按照PPT给定的方式进行翻译:</p>
+<p>首先根据产生式写出LR(0)分析表,确定运算的优先次序.</p>
+<p>其次按照LR(0)分析,对给定的程序输入串进行分析规约.同时通过设定好的语义规则产生中间代码.</p>
+</li>
+<li><p>第二种,直接写语法树</p>
+<p>问题在于需要确定运算时的优先级设定.</p>
+<p>如果优先级确定没问题,那么最终结果应该也没问题.</p>
+</li>
+</ul>
+<p><strong>翻译时,一定务必搞清楚跳转关系啥的!!!</strong></p>
+<img src="https://s2.loli.net/2022/06/16/Jbc7FtWjsyxV4ga.png" alt="image-20220616212008779" style="zoom:80%;" />
+
+ 
+
+<p>几种常见的类型的句子的翻译:</p>
+<ul>
+<li><p>布尔</p>
+</li>
+<li><p>控制</p>
+</li>
+<li><p>说明</p>
+<p>这里说明语句,主要是在符号表中填写,主要填写内容包括:名字\类型\字宽等信息.</p>
+<blockquote>
+<p>① 过程中的说明语句形式：𝑖𝑑1, 𝑖𝑑2, … , 𝑖𝑑𝑛 ∶ 𝑡𝑦𝑝𝑒</p>
+<p>② 每个变量需要记录名字、类型、字宽信息，分别用属性name、type、width记录</p>
+<p>③ 当新出现一个名字时，需要记录进符号表，用offset记录该名字在符号表中的地址偏移量，在识别前置初值为0 。 </p>
+<p>④ 过程enter(name, type, offset)用来把名字name填入到符号表，并给出该名字的类型type及在过程数据区中的相对地址offset。 </p>
+<p>⑤ 假定整数类型域宽为4，实型域宽为8。</p>
+</blockquote>
+</li>
+</ul>
 </li>
 </ul>
 <h3 id="DAG优化"><a href="#DAG优化" class="headerlink" title="DAG优化"></a>DAG优化</h3><ul>
@@ -634,7 +811,77 @@
 <p>写出优化后的中间代码<br>写出DAG目标优化后的中间代码<br>根据变量活跃性和寄存器信息，写出目标代码</p>
 </blockquote>
 </blockquote>
+<p>基础的内容暂且不表.</p>
+<h3 id="代码块划分"><a href="#代码块划分" class="headerlink" title="代码块划分"></a>代码块划分</h3><ul>
+<li>开始<ul>
+<li>整个代码的开头</li>
+<li>跳转语句所能到达的位置</li>
+<li>在条件跳转语句之后的第一条语句</li>
+</ul>
 </li>
+<li>结束<ul>
+<li>另一个开头</li>
+<li>转移代码(包含</li>
+<li>HALT指令(包含</li>
+</ul>
+</li>
+</ul>
+<h3 id="代码外提"><a href="#代码外提" class="headerlink" title="代码外提"></a>代码外提</h3><p>说一说代码外提的优化策略:</p>
+<ol>
+<li>首先要满足这是一个循环不变量</li>
+<li>要提出去的循环不变量应该是出口节点B的<strong>必经节点</strong>/或者如果不是必经节点,那么循环之后<strong>不能再引用改定点值.</strong></li>
+<li>循环不变量A=… 外提时,需要保证循环中的<strong>其它地方不再有A的定值点.</strong></li>
+<li>循环不变量A=…外提时,要求循环中所有关于A的引用点都必须是且仅是这个定值点所能达到的.(也就是不能在要外提的定值点之前出现对A的引用.</li>
+</ol>
+<p>其次是查找循环L中的不变量的算法:</p>
+<ol>
+<li>依次查看每个L的每个基本块的代码,如果其运算对象为常数,或者定值点在L之外,将这个代码标记为不变运算.</li>
+<li>重复后面一一步,直到没有新的代码被标记为不变运算</li>
+<li>依次查看没有被标记为不变运算的代码,如果它的每个运算对象或为常数，或者定值点在L之外，或只有一个能到达的定值点且该点上的代码已标记为“不变运算”，则把查看的代码标记为“不变运算”.</li>
+</ol>
+<p><strong>代码外提算法</strong></p>
+<ol>
+<li>寻找不变运算</li>
+<li>判断能否外提</li>
+<li>按照顺序依次外提</li>
+</ol>
+<h3 id="强度削弱"><a href="#强度削弱" class="headerlink" title="强度削弱"></a>强度削弱</h3><p>完成将循环内的每次的线性乘法分解成循环外的初始赋值和循环内的加法.</p>
+<p>将变量更换为常量.</p>
+<h3 id="目标代码的生成设定"><a href="#目标代码的生成设定" class="headerlink" title="目标代码的生成设定"></a>目标代码的生成设定</h3><ul>
+<li><p>相关设定</p>
+<p> ➢ 建立一个编译时用的寄存器描述数组𝑅𝑣𝑎𝑙𝑢𝑒，动态地记录各寄存器的上述信息</p>
+<p>➢ 建立一个变量地址描述数组𝐴𝑣𝑎𝑙𝑢𝑒，动态地记录各变量现行值的存放位置：是寄存器中，还是某主存单元，还是既在寄存器又在主存单元。</p>
+</li>
+<li><p>寄存器获取</p>
+<ol>
+<li><p>如果<strong>𝐵存放在某个寄存器𝑅𝑖</strong>，𝑅𝑣𝑎𝑙𝑢𝑒[𝑅𝑖]<strong>只包含𝐵</strong>，同时，或者𝐵与𝐴是<strong>同一标识符</strong>，或者中间代码𝑖中𝐵的信息为(−, −)（即<strong>后面不再引用</strong>），则选取𝑅𝑖为所需寄存器，转(4)。</p>
+<p>(三个条件必须同时满足才行:在寄存器中,只包含,后续不用/同一标识符)</p>
+</li>
+<li><p>如果(1)失败，若有空闲寄存器𝑅𝑖，选择其作为所需寄存器，转(4)。</p>
+</li>
+<li><p> 若(2)也失败，需要从已分配寄存器中选择𝑅𝑖：</p>
+</li>
+</ol>
+<p>   占用该𝑅𝑖的变量也保存在<strong>主存</strong>中，或者在最远的地方被引用（即待用信息值最大）。</p>
+<ol start="4">
+<li><p>对𝑅𝑣𝑎𝑙𝑢𝑒[𝑅𝑖]中的每个变量𝑀，如果𝑀 ≠ 𝐴，或者𝑀 = 𝐴 = 𝐶 ≠ 𝐵 ∧ 𝐵 ∉𝑅𝑣𝑎𝑙𝑢𝑒[𝑅𝑖]，则：</p>
+<p>① 如果𝑀 ∉ 𝐴𝑣𝑎𝑙𝑢𝑒[𝑀]，生成目标代码𝑆𝑇 𝑅𝑖, 𝑀； </p>
+<p>② 如果𝑀 = 𝐵，或者𝑀 = 𝐶 ∧ 𝐵 ∈ 𝑅𝑣𝑎𝑙𝑢𝑒[𝑅𝑖]，则令𝐴𝑣𝑎𝑙𝑢𝑒 𝑀 = {𝑀, 𝑅}，否则</p>
+<p>令𝐴𝑣𝑎𝑙𝑢𝑒 𝑀 = {𝑀}； </p>
+<p>③ 删除𝑅𝑣𝑎𝑙𝑢𝑒[𝑅𝑖]中的𝑀； </p>
+<p>④ 给出𝑅，返回。</p>
+<blockquote>
+<p>当前已经拿到了要分配的寄存器了,但是不确定要不要将寄存器内容写内存,因此需要判断:</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>名词</p>
+<p>指令执行代价:：每条指令的执行代价 = 每条指令访问主存单元次数 + 1</p>
+</li>
+</ul>
+<h3 id="DAG的目标代码"><a href="#DAG的目标代码" class="headerlink" title="DAG的目标代码"></a>DAG的目标代码</h3><p>算法详情:</p>
+<img src="https://s2.loli.net/2022/06/17/ov3VCX5HmYnhRQd.png" alt="image-20220617220741228" style="zoom:80%;" /></li>
 </ul>
 <h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h3><ul>
 <li><p>构造语言</p>
@@ -644,7 +891,19 @@
 <li><p>作业题</p>
 <img src="https://s2.loli.net/2022/06/14/oYXO7H5rIswWVJm.png" alt="image-20220612004824158" style="zoom:67%;" /></li>
 </ul>
-<h3 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h3>
+<h3 id="第七章优先级"><a href="#第七章优先级" class="headerlink" title="第七章优先级"></a>第七章优先级</h3><img src="https://s2.loli.net/2022/06/17/rRo9Azd7u6QyWEF.png" alt="image-20220617102749876" style="zoom:80%;" />
+
+
+
+<h3 id="第七章说明"><a href="#第七章说明" class="headerlink" title="第七章说明"></a>第七章说明</h3><img src="https://s2.loli.net/2022/06/17/PYVbLByiJksv8jT.png" alt="image-20220617103328274" style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/17/QJNfoezWU1E8L7C.png" alt="image-20220617103349846" style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/17/imLWuJysMgYtAp1.png" alt="image-20220617103601530" style="zoom:80%;" />
+
+<img src="https://s2.loli.net/2022/06/17/xvaZL51NJn4M9CS.png" alt="image-20220617103633347" style="zoom:80%;" />
+
+
     </div>
 
     
