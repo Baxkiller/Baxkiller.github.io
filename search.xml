@@ -2407,9 +2407,14 @@
 </li>
 </ol>
 <h1 id="第三章-存储系统"><a href="#第三章-存储系统" class="headerlink" title="第三章 存储系统"></a>第三章 存储系统</h1><blockquote>
+<p>存储系统的定义?(组织成一个)</p>
+<p>命中率H如何计算?访问周期T和命中率的关系(一路飙升)? 存储系统访问效率e?</p>
+<p>啥是并行存储器?有什么显著缺点(4).</p>
+<p>交叉访问存储器的加速比N的计算?两种交叉访问的目的?</p>
 </blockquote>
 <h2 id="存储系统定义和评价标准（价格、容量和速度）"><a href="#存储系统定义和评价标准（价格、容量和速度）" class="headerlink" title="存储系统定义和评价标准（价格、容量和速度）"></a>存储系统定义和评价标准（价格、容量和速度）</h2><blockquote>
 <p>命中率的计算H，访问周期与命中率的关系T，<strong>存储系统的访问效率e</strong></p>
+<p>并行存储器的加速比N=平均有效字的期望</p>
 </blockquote>
 <p>组成存储系统的关键：将速度，容量，价格不同的多个物理存储器组织成一个存储器，其速度最快，容量最大，<strong>单位容量</strong>价格最便宜。</p>
 <h3 id="存储系统的定义"><a href="#存储系统的定义" class="headerlink" title="存储系统的定义"></a>存储系统的定义</h3><p><strong>两个或两个以上速度、容量和价格各不相同的存储器</strong>用硬件、软件、或软件与硬件相结合的方法<strong>连接起来成为一个存储系统。</strong>这个存储系统对程序员透明，并且该存储器速度<strong>接近</strong>速度最快的那个存储器，存储容量与容量最大的那个存储器<strong>相等</strong>，单位容量的价格<strong>接近</strong>最便宜的那个存储器。</p>
@@ -2445,7 +2450,222 @@
 </li>
 </ol>
 <h2 id="存储系统的层次结构"><a href="#存储系统的层次结构" class="headerlink" title="存储系统的层次结构"></a>存储系统的层次结构</h2><p>多层次寄存器：寄存器堆，先行缓冲站，高速缓冲存储器Cache，主存，联机存储器，脱机存储器</p>
-<h2 id="并行存储器"><a href="#并行存储器" class="headerlink" title="并行存储器"></a>并行存储器</h2><p>指的是将原本m字w位的存储器改变成为m/n字n*w位的存储器。</p>
-<h2 id="交叉访问存储器"><a href="#交叉访问存储器" class="headerlink" title="交叉访问存储器"></a>交叉访问存储器</h2><h2 id="虚拟存储器工作原理（页，段，段页式）"><a href="#虚拟存储器工作原理（页，段，段页式）" class="headerlink" title="虚拟存储器工作原理（页，段，段页式）"></a>虚拟存储器工作原理（页，段，段页式）</h2><h2 id="加快内部地址变换的方法"><a href="#加快内部地址变换的方法" class="headerlink" title="加快内部地址变换的方法"></a>加快内部地址变换的方法</h2><h2 id="页面替换算法"><a href="#页面替换算法" class="headerlink" title="页面替换算法"></a>页面替换算法</h2><h2 id="页面大小，主存容量，页面调度算法对主存命中率影响"><a href="#页面大小，主存容量，页面调度算法对主存命中率影响" class="headerlink" title="页面大小，主存容量，页面调度算法对主存命中率影响"></a>页面大小，主存容量，页面调度算法对主存命中率影响</h2><h2 id="Cache存储系统基本工作原理"><a href="#Cache存储系统基本工作原理" class="headerlink" title="Cache存储系统基本工作原理"></a>Cache存储系统基本工作原理</h2><h3 id="直接映像"><a href="#直接映像" class="headerlink" title="直接映像"></a>直接映像</h3><h3 id="全相联"><a href="#全相联" class="headerlink" title="全相联"></a>全相联</h3><h3 id="组相联"><a href="#组相联" class="headerlink" title="组相联"></a>组相联</h3><h2 id="Cache的一致性问题"><a href="#Cache的一致性问题" class="headerlink" title="Cache的一致性问题"></a>Cache的一致性问题</h2><h2 id="Cache的预取算法"><a href="#Cache的预取算法" class="headerlink" title="Cache的预取算法"></a>Cache的预取算法</h2>]]></content>
+<h2 id="并行存储器"><a href="#并行存储器" class="headerlink" title="并行存储器"></a>并行存储器</h2><p>指的是将原本m字w位的存储器改变成为m/n字n*w位的存储器。（类似于高位/低位交叉编址）</p>
+<p>逻辑上来看,就是指将地址码分为两个部分，一部分负责存储存储器的地址，另一部分选择数据。</p>
+<p><strong>缺点：</strong></p>
+<ol>
+<li>取指令冲突：遇到转移指令且转移成功时，一个存储周期内读到的n条指令，后面的几条将无用</li>
+<li>读操作数冲突：一次性读出n个，不一定都有用</li>
+<li>写数据冲突：需要凑齐n个数据之后才一起写入存储器（如果只写一个，需要读入n个，修改一个，写回n个）</li>
+<li>读写冲突：要读入的字和要写入的字同在一个存储器内，无法在一个存储周期完成</li>
+</ol>
+<h2 id="交叉访问存储器"><a href="#交叉访问存储器" class="headerlink" title="交叉访问存储器"></a>交叉访问存储器</h2><ol>
+<li><p>高位交叉访问存储器（使用高位区分存储体）</p>
+<p>目的：扩大存储器容量</p>
+</li>
+<li><p>低位交叉访问存储器（使用低位区分存储体）</p>
+<p>目的：提高存储器访问速度</p>
+<p>为了提高速度，通过n个存储体分时启动，近似实现并行存储的读写操作。</p>
+</li>
+</ol>
+<p><strong>并行存储器的加速比N的计算</strong></p>
+<p>N也是每个存储周期能够访问到的平均有效字的个数</p>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625191727648.png" alt="image-20220625191727648" style="zoom:80%;" />
+
+<p>假设转移概率为g：存储体越多，转移概率越小，加速比越大！</p>
+<p>但是随着存储体个数不断增大，存储体个数对有效字长的影响会逐渐减小，例如g=0.2，每五条出现一条转移,即便提高存储体个数,前五个也应当会出现一个转移指令,那么后面的指令冗余</p>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625192526088.png" alt="image-20220625192526088" style="zoom:80%;" />
+
+<h2 id="虚拟存储器工作原理（页，段，段页式）"><a href="#虚拟存储器工作原理（页，段，段页式）" class="headerlink" title="虚拟存储器工作原理（页，段，段页式）"></a>虚拟存储器工作原理（页，段，段页式）</h2><p>地址组成：</p>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625192814639.png" alt="image-20220625192814639" style="zoom:67%;" />
+
+<ul>
+<li><p>多用户虚拟地址Av变换成主存实地址A </p>
+</li>
+<li><p>多用户虚拟地址中的页内偏移D直接作为主存实地址中的页内偏移d </p>
+</li>
+<li><p>主存实页号p与它的页内偏移d直接拼接起来就得到主存实地址A。</p>
+</li>
+</ul>
+<h3 id="段式虚拟存储器"><a href="#段式虚拟存储器" class="headerlink" title="段式虚拟存储器"></a>段式虚拟存储器</h3><ul>
+<li><p>地址映像：<strong>每个程序段都从0地址开始编址</strong>，长度可长可短，可以在程序执行过程中<strong>动态改变程序段的长度</strong>。</p>
+</li>
+<li><p>地址变换方法：由用户号找到基址寄存器，读出段表起始地址，与虚地址中段号相加得到段表地址，把段表中的起始地址与段内偏移D相加就能得到主存实地址。</p>
+</li>
+<li><p>==优点：==</p>
+<ol>
+<li><p>程序的模块化性能好。</p>
+</li>
+<li><p>便于程序和数据的共享。 </p>
+</li>
+<li><p>程序的动态链接和调度比较容易。 </p>
+</li>
+<li><p>便于实现信息保护。 </p>
+</li>
+</ol>
+</li>
+<li><p>==缺点==</p>
+<ol>
+<li><p>地址变换所花费的时间长，两次加法（先找到该用户的段表，找到后做一次加法得到段的起始地址，再做一次加法得到对应段内的具体位置）</p>
+</li>
+<li><p>主存储器的利用率往往比较低。</p>
+</li>
+</ol>
+</li>
+</ul>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625193716075.png" alt="image-20220625193716075" style="zoom:80%;" />
+
+<h3 id="页式虚拟存储器"><a href="#页式虚拟存储器" class="headerlink" title="页式虚拟存储器"></a><strong>页式虚拟存储器</strong></h3><ul>
+<li><p>地址映像：虚拟地址空间划分为大小固定的页，把主存的地址空间同样划分为大小相等的固定大小的页。</p>
+</li>
+<li><p>优点：</p>
+<ol>
+<li>主存储器的利用率比较高</li>
+</ol>
+<ol start="2">
+<li><p>页表相对比较简单</p>
+</li>
+<li><p>地址变换的速度比较快（只需要做一次加法）</p>
+</li>
+<li><p>对磁盘的管理比较容易 </p>
+</li>
+</ol>
+</li>
+<li><p>缺点：</p>
+<ol>
+<li><p>程序的模块化性能不好</p>
+</li>
+<li><p>页表很长，需要占用很大的存储空间</p>
+</li>
+</ol>
+</li>
+</ul>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625194515080.png" alt="image-20220625194515080" style="zoom: 80%;" />
+
+
+
+<h3 id="段页式"><a href="#段页式" class="headerlink" title="段页式"></a>段页式</h3><ul>
+<li><strong>地址映象方法</strong>：每个程序段在段表中占一行，在段表中给出页表长度和页表的起始地址，页表中给出每一页在主存储器中的实页号</li>
+<li><strong>地址变换方法：</strong>先查段表，得到页表起始地址和页表长度，再查页表找到要访问的主存实页号，把实页号p与页内偏移d拼接得到主存实地址。</li>
+</ul>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625195102120.png" alt="image-20220625195102120" style="zoom:80%;" />
+
+
+
+<h2 id="加快内部地址变换的方法"><a href="#加快内部地址变换的方法" class="headerlink" title="加快内部地址变换的方法"></a>加快内部地址变换的方法</h2><ul>
+<li>导致虚拟存储器速度降低的主要原因<ol>
+<li>页表或者段表过大，查找需要花费很多时间</li>
+<li>页表或者段表在内存中的存放不连续，无法通过偏移量查找对应地址</li>
+</ol>
+</li>
+</ul>
+<p>解决方法：<strong>多级页表</strong></p>
+<p>页表级数的计算公式：需要多少个页面(log转换为比特位)/一个页面能够存储多少页表项(log转换为bit位)</p>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625195516965.png" alt="image-20220625195516965" style="zoom:80%;" />
+
+<p>内存中必须保留一级页表，把调入到内存中的程序的相关页表保留在内存中，其他存储在磁盘中即可。但由此产生问题：<strong>访问内存的次数增加</strong>，需要加快查表速度。</p>
+<ul>
+<li><p>目录表法</p>
+<p>压缩页表的存储容量，用一个<strong>容量比较小的高速存储器</strong>来存放页表，从而加快页表的查表速度。</p>
+<p>缺点：随着主存容量增大，目录表的容量同样增大，可扩展性较差。且造价高，查表速度降低。</p>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625200147080.png" alt="image-20220625200147080" style="zoom:80%;" /></li>
+<li><p>快慢表</p>
+<p>目录表为快表（硬件实现）,完整表页为慢表(可能是多级页表)，快表大小压缩,<strong>并不需要匹配整个内存</strong>,只需要8-16个存储字,内存转换速度非常快</p>
+<p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625200753861.png" alt="image-20220625200753861"></p>
+</li>
+<li><p>散列函数</p>
+<p>把<strong>按内容的相联访问</strong>变为<strong>按地址访问</strong>，从而支持更大的快表。</p>
+<p>散列部件的输入是用户号+虚拟页号，输出是映射完成的快表的地址。</p>
+<p>优点:速度快,可扩展性强</p>
+<p>缺点:需要额外的硬件</p>
+</li>
+</ul>
+<h2 id="页面替换算法"><a href="#页面替换算法" class="headerlink" title="页面替换算法"></a>页面替换算法</h2><p>评价算法的指标：</p>
+<ol>
+<li>命中率</li>
+<li>算法是否容易实现</li>
+</ol>
+<p>页面替换使用场合：</p>
+<ol>
+<li><p>虚拟存储器中，主存页面的替换，一般用软件实现。</p>
+</li>
+<li><p>Cache中的块替换，一般用硬件实现。 </p>
+</li>
+<li><p>虚拟存储器的快慢表中，快表存储字的替换，用硬件实现。 </p>
+</li>
+<li><p>虚拟存储器中，用户基地址寄存器的替换，用硬件实现。 </p>
+</li>
+<li><p>在有些虚拟存储器中，目录表的替换。</p>
+</li>
+</ol>
+<p><strong>随机替换算法</strong></p>
+<p>优点：算法简单，容易实现</p>
+<p>缺点：没有利用历史信息，没有反映程序的局部性，命中率低</p>
+<p><strong>最优替换算法</strong>：理想算法，仅用作评价其它页面替换算法好坏的标准。</p>
+<p><strong>近期最少用算法LRU：</strong>选择近期最少访问的页</p>
+<p>优点： 能够比较正确反映程序的局部性，<strong>把最久未被访问的页作为被替换页</strong></p>
+<p><strong>先进先出算法FIFO：</strong>选择最早装入主存的页作为被替换的页</p>
+<p>优点：容易实现，利用了历史信息但是没有利用局部性。</p>
+<h2 id="主存命中率影响"><a href="#主存命中率影响" class="headerlink" title="主存命中率影响"></a>主存命中率影响</h2><h3 id="页面大小"><a href="#页面大小" class="headerlink" title="页面大小"></a>页面大小</h3><p>当页面大小为某个值，结果存在最值。</p>
+<p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625204430706.png" alt="image-20220625204430706"></p>
+<p>页面大小导致的其他结果：</p>
+<ul>
+<li>页面增大：命中率可能下降（当d&gt;Sp），造成的空间浪费可能增大，内存空间利用率下降。可用页面减少。</li>
+<li>页面减小：命中率可能下降(d&lt;Sp)，页表和页面表在内存中占的比例将会增大。</li>
+</ul>
+<h3 id="主存容量"><a href="#主存容量" class="headerlink" title="主存容量"></a>主存容量</h3><img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625204811203.png" alt="image-20220625204811203" style="zoom:80%;" />
+
+
+
+<h3 id="页面调度"><a href="#页面调度" class="headerlink" title="页面调度"></a>页面调度</h3><p><strong>请求式</strong>：当使用到的时候，再调入主存</p>
+<p><strong>预取式</strong>：在程序重新开始运行之前，把上次停止运行前一段时间内用到的页面先调入到主存储器，然后才开始运行程序。其主要优点是可以避免在程序开始运行时，频繁发生页面失效的情况；</p>
+<p>其主要缺点：如果调入的页面用不上，浪费了调入的时间，占用了主存的资源。</p>
+<h2 id="Cache存储系统基本工作原理"><a href="#Cache存储系统基本工作原理" class="headerlink" title="Cache存储系统基本工作原理"></a>Cache存储系统基本工作原理</h2><p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625205447342.png" alt="image-20220625205447342"></p>
+<h2 id="地址映像"><a href="#地址映像" class="headerlink" title="地址映像"></a>地址映像</h2><h3 id="直接映像"><a href="#直接映像" class="headerlink" title="直接映像"></a>直接映像</h3><p>主存储器中一块只能映象到Cache的一个特定的块中，通常是对Cache的块数进行取模。因此，Cache地址与主存储器地址的低位部分完全相同。</p>
+<p>用主存地址中的块号B<strong>去访问区号存储器</strong>，把读出来的区号<strong>与主存地址中的区号E进行比较</strong>。只有比较相等并且有效位为1，才访问Cache，获得块内内容。为了提高Cache速度，可以将区号存储器和Cache合并成一个存储器。</p>
+<p>优点：硬件简单，不需要相联访问存储器；访问速度快实际上不需要进行地址变换。</p>
+<p>缺点：块的冲突率比较高。</p>
+<p><img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625212215158.png" alt="image-20220625212215158" style="zoom:80%;" /><img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625212202795.png" alt="image-20220625212202795" style="zoom:80%;" /></p>
+<h3 id="全相联"><a href="#全相联" class="headerlink" title="全相联"></a>全相联</h3><p>主存中的任意一块到Cache中的任意一块。</p>
+<p>优点：块冲突概率低，空间利用率高。</p>
+<p>缺点：相联存储器<strong>成本高</strong>，<strong>查表速度慢</strong>。</p>
+<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625210359843.png" alt="image-20220625210359843" style="zoom:80%;" />
+
+<h3 id="组相联"><a href="#组相联" class="headerlink" title="组相联"></a>组相联</h3><p>主存和Cache划分为大小相同的块和组。组间直接映射，组内全相联映射。</p>
+<p>优点：冲突率较低，块的利用率大幅度提高，块的失效率明显降低。</p>
+<p>缺点：实现难度和造价比较高。</p>
+<p><img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625212737832.png" alt="image-20220625212737832" style="zoom:67%;" /><img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625212747181.png" alt="image-20220625212747181" style="zoom:80%;" /></p>
+<h2 id="Cache的一致性问题"><a href="#Cache的一致性问题" class="headerlink" title="Cache的一致性问题"></a>Cache的一致性问题</h2><p>造成Cache与主存内容不一致的原因：</p>
+<ul>
+<li><p>由于CPU写Cache，没有立即写主存（Cache新）</p>
+</li>
+<li><p>由于IO处理机或IO设备写主存（主存新）</p>
+</li>
+</ul>
+<p>Cache的更新算法：</p>
+<ul>
+<li><p>写直达法through，写入Cache时也写入主存</p>
+<p>可靠，实现简单，但是与主存 通信太多（每次写写一个字），要设置后行写数缓冲站（一个高速寄存器堆）</p>
+</li>
+<li><p>写回法back，数据只写入Cache，仅当替换时才把修改过的Cache写回内存</p>
+<p>不如写直达可靠，并且控制复杂，但是通信少，每次写一个块，不需要写数缓冲站</p>
+</li>
+</ul>
+<p>写Cache的两种方法：</p>
+<ul>
+<li>不按写分配法：写Cache不命中，只需要把写的字写入内存（写直达）</li>
+<li>按写分配法：不命中，还要把一个块从主存读入Cache（写回法）</li>
+</ul>
+<h2 id="Cache的预取算法"><a href="#Cache的预取算法" class="headerlink" title="Cache的预取算法"></a>Cache的预取算法</h2><ol>
+<li><p>按需取。当出现Cache不命中时，才把需要的一个块取到Cache中。</p>
+</li>
+<li><p>恒预取。无论Cache是否命中，都把下一块取到Cache中。 </p>
+</li>
+<li><p>不命中预取。当出现Cache不命中，把本块和下一块都取到Cache中。</p>
+</li>
+</ol>
+<p>主要考虑命中率是否提高，采用恒预取，不命中率降低很多75-85</p>
+<p>不命中预取也能降低30-40</p>
+]]></content>
   </entry>
 </search>
