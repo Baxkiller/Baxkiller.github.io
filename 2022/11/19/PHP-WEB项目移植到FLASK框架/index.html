@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="google-site-verification" content="TZE0rZyIqLl10trYu3BWBWa1Vmz6HFwhb2OcNEK4u-s" />
+     <link rel="shortcut icon" href= /img/ico.ico >
+    <title>
+        Blog | Baxkiller
+    </title>
+    <meta name="description" content= Hey Bro! Here's Baxkiller's Blog Site. >
+    <meta name="keywords" content= Blog,Hexo,Theme,Baxkiller,Coder >
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-home
+ replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            PHP-WEB项目移植到FLASK框架
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <h1 id="PHP-WEB项目移植到FLASK框架以及FLASK快速入门"><a href="#PHP-WEB项目移植到FLASK框架以及FLASK快速入门" class="headerlink" title="PHP-WEB项目移植到FLASK框架以及FLASK快速入门"></a>PHP-WEB项目移植到FLASK框架以及FLASK快速入门</h1><p>项目地址： <a target="_blank" rel="noopener" href="https://github.com/Baxkiller/Data_Collection_Online">Baxkiller/Data_Collection_Online  (github.com)</a></p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>某天笔者在快乐地遨游于知识的海洋中时，一位朋友问我能否帮他写个网站，只需要做到能够收发数据即可。我一想，这个简单啊，于是花了一些时间把网站写好了，本地开启了PHP服务器也可以正常挂载到服务器上使用和访问，心想这下可以下班啦！</p>
+<p>这时朋友又发来一个请求，问我能否帮他挂载到服务器上。天真的我此时心想无非是安装一个apache服务器，然后安装好<code>nginx</code>配置完，监听端口就好了。等他把服务器地址和用户名密码发给我，我远程登陆后发现他的用户并不在管理员组中，没办法安装新的软件，即便原服务器中已经安装好了<code>apache</code>和<code>nginx</code>服务器，我也无法对其设置做出更改。一时间陷入了困境。</p>
+<p>不过所谓“解铃还须系铃人”，我向他说明问题后，他提出可以通过<code>flask</code>框架完成<strong>不需要<code>root</code>权限即可监听端口并运行网站</strong>。</p>
+<p><strong>好吧，那就试试看把WEB项目移植到FLASK框架吧。</strong></p>
+<h2 id="适用对象"><a href="#适用对象" class="headerlink" title="适用对象"></a>适用对象</h2><ul>
+<li><p>对<code>Python</code>有一定了解，会使用Python的基本语法。</p>
+</li>
+<li><p>有网站搭建的经验，熟悉<code>HTML</code>,<code>CSS</code>,<code>JS</code>，知道前端和后端分别是什么以及如何运行工作。</p>
+<p>不知道的同学可以看我的这篇博客 <a href="">还没写，等写好了我就换掉链接</a> 大致了解一下~</p>
+</li>
+</ul>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>如果准备好了，那我们就直接开始了！想要看直接一点的可以直接看最后的<a href="#summary">总结部分</a></p>
+<blockquote>
+<p><strong>免责声明</strong>：关于FLASK的运行原理我本身也不是特别清楚，这里只讲一讲我在实际<del>使用</del>（照葫芦画瓢）过程中的一些自我认识，如果有对这方面有比较深了解的同学可以把相关内容或者帖子的链接发在评论区，不要喷我   : (</p>
+</blockquote>
+<p>FLASK本身实际上与PHP等后端语言的运行使用比较相似，不同之处在于FLASK是本身基于Python语言的一个框架，依托了Python环境自带的创建服务器功能。所以使用FLASK可以完成网站后端的快速开发和上线，相对需要配置的环境也比较简单，不需要配置复杂的<code>nginx</code>和<code>apache</code>等环境。</p>
+<blockquote>
+<p>Python在端口9000快速创建服务器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 9000</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>关于FLASK框架<strong>对于移植本身</strong>带来的优势有以下几点：</p>
+<ol>
+<li>提供页面渲染，可以完整地将原本准备好的静态页面渲染出来，只需要一个很简单的函数即可</li>
+<li>提供后端请求接口，只需要短短两三行代码即可完成最基本的后端处理函数的创建，并且可以创建非常简单的接口。这依托于其本身提供的<strong>语法</strong>。</li>
+</ol>
+<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><p>本项目文件结构如下：</p>
+<p>其中<code>init.py</code>代表运行该网站系统时的主文件，由于<code>flask</code>的特殊文件系统，他在搜索网站显示的根目录时，将会<strong>默认</strong>从与<code>init.py</code>并列的目录下寻找，当然了，这个搜索地址是可以通过指定参数更改的，这里后面再讲，心里先有一个概念就好。</p>
+<p>与整个系统相关的其他文件也是从与<code>init.py</code>并列的目录下寻找的，因此如果想要请求某个资源，比如说<code>js/timer.js</code>，必须在<code>html</code>中标明位置是<code>    &lt;script src=&quot;/static/js/dataShow.js&quot;&gt;&lt;/script&gt;</code>！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">-</span><br><span class="line">│  init.py</span><br><span class="line">│</span><br><span class="line">└─static</span><br><span class="line">    ├─css</span><br><span class="line">    │      login.css</span><br><span class="line">    │      toShow.css</span><br><span class="line">    │</span><br><span class="line">    ├─data</span><br><span class="line">    │      data.json</span><br><span class="line">    │</span><br><span class="line">    ├─js</span><br><span class="line">    │      dataLoad.js</span><br><span class="line">    │      dataSave.js</span><br><span class="line">    │      dataShow.js</span><br><span class="line">    │      timer.js</span><br><span class="line">    │</span><br><span class="line">    ├─templates</span><br><span class="line">    │      index.html</span><br><span class="line">    │      labelPage.html</span><br><span class="line">    │      saveData.php</span><br><span class="line">    │</span><br><span class="line">    └─userData</span><br><span class="line">            login.json</span><br><span class="line">            setting.json</span><br><span class="line">            timeStamps.json</span><br><span class="line">            toLabelInfo.json</span><br><span class="line">            userLabelInfo.json</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="语法-接口"><a href="#语法-接口" class="headerlink" title="语法/接口"></a>语法/接口</h3><ul>
+<li><p>整体框架用法：</p>
+<p>最好先安装好对应的包：<code>flask</code>，<code>json</code>等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, jsonify, render_template, request <span class="comment"># 引入包</span></span><br><span class="line"></span><br><span class="line">app = Flask(__name__, template_folder = <span class="string">&#x27;./static/templates&#x27;</span>)  <span class="comment"># 实例化app对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 相应的很多函数(语法后面也有说明)</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/xxx&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xxx</span>():</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">        app.run(host = <span class="string">&#x27;0.0.0.0&#x27;</span>,  <span class="comment"># 任何ip都可以访问</span></span><br><span class="line">            port = <span class="number">7777</span>,  <span class="comment"># 端口</span></span><br><span class="line">            debug = <span class="literal">True</span>, <span class="comment"># debug模式</span></span><br><span class="line">            use_reloader = <span class="literal">False</span> <span class="comment"># 一些参数，具体可以自行查找</span></span><br><span class="line">            )</span><br></pre></td></tr></table></figure></li>
+<li><p>基本函数/渲染用函数模板如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>) </span><span class="comment"># this is the path of global</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">function</span>():</span></span><br><span class="line">    <span class="comment"># do something</span></span><br><span class="line">    <span class="comment"># you can read data from front or just render a page</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># you can return the data after being operated</span></span><br><span class="line">    <span class="comment"># or return the page you just render</span></span><br><span class="line">    <span class="keyword">return</span> something</span><br></pre></td></tr></table></figure>
+
+<p>第一行中括号里的内容代表相对于整个项目的位置，无论是数据请求或是通过url进行请求，对应的数据/请求都会发送到与你给定的url下的函数<code>function()</code>中。例如访问<code>127.0.0.1</code>，那么对应请求会发送到<code>route(&#39;/&#39;)</code>下的函数中，函数返回啥，对应页面就显示啥。</p>
+</li>
+</ul>
+<h3 id="页面渲染"><a href="#页面渲染" class="headerlink" title="页面渲染"></a>页面渲染</h3><p>书接上一行，既然函数返回啥，对应页面就显示啥，那能不能直接返回我想要渲染的页面啊？比如我使用文件操作直接读入<code>.html</code>文件然后返回？</p>
+<p>答案当然是<strong>不可以！</strong> 一个框架有一个框架的规则，如果想要渲染一个页面，使用函数<code>render_templates(&#39;index.html&#39;)</code>即可。</p>
+<p>特别需要<strong>注意</strong>：既然说了是render <strong>templates</strong>，那就把你要渲染的页面放在<code>/templates</code>文件夹下。具体的这个文件夹的位置，可以在最初实例化<code>app对象</code>时声明，如下（对应上面的文件结构）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__, template_folder = <span class="string">&#x27;./static/templates&#x27;</span>)  <span class="comment"># 实例化app对象</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="数据收发-前后台通信"><a href="#数据收发-前后台通信" class="headerlink" title="数据收发/前后台通信"></a>数据收发/前后台通信</h3><p>这个数据收发也非常滴简单呐。</p>
+<p>这里介绍我自己常用的收发方式，即前端通过<code>jQuery</code>的<code>ajax</code>方式发出数据请求，然后后端在函数中接受到数据请求后对数据做完处理再<code>return</code>回去。</p>
+<p>举个栗子：</p>
+<p><code>requestData.js</code>（虽然上面文件结构中没有，但你可以认为这个文件存在于<code>./static/js</code>目录下。）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据用户登录得到的数据，请求获取数据</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dataLoad</span>(<span class="params"></span>):</span></span><br><span class="line"><span class="function">	<span class="title">$</span>.<span class="title">ajax</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="params"><span class="function">        url: <span class="string">&quot;/requestData&quot;</span>, <span class="regexp">//</span> 对应后台的函数格式中@app.route(<span class="string">&#x27;/requestData&#x27;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        type: <span class="string">&quot;POST&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        dataType: <span class="string">&quot;json&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        data: &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">            uid: uid,</span></span></span><br><span class="line"><span class="params"><span class="function">            mode: mode,</span></span></span><br><span class="line"><span class="params"><span class="function">        &#125;,</span></span></span><br><span class="line"><span class="params"><span class="function">        success: <span class="regexp">//</span>如果数据请求成功，做的事情</span></span></span><br><span class="line"><span class="params"><span class="function">            <span class="keyword">function</span> (data) &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">                <span class="keyword">if</span>(data.index === -<span class="number">1</span>) <span class="regexp">//</span>检查数据的内容判断后台的结果，做出响应动作</span></span></span><br><span class="line"><span class="params"><span class="function">                &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">                    alert(<span class="string">&quot;当前无数据可标注!请联系任务发布者或稍后再试...&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">                    reDirected()</span></span></span><br><span class="line"><span class="params"><span class="function">                &#125;</span></span></span><br><span class="line"><span class="params"><span class="function">                <span class="keyword">else</span> <span class="keyword">if</span>(data.index === -<span class="number">2</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">                &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">                    alert(data.msg)</span></span></span><br><span class="line"><span class="params"><span class="function">                    reDirected()</span></span></span><br><span class="line"><span class="params"><span class="function">                &#125;</span></span></span><br><span class="line"><span class="params"><span class="function">                update(data.d,data.index)</span></span></span><br><span class="line"><span class="params"><span class="function">            &#125;</span></span></span><br><span class="line"><span class="params"><span class="function">    &#125;</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>而对应的前台函数是啥呢：</p>
+<p><code>init.py</code>中的一个函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/requestData&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>) </span><span class="comment"># 要与上面的对应方式相同</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">requestData</span>():</span></span><br><span class="line">    uid = request.form.get(<span class="string">&#x27;uid&#x27;</span>)</span><br><span class="line">    mode = <span class="built_in">eval</span>(request.form.get(<span class="string">&#x27;mode&#x27;</span>))  <span class="comment"># 两个数据参数</span></span><br><span class="line">    res=do_something(uid, mode)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(res) <span class="comment"># 将结果以json形式返回，但是传输需要先转化为字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>这样，两者之间就可以非常方便的完成通讯啦！</p>
+<p>为了方便大家理解，我这里再给出一个图：</p>
+<p><img src="https://s2.loli.net/2022/11/20/yWQdqkGXNOoVFZK.png" alt="1"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><div id="summary">总结</div></h2><p>最后的总结部分如下：</p>
+<p>想要完成从HTML到<code>FLASK</code>的移植，按照以下步骤：</p>
+<ol>
+<li><p>将原项目的文件结构设置为上面提到的文件结构的设置。</p>
+<p>即对于大部分形如 ↓ 的项目，在<code>css</code>这种文件夹的并列位置创建<code>templates</code>文件夹，并将所有静态模板文件复制进去。</p>
+<p><img src="https://s2.loli.net/2022/11/20/vTckq5YxpJ9U3fu.png" alt="2"></p>
+<p>在这些文件夹的上层目录部分，新建一个文件夹名为<code>static</code>，新建一个<code>py</code>文件，随便命名（例如<code>init.py</code>）</p>
+<p>将上面提到的<code>css,templates</code>在内的所有文件剪切粘贴到<code>static</code>文件夹中</p>
+</li>
+<li><p>修改所有引用<code>js,css</code>的链接，更改为<code>/static/js/...</code>以及<code>/static/css/...</code>，<code>data</code>同理。</p>
+</li>
+<li><p>修改前端发送数据请求的位置的目标地址为<code>/name</code>的形式。</p>
+</li>
+<li><p>编辑<code>init.py</code>文件，按照前面提到的语法/接口部分，编写函数。</p>
+<p>例如对于接受前端的数据请求的处理函数(3中的<code>/name</code>)对应函数为:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/name&#x27;</span>,method=[<span class="string">&#x27;post&#x27;</span>,<span class="string">&#x27;get&#x27;</span>]</span>) </span><span class="comment"># this is the path of global</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">name</span>():</span></span><br><span class="line">    data=request.form.get(<span class="string">&#x27;input_name/json_name&#x27;</span>) <span class="comment"># 发送时对应的数据名称</span></span><br><span class="line">    res=data.operat() <span class="comment"># 操作数据</span></span><br><span class="line">    <span class="keyword">return</span> json.dumps(res) <span class="comment"># 传回数据</span></span><br></pre></td></tr></table></figure></li>
+<li><p>运行<code>init.py</code>即可啦~</p>
+</li>
+</ol>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>受限于知识面和时间问题，自己有很多东西并没有特别深究。</p>
+<p>如果您对本文有任何好的建议或意见，或者任何问题，欢迎通过以下方式联系我：</p>
+<ul>
+<li>email <code>zhanghnsd@163.com</code></li>
+<li>评论区留言或私信</li>
+<li><code>github</code>对应仓库提交<code>issue</code></li>
+</ul>
+<p>以上。</p>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <p><h4>© 2021 Baxkiller Powered By <a class="theme-author" target="_blank" rel="noopener" href="https://github.com/Xunzhuo/hexo-theme-coder" style="font-size:14px; color: #969696">Coder</a></h4>
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span id="busuanzi_container_site_pv">本站浏览总访问量: <span id="busuanzi_value_site_pv"></span></span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">本站访问人数: <span id="busuanzi_value_site_uv"></span></span>
+    
+    <label class="el-switch el-switch-blue el-switch-sm" style="vertical-align: sub;">
+        <input type="checkbox" name="switch" id="update_style">
+        <span class="el-switch-style"></span>
+    </label>
+
+    <!--         <script type="text/javascript">
+    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script> -->
+</p>
+</div>
+
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="db91ONAaJE7csgIBIIeWxEXK-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="V4ivekKhnC8pvzwTKL40Pnx8">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+color: #698fca;
+}
+.v .vlist .vcard .vhead .vsys {
+color: #3a3e4a;
+}
+.v .vlist .vcard .vh .vmeta .vat {
+color: #638fd5;
+}
+.v .vlist .vcard .vhead .vnick {
+color: #6ba1ff;
+}
+.v a {
+color: #8696b1;
+}
+.v .vlist .vcard .vhead .vnick:hover {
+color: #669bfc;
+}
+</style>
+    <script type="text/javascript" color="173,174,173" opacity='1' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>

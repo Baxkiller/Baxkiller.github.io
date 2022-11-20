@@ -2148,7 +2148,7 @@
 <p>标识符数据表示与数据描述符描述的差别？</p>
 <p>浮点数表示rm增大，带来的影响（6个）；</p>
 <p>尾数下溢的处理方法（4种），各自的优缺点</p>
-<p>编址方式（4种），对齐方式，大小端；高位/低位交叉编址；寻址方式（四种）</p>
+<p>编址方式（4种），==对齐方式==，大小端；高位/低位交叉编址；寻址方式（四种）</p>
 <p>定位方式（3），各自的含义，为什么要定位（4）</p>
 <p>操作码设计（3种），信息冗余度计算</p>
 <p>RISC基本思想（定义/目的），RISC特点（指令（4），硬，优化编译）</p>
@@ -2214,7 +2214,7 @@
 <li>定义：为进一步减少标志符所占用的存储空间，对向量、数据、记录等数据，由于元素属性<strong>相同</strong>，采用数据描述符。</li>
 </ul>
 <h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>标志符只作用于一个数据，而数据描述符要作用于一组数据。 </p>
-<h2 id="浮点数的表示方法"><a href="#浮点数的表示方法" class="headerlink" title="浮点数的表示方法"></a>浮点数的表示方法</h2><img src="https://s2.loli.net/2022/06/25/hARL2ZQlBD31GdW.png" alt="image-20220624214820583" style="zoom:80%;" />
+<h2 id="浮点数的表示方法"><a href="#浮点数的表示方法" class="headerlink" title="==浮点数的表示方法=="></a>==浮点数的表示方法==</h2><img src="https://s2.loli.net/2022/06/25/hARL2ZQlBD31GdW.png" alt="image-20220624214820583" style="zoom:80%;" />
 
 <img src="https://s2.loli.net/2022/06/25/38gvFuTnhN6IGVm.png" alt="image-20220624215146422" style="zoom:90%;" />
 
@@ -2268,7 +2268,7 @@
 <li>大端小端问题</li>
 </ul>
 </li>
-<li><p>数据对齐访问：</p>
+<li><p>==数据对齐访问：==</p>
 <ul>
 <li><p>从任意位置都可访问</p>
 <p>优点：节省存储资源</p>
@@ -2410,7 +2410,13 @@
 <p>存储系统的定义?(组织成一个)</p>
 <p>命中率H如何计算?访问周期T和命中率的关系(一路飙升)? 存储系统访问效率e?</p>
 <p>啥是并行存储器?有什么显著缺点(4).</p>
-<p>交叉访问存储器的加速比N的计算?两种交叉访问的目的?</p>
+<p>交叉访问存储器的加速比N的计算(与转移概率g相关)?两种交叉访问的目的?</p>
+<p>虚拟存储器的三种方式的各自的优缺点?</p>
+<p>加快内部地址变换的方法?(多级页表,目录表,快慢表,散列函数),如何计算一个给定虚拟地址空间,页面大小和页表项大小的系统需要的多级页表层级数?</p>
+<p>如何评价页面替换算法?(命中率,实现难度)有几种?(4),各自的描述?</p>
+<p>主存命中率的影响因素有啥?(存,页,调度)各自如何影响的?<br>与Cache相关的,三种地址映像的<strong>绘图</strong>?如何计算?</p>
+<p>Cache的一致性问题出现的情况?(两种),处理方式,各自的优缺点?(简,可靠,通信次数,硬件)</p>
+<p>Cache的预取算法?三种各自的描述?</p>
 </blockquote>
 <h2 id="存储系统定义和评价标准（价格、容量和速度）"><a href="#存储系统定义和评价标准（价格、容量和速度）" class="headerlink" title="存储系统定义和评价标准（价格、容量和速度）"></a>存储系统定义和评价标准（价格、容量和速度）</h2><blockquote>
 <p>命中率的计算H，访问周期与命中率的关系T，<strong>存储系统的访问效率e</strong></p>
@@ -2434,7 +2440,7 @@
 <li><p>在一轮存储器访问过程中，命中率在M1存储器访问到的概率<img src="https://s2.loli.net/2022/06/25/651eMplO9kgT84c.png" alt="image-20220625163634133" style="zoom: 80%;" /></p>
 </li>
 <li><p><strong>访问周期与命中率的关系</strong></p>
-<p>$$<br>T=H \cdot T_1+(1+H)\cdot T_2<br>$$<br>当命中率趋近于1，T趋近于T1</p>
+<p>$$<br>T=H \cdot T_1+(1-H)\cdot T_2<br>$$<br>当命中率趋近于1，T趋近于T1</p>
 </li>
 <li><p><strong>存储系统的访问效率</strong>（与命中率和两级存储器的速度之比有关系）</p>
 <img src="https://s2.loli.net/2022/06/25/E7FoKXvt4g6ILAQ.png" alt="image-20220625165802130" style="zoom:80%;" />
@@ -2450,7 +2456,7 @@
 </li>
 </ol>
 <h2 id="存储系统的层次结构"><a href="#存储系统的层次结构" class="headerlink" title="存储系统的层次结构"></a>存储系统的层次结构</h2><p>多层次寄存器：寄存器堆，先行缓冲站，高速缓冲存储器Cache，主存，联机存储器，脱机存储器</p>
-<h2 id="并行存储器"><a href="#并行存储器" class="headerlink" title="并行存储器"></a>并行存储器</h2><p>指的是将原本m字w位的存储器改变成为m/n字n*w位的存储器。（类似于高位/低位交叉编址）</p>
+<h2 id="并行存储器"><a href="#并行存储器" class="headerlink" title="并行存储器"></a>并行存储器</h2><p>指的是将原本m字w位的存储器改变成为m/n字n*w位的存储器。</p>
 <p>逻辑上来看,就是指将地址码分为两个部分，一部分负责存储存储器的地址，另一部分选择数据。</p>
 <p><strong>缺点：</strong></p>
 <ol>
@@ -2470,14 +2476,14 @@
 </ol>
 <p><strong>并行存储器的加速比N的计算</strong></p>
 <p>N也是每个存储周期能够访问到的平均有效字的个数</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625191727648.png" alt="image-20220625191727648" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/BoiEMPuq4QgZetf.png" alt="image-20220625191727648" style="zoom:80%;" />
 
 <p>假设转移概率为g：存储体越多，转移概率越小，加速比越大！</p>
 <p>但是随着存储体个数不断增大，存储体个数对有效字长的影响会逐渐减小，例如g=0.2，每五条出现一条转移,即便提高存储体个数,前五个也应当会出现一个转移指令,那么后面的指令冗余</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625192526088.png" alt="image-20220625192526088" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/mOfjyr46Cb7QZaK.png" alt="image-20220625192526088" style="zoom:80%;" />
 
 <h2 id="虚拟存储器工作原理（页，段，段页式）"><a href="#虚拟存储器工作原理（页，段，段页式）" class="headerlink" title="虚拟存储器工作原理（页，段，段页式）"></a>虚拟存储器工作原理（页，段，段页式）</h2><p>地址组成：</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625192814639.png" alt="image-20220625192814639" style="zoom:67%;" />
+<img src="https://s2.loli.net/2022/06/26/A2NMkZrYRCzDdnp.png" alt="image-20220625192814639" style="zoom:67%;" />
 
 <ul>
 <li><p>多用户虚拟地址Av变换成主存实地址A </p>
@@ -2505,15 +2511,13 @@
 </ol>
 </li>
 <li><p>==缺点==</p>
-<ol>
-<li><p>地址变换所花费的时间长，两次加法（先找到该用户的段表，找到后做一次加法得到段的起始地址，再做一次加法得到对应段内的具体位置）</p>
-</li>
-<li><p>主存储器的利用率往往比较低。</p>
-</li>
-</ol>
 </li>
 </ul>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625193716075.png" alt="image-20220625193716075" style="zoom:80%;" />
+<ol>
+<li>地址变换所花费的时间长，两次加法（先找到该用户的段表，找到后做一次加法得到段的起始地址，再做一次加法得到对应段内的具体位置）</li>
+<li>主存储器的利用率往往比较低。</li>
+</ol>
+<img src="https://s2.loli.net/2022/06/26/J6M3yIOkQwGCs2P.png" alt="image-20220625193716075" style="zoom:80%;" />
 
 <h3 id="页式虚拟存储器"><a href="#页式虚拟存储器" class="headerlink" title="页式虚拟存储器"></a><strong>页式虚拟存储器</strong></h3><ul>
 <li><p>地址映像：虚拟地址空间划分为大小固定的页，把主存的地址空间同样划分为大小相等的固定大小的页。</p>
@@ -2540,7 +2544,7 @@
 </ol>
 </li>
 </ul>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625194515080.png" alt="image-20220625194515080" style="zoom: 80%;" />
+<img src="https://s2.loli.net/2022/06/26/3rumFlLTCpK1aOz.png" alt="image-20220625194515080" style="zoom: 80%;" />
 
 
 
@@ -2548,7 +2552,7 @@
 <li><strong>地址映象方法</strong>：每个程序段在段表中占一行，在段表中给出页表长度和页表的起始地址，页表中给出每一页在主存储器中的实页号</li>
 <li><strong>地址变换方法：</strong>先查段表，得到页表起始地址和页表长度，再查页表找到要访问的主存实页号，把实页号p与页内偏移d拼接得到主存实地址。</li>
 </ul>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625195102120.png" alt="image-20220625195102120" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/FfRKk1EAI7Vgwbi.png" alt="image-20220625195102120" style="zoom:80%;" />
 
 
 
@@ -2561,17 +2565,17 @@
 </ul>
 <p>解决方法：<strong>多级页表</strong></p>
 <p>页表级数的计算公式：需要多少个页面(log转换为比特位)/一个页面能够存储多少页表项(log转换为bit位)</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625195516965.png" alt="image-20220625195516965" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/pRtAy7dKFvCzDWk.png" alt="image-20220625195516965" style="zoom:80%;" />
 
 <p>内存中必须保留一级页表，把调入到内存中的程序的相关页表保留在内存中，其他存储在磁盘中即可。但由此产生问题：<strong>访问内存的次数增加</strong>，需要加快查表速度。</p>
 <ul>
 <li><p>目录表法</p>
 <p>压缩页表的存储容量，用一个<strong>容量比较小的高速存储器</strong>来存放页表，从而加快页表的查表速度。</p>
 <p>缺点：随着主存容量增大，目录表的容量同样增大，可扩展性较差。且造价高，查表速度降低。</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625200147080.png" alt="image-20220625200147080" style="zoom:80%;" /></li>
+<img src="https://s2.loli.net/2022/06/26/v28imhErAOy4Wnp.png" alt="image-20220625200147080" style="zoom:80%;" /></li>
 <li><p>快慢表</p>
 <p>目录表为快表（硬件实现）,完整表页为慢表(可能是多级页表)，快表大小压缩,<strong>并不需要匹配整个内存</strong>,只需要8-16个存储字,内存转换速度非常快</p>
-<p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625200753861.png" alt="image-20220625200753861"></p>
+<p><img src="https://s2.loli.net/2022/06/26/rpuB3K8AHiqLEf1.png" alt="image-20220625200753861"></p>
 </li>
 <li><p>散列函数</p>
 <p>把<strong>按内容的相联访问</strong>变为<strong>按地址访问</strong>，从而支持更大的快表。</p>
@@ -2607,20 +2611,22 @@
 <p><strong>先进先出算法FIFO：</strong>选择最早装入主存的页作为被替换的页</p>
 <p>优点：容易实现，利用了历史信息但是没有利用局部性。</p>
 <h2 id="主存命中率影响"><a href="#主存命中率影响" class="headerlink" title="主存命中率影响"></a>主存命中率影响</h2><h3 id="页面大小"><a href="#页面大小" class="headerlink" title="页面大小"></a>页面大小</h3><p>当页面大小为某个值，结果存在最值。</p>
-<p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625204430706.png" alt="image-20220625204430706"></p>
+<img src="https://s2.loli.net/2022/06/26/S9f2FNTVy6ApLtH.png" alt="image-20220625204430706" style="zoom:80%;" />
+
 <p>页面大小导致的其他结果：</p>
 <ul>
 <li>页面增大：命中率可能下降（当d&gt;Sp），造成的空间浪费可能增大，内存空间利用率下降。可用页面减少。</li>
 <li>页面减小：命中率可能下降(d&lt;Sp)，页表和页面表在内存中占的比例将会增大。</li>
 </ul>
-<h3 id="主存容量"><a href="#主存容量" class="headerlink" title="主存容量"></a>主存容量</h3><img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625204811203.png" alt="image-20220625204811203" style="zoom:80%;" />
+<h3 id="主存容量"><a href="#主存容量" class="headerlink" title="主存容量"></a>主存容量</h3><img src="https://s2.loli.net/2022/06/26/FmHODP1ue7YKtdb.png" alt="image-20220625204811203" style="zoom:80%;" />
 
 
 
 <h3 id="页面调度"><a href="#页面调度" class="headerlink" title="页面调度"></a>页面调度</h3><p><strong>请求式</strong>：当使用到的时候，再调入主存</p>
 <p><strong>预取式</strong>：在程序重新开始运行之前，把上次停止运行前一段时间内用到的页面先调入到主存储器，然后才开始运行程序。其主要优点是可以避免在程序开始运行时，频繁发生页面失效的情况；</p>
 <p>其主要缺点：如果调入的页面用不上，浪费了调入的时间，占用了主存的资源。</p>
-<h2 id="Cache存储系统基本工作原理"><a href="#Cache存储系统基本工作原理" class="headerlink" title="Cache存储系统基本工作原理"></a>Cache存储系统基本工作原理</h2><p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625205447342.png" alt="image-20220625205447342"></p>
+<h2 id="Cache存储系统基本工作原理"><a href="#Cache存储系统基本工作原理" class="headerlink" title="Cache存储系统基本工作原理"></a>Cache存储系统基本工作原理</h2><img src="https://s2.loli.net/2022/06/26/r2WaVdxqo9BTpzt.png" alt="image-20220625205447342" style="zoom:80%;" />
+
 <h2 id="地址映像"><a href="#地址映像" class="headerlink" title="地址映像"></a>地址映像</h2><h3 id="直接映像"><a href="#直接映像" class="headerlink" title="直接映像"></a>直接映像</h3><p>主存储器中一块只能映象到Cache的一个特定的块中，通常是对Cache的块数进行取模。因此，Cache地址与主存储器地址的低位部分完全相同。</p>
 <p>用主存地址中的块号B<strong>去访问区号存储器</strong>，把读出来的区号<strong>与主存地址中的区号E进行比较</strong>。只有比较相等并且有效位为1，才访问Cache，获得块内内容。为了提高Cache速度，可以将区号存储器和Cache合并成一个存储器。</p>
 <p>优点：硬件简单，不需要相联访问存储器；访问速度快实际上不需要进行地址变换。</p>
@@ -2666,6 +2672,101 @@
 </ol>
 <p>主要考虑命中率是否提高，采用恒预取，不命中率降低很多75-85</p>
 <p>不命中预取也能降低30-40</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>PHP-WEB项目移植到FLASK框架</title>
+    <url>/2022/11/19/PHP-WEB%E9%A1%B9%E7%9B%AE%E7%A7%BB%E6%A4%8D%E5%88%B0FLASK%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<h1 id="PHP-WEB项目移植到FLASK框架以及FLASK快速入门"><a href="#PHP-WEB项目移植到FLASK框架以及FLASK快速入门" class="headerlink" title="PHP-WEB项目移植到FLASK框架以及FLASK快速入门"></a>PHP-WEB项目移植到FLASK框架以及FLASK快速入门</h1><p>项目地址： <a href="https://github.com/Baxkiller/Data_Collection_Online">Baxkiller/Data_Collection_Online  (github.com)</a></p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>某天笔者在快乐地遨游于知识的海洋中时，一位朋友问我能否帮他写个网站，只需要做到能够收发数据即可。我一想，这个简单啊，于是花了一些时间把网站写好了，本地开启了PHP服务器也可以正常挂载到服务器上使用和访问，心想这下可以下班啦！</p>
+<p>这时朋友又发来一个请求，问我能否帮他挂载到服务器上。天真的我此时心想无非是安装一个apache服务器，然后安装好<code>nginx</code>配置完，监听端口就好了。等他把服务器地址和用户名密码发给我，我远程登陆后发现他的用户并不在管理员组中，没办法安装新的软件，即便原服务器中已经安装好了<code>apache</code>和<code>nginx</code>服务器，我也无法对其设置做出更改。一时间陷入了困境。</p>
+<p>不过所谓“解铃还须系铃人”，我向他说明问题后，他提出可以通过<code>flask</code>框架完成<strong>不需要<code>root</code>权限即可监听端口并运行网站</strong>。</p>
+<p><strong>好吧，那就试试看把WEB项目移植到FLASK框架吧。</strong></p>
+<h2 id="适用对象"><a href="#适用对象" class="headerlink" title="适用对象"></a>适用对象</h2><ul>
+<li><p>对<code>Python</code>有一定了解，会使用Python的基本语法。</p>
+</li>
+<li><p>有网站搭建的经验，熟悉<code>HTML</code>,<code>CSS</code>,<code>JS</code>，知道前端和后端分别是什么以及如何运行工作。</p>
+<p>不知道的同学可以看我的这篇博客 <a href="">还没写，等写好了我就换掉链接</a> 大致了解一下~</p>
+</li>
+</ul>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>如果准备好了，那我们就直接开始了！想要看直接一点的可以直接看最后的<a href="#summary">总结部分</a></p>
+<blockquote>
+<p><strong>免责声明</strong>：关于FLASK的运行原理我本身也不是特别清楚，这里只讲一讲我在实际<del>使用</del>（照葫芦画瓢）过程中的一些自我认识，如果有对这方面有比较深了解的同学可以把相关内容或者帖子的链接发在评论区，不要喷我   : (</p>
+</blockquote>
+<p>FLASK本身实际上与PHP等后端语言的运行使用比较相似，不同之处在于FLASK是本身基于Python语言的一个框架，依托了Python环境自带的创建服务器功能。所以使用FLASK可以完成网站后端的快速开发和上线，相对需要配置的环境也比较简单，不需要配置复杂的<code>nginx</code>和<code>apache</code>等环境。</p>
+<blockquote>
+<p>Python在端口9000快速创建服务器：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python -m http.server 9000</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>关于FLASK框架<strong>对于移植本身</strong>带来的优势有以下几点：</p>
+<ol>
+<li>提供页面渲染，可以完整地将原本准备好的静态页面渲染出来，只需要一个很简单的函数即可</li>
+<li>提供后端请求接口，只需要短短两三行代码即可完成最基本的后端处理函数的创建，并且可以创建非常简单的接口。这依托于其本身提供的<strong>语法</strong>。</li>
+</ol>
+<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><p>本项目文件结构如下：</p>
+<p>其中<code>init.py</code>代表运行该网站系统时的主文件，由于<code>flask</code>的特殊文件系统，他在搜索网站显示的根目录时，将会<strong>默认</strong>从与<code>init.py</code>并列的目录下寻找，当然了，这个搜索地址是可以通过指定参数更改的，这里后面再讲，心里先有一个概念就好。</p>
+<p>与整个系统相关的其他文件也是从与<code>init.py</code>并列的目录下寻找的，因此如果想要请求某个资源，比如说<code>js/timer.js</code>，必须在<code>html</code>中标明位置是<code>    &lt;script src=&quot;/static/js/dataShow.js&quot;&gt;&lt;/script&gt;</code>！</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-</span><br><span class="line">│  init.py</span><br><span class="line">│</span><br><span class="line">└─static</span><br><span class="line">    ├─css</span><br><span class="line">    │      login.css</span><br><span class="line">    │      toShow.css</span><br><span class="line">    │</span><br><span class="line">    ├─data</span><br><span class="line">    │      data.json</span><br><span class="line">    │</span><br><span class="line">    ├─js</span><br><span class="line">    │      dataLoad.js</span><br><span class="line">    │      dataSave.js</span><br><span class="line">    │      dataShow.js</span><br><span class="line">    │      timer.js</span><br><span class="line">    │</span><br><span class="line">    ├─templates</span><br><span class="line">    │      index.html</span><br><span class="line">    │      labelPage.html</span><br><span class="line">    │      saveData.php</span><br><span class="line">    │</span><br><span class="line">    └─userData</span><br><span class="line">            login.json</span><br><span class="line">            setting.json</span><br><span class="line">            timeStamps.json</span><br><span class="line">            toLabelInfo.json</span><br><span class="line">            userLabelInfo.json</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="语法-接口"><a href="#语法-接口" class="headerlink" title="语法/接口"></a>语法/接口</h3><ul>
+<li><p>整体框架用法：</p>
+<p>最好先安装好对应的包：<code>flask</code>，<code>json</code>等。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, jsonify, render_template, request <span class="comment"># 引入包</span></span><br><span class="line"></span><br><span class="line">app = Flask(__name__, template_folder = <span class="string">&#x27;./static/templates&#x27;</span>)  <span class="comment"># 实例化app对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 相应的很多函数(语法后面也有说明)</span></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/xxx&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xxx</span>():</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">        app.run(host = <span class="string">&#x27;0.0.0.0&#x27;</span>,  <span class="comment"># 任何ip都可以访问</span></span><br><span class="line">            port = <span class="number">7777</span>,  <span class="comment"># 端口</span></span><br><span class="line">            debug = <span class="literal">True</span>, <span class="comment"># debug模式</span></span><br><span class="line">            use_reloader = <span class="literal">False</span> <span class="comment"># 一些参数，具体可以自行查找</span></span><br><span class="line">            )</span><br></pre></td></tr></table></figure></li>
+<li><p>基本函数/渲染用函数模板如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>) </span><span class="comment"># this is the path of global</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">function</span>():</span></span><br><span class="line">    <span class="comment"># do something</span></span><br><span class="line">    <span class="comment"># you can read data from front or just render a page</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># you can return the data after being operated</span></span><br><span class="line">    <span class="comment"># or return the page you just render</span></span><br><span class="line">    <span class="keyword">return</span> something</span><br></pre></td></tr></table></figure>
+
+<p>第一行中括号里的内容代表相对于整个项目的位置，无论是数据请求或是通过url进行请求，对应的数据/请求都会发送到与你给定的url下的函数<code>function()</code>中。例如访问<code>127.0.0.1</code>，那么对应请求会发送到<code>route(&#39;/&#39;)</code>下的函数中，函数返回啥，对应页面就显示啥。</p>
+</li>
+</ul>
+<h3 id="页面渲染"><a href="#页面渲染" class="headerlink" title="页面渲染"></a>页面渲染</h3><p>书接上一行，既然函数返回啥，对应页面就显示啥，那能不能直接返回我想要渲染的页面啊？比如我使用文件操作直接读入<code>.html</code>文件然后返回？</p>
+<p>答案当然是<strong>不可以！</strong> 一个框架有一个框架的规则，如果想要渲染一个页面，使用函数<code>render_templates(&#39;index.html&#39;)</code>即可。</p>
+<p>特别需要<strong>注意</strong>：既然说了是render <strong>templates</strong>，那就把你要渲染的页面放在<code>/templates</code>文件夹下。具体的这个文件夹的位置，可以在最初实例化<code>app对象</code>时声明，如下（对应上面的文件结构）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">app = Flask(__name__, template_folder = <span class="string">&#x27;./static/templates&#x27;</span>)  <span class="comment"># 实例化app对象</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="数据收发-前后台通信"><a href="#数据收发-前后台通信" class="headerlink" title="数据收发/前后台通信"></a>数据收发/前后台通信</h3><p>这个数据收发也非常滴简单呐。</p>
+<p>这里介绍我自己常用的收发方式，即前端通过<code>jQuery</code>的<code>ajax</code>方式发出数据请求，然后后端在函数中接受到数据请求后对数据做完处理再<code>return</code>回去。</p>
+<p>举个栗子：</p>
+<p><code>requestData.js</code>（虽然上面文件结构中没有，但你可以认为这个文件存在于<code>./static/js</code>目录下。）</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 根据用户登录得到的数据，请求获取数据</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dataLoad</span>(<span class="params"></span>):</span></span><br><span class="line"><span class="function">	<span class="title">$</span>.<span class="title">ajax</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="params"><span class="function">        url: <span class="string">&quot;/requestData&quot;</span>, <span class="regexp">//</span> 对应后台的函数格式中@app.route(<span class="string">&#x27;/requestData&#x27;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        type: <span class="string">&quot;POST&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        dataType: <span class="string">&quot;json&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        data: &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">            uid: uid,</span></span></span><br><span class="line"><span class="params"><span class="function">            mode: mode,</span></span></span><br><span class="line"><span class="params"><span class="function">        &#125;,</span></span></span><br><span class="line"><span class="params"><span class="function">        success: <span class="regexp">//</span>如果数据请求成功，做的事情</span></span></span><br><span class="line"><span class="params"><span class="function">            <span class="keyword">function</span> (data) &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">                <span class="keyword">if</span>(data.index === -<span class="number">1</span>) <span class="regexp">//</span>检查数据的内容判断后台的结果，做出响应动作</span></span></span><br><span class="line"><span class="params"><span class="function">                &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">                    alert(<span class="string">&quot;当前无数据可标注!请联系任务发布者或稍后再试...&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">                    reDirected()</span></span></span><br><span class="line"><span class="params"><span class="function">                &#125;</span></span></span><br><span class="line"><span class="params"><span class="function">                <span class="keyword">else</span> <span class="keyword">if</span>(data.index === -<span class="number">2</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">                &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">                    alert(data.msg)</span></span></span><br><span class="line"><span class="params"><span class="function">                    reDirected()</span></span></span><br><span class="line"><span class="params"><span class="function">                &#125;</span></span></span><br><span class="line"><span class="params"><span class="function">                update(data.d,data.index)</span></span></span><br><span class="line"><span class="params"><span class="function">            &#125;</span></span></span><br><span class="line"><span class="params"><span class="function">    &#125;</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>而对应的前台函数是啥呢：</p>
+<p><code>init.py</code>中的一个函数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/requestData&#x27;</span>, methods = [<span class="string">&#x27;POST&#x27;</span>]</span>) </span><span class="comment"># 要与上面的对应方式相同</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">requestData</span>():</span></span><br><span class="line">    uid = request.form.get(<span class="string">&#x27;uid&#x27;</span>)</span><br><span class="line">    mode = <span class="built_in">eval</span>(request.form.get(<span class="string">&#x27;mode&#x27;</span>))  <span class="comment"># 两个数据参数</span></span><br><span class="line">    res=do_something(uid, mode)</span><br><span class="line">    <span class="keyword">return</span> json.dumps(res) <span class="comment"># 将结果以json形式返回，但是传输需要先转化为字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>这样，两者之间就可以非常方便的完成通讯啦！</p>
+<p>为了方便大家理解，我这里再给出一个图：</p>
+<p><img src="https://s2.loli.net/2022/11/20/yWQdqkGXNOoVFZK.png" alt="1"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><div id="summary">总结</div></h2><p>最后的总结部分如下：</p>
+<p>想要完成从HTML到<code>FLASK</code>的移植，按照以下步骤：</p>
+<ol>
+<li><p>将原项目的文件结构设置为上面提到的文件结构的设置。</p>
+<p>即对于大部分形如 ↓ 的项目，在<code>css</code>这种文件夹的并列位置创建<code>templates</code>文件夹，并将所有静态模板文件复制进去。</p>
+<p><img src="https://s2.loli.net/2022/11/20/vTckq5YxpJ9U3fu.png" alt="2"></p>
+<p>在这些文件夹的上层目录部分，新建一个文件夹名为<code>static</code>，新建一个<code>py</code>文件，随便命名（例如<code>init.py</code>）</p>
+<p>将上面提到的<code>css,templates</code>在内的所有文件剪切粘贴到<code>static</code>文件夹中</p>
+</li>
+<li><p>修改所有引用<code>js,css</code>的链接，更改为<code>/static/js/...</code>以及<code>/static/css/...</code>，<code>data</code>同理。</p>
+</li>
+<li><p>修改前端发送数据请求的位置的目标地址为<code>/name</code>的形式。</p>
+</li>
+<li><p>编辑<code>init.py</code>文件，按照前面提到的语法/接口部分，编写函数。</p>
+<p>例如对于接受前端的数据请求的处理函数(3中的<code>/name</code>)对应函数为:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/name&#x27;</span>,method=[<span class="string">&#x27;post&#x27;</span>,<span class="string">&#x27;get&#x27;</span>]</span>) </span><span class="comment"># this is the path of global</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">name</span>():</span></span><br><span class="line">    data=request.form.get(<span class="string">&#x27;input_name/json_name&#x27;</span>) <span class="comment"># 发送时对应的数据名称</span></span><br><span class="line">    res=data.operat() <span class="comment"># 操作数据</span></span><br><span class="line">    <span class="keyword">return</span> json.dumps(res) <span class="comment"># 传回数据</span></span><br></pre></td></tr></table></figure></li>
+<li><p>运行<code>init.py</code>即可啦~</p>
+</li>
+</ol>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>受限于知识面和时间问题，自己有很多东西并没有特别深究。</p>
+<p>如果您对本文有任何好的建议或意见，或者任何问题，欢迎通过以下方式联系我：</p>
+<ul>
+<li>email <code>zhanghnsd@163.com</code></li>
+<li>评论区留言或私信</li>
+<li><code>github</code>对应仓库提交<code>issue</code></li>
+</ul>
+<p>以上。</p>
 ]]></content>
   </entry>
 </search>
