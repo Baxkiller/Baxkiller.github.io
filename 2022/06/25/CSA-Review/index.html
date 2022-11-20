@@ -39,7 +39,7 @@
 <p>标识符数据表示与数据描述符描述的差别？</p>
 <p>浮点数表示rm增大，带来的影响（6个）；</p>
 <p>尾数下溢的处理方法（4种），各自的优缺点</p>
-<p>编址方式（4种），对齐方式，大小端；高位/低位交叉编址；寻址方式（四种）</p>
+<p>编址方式（4种），==对齐方式==，大小端；高位/低位交叉编址；寻址方式（四种）</p>
 <p>定位方式（3），各自的含义，为什么要定位（4）</p>
 <p>操作码设计（3种），信息冗余度计算</p>
 <p>RISC基本思想（定义/目的），RISC特点（指令（4），硬，优化编译）</p>
@@ -105,7 +105,7 @@
 <li>定义：为进一步减少标志符所占用的存储空间，对向量、数据、记录等数据，由于元素属性<strong>相同</strong>，采用数据描述符。</li>
 </ul>
 <h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>标志符只作用于一个数据，而数据描述符要作用于一组数据。 </p>
-<h2 id="浮点数的表示方法"><a href="#浮点数的表示方法" class="headerlink" title="浮点数的表示方法"></a>浮点数的表示方法</h2><img src="https://s2.loli.net/2022/06/25/hARL2ZQlBD31GdW.png" alt="image-20220624214820583" style="zoom:80%;" />
+<h2 id="浮点数的表示方法"><a href="#浮点数的表示方法" class="headerlink" title="==浮点数的表示方法=="></a>==浮点数的表示方法==</h2><img src="https://s2.loli.net/2022/06/25/hARL2ZQlBD31GdW.png" alt="image-20220624214820583" style="zoom:80%;" />
 
 <img src="https://s2.loli.net/2022/06/25/38gvFuTnhN6IGVm.png" alt="image-20220624215146422" style="zoom:90%;" />
 
@@ -159,7 +159,7 @@
 <li>大端小端问题</li>
 </ul>
 </li>
-<li><p>数据对齐访问：</p>
+<li><p>==数据对齐访问：==</p>
 <ul>
 <li><p>从任意位置都可访问</p>
 <p>优点：节省存储资源</p>
@@ -301,7 +301,13 @@
 <p>存储系统的定义?(组织成一个)</p>
 <p>命中率H如何计算?访问周期T和命中率的关系(一路飙升)? 存储系统访问效率e?</p>
 <p>啥是并行存储器?有什么显著缺点(4).</p>
-<p>交叉访问存储器的加速比N的计算?两种交叉访问的目的?</p>
+<p>交叉访问存储器的加速比N的计算(与转移概率g相关)?两种交叉访问的目的?</p>
+<p>虚拟存储器的三种方式的各自的优缺点?</p>
+<p>加快内部地址变换的方法?(多级页表,目录表,快慢表,散列函数),如何计算一个给定虚拟地址空间,页面大小和页表项大小的系统需要的多级页表层级数?</p>
+<p>如何评价页面替换算法?(命中率,实现难度)有几种?(4),各自的描述?</p>
+<p>主存命中率的影响因素有啥?(存,页,调度)各自如何影响的?<br>与Cache相关的,三种地址映像的<strong>绘图</strong>?如何计算?</p>
+<p>Cache的一致性问题出现的情况?(两种),处理方式,各自的优缺点?(简,可靠,通信次数,硬件)</p>
+<p>Cache的预取算法?三种各自的描述?</p>
 </blockquote>
 <h2 id="存储系统定义和评价标准（价格、容量和速度）"><a href="#存储系统定义和评价标准（价格、容量和速度）" class="headerlink" title="存储系统定义和评价标准（价格、容量和速度）"></a>存储系统定义和评价标准（价格、容量和速度）</h2><blockquote>
 <p>命中率的计算H，访问周期与命中率的关系T，<strong>存储系统的访问效率e</strong></p>
@@ -325,7 +331,7 @@
 <li><p>在一轮存储器访问过程中，命中率在M1存储器访问到的概率<img src="https://s2.loli.net/2022/06/25/651eMplO9kgT84c.png" alt="image-20220625163634133" style="zoom: 80%;" /></p>
 </li>
 <li><p><strong>访问周期与命中率的关系</strong></p>
-<p>$$<br>T=H \cdot T_1+(1+H)\cdot T_2<br>$$<br>当命中率趋近于1，T趋近于T1</p>
+<p>$$<br>T=H \cdot T_1+(1-H)\cdot T_2<br>$$<br>当命中率趋近于1，T趋近于T1</p>
 </li>
 <li><p><strong>存储系统的访问效率</strong>（与命中率和两级存储器的速度之比有关系）</p>
 <img src="https://s2.loli.net/2022/06/25/E7FoKXvt4g6ILAQ.png" alt="image-20220625165802130" style="zoom:80%;" />
@@ -341,7 +347,7 @@
 </li>
 </ol>
 <h2 id="存储系统的层次结构"><a href="#存储系统的层次结构" class="headerlink" title="存储系统的层次结构"></a>存储系统的层次结构</h2><p>多层次寄存器：寄存器堆，先行缓冲站，高速缓冲存储器Cache，主存，联机存储器，脱机存储器</p>
-<h2 id="并行存储器"><a href="#并行存储器" class="headerlink" title="并行存储器"></a>并行存储器</h2><p>指的是将原本m字w位的存储器改变成为m/n字n*w位的存储器。（类似于高位/低位交叉编址）</p>
+<h2 id="并行存储器"><a href="#并行存储器" class="headerlink" title="并行存储器"></a>并行存储器</h2><p>指的是将原本m字w位的存储器改变成为m/n字n*w位的存储器。</p>
 <p>逻辑上来看,就是指将地址码分为两个部分，一部分负责存储存储器的地址，另一部分选择数据。</p>
 <p><strong>缺点：</strong></p>
 <ol>
@@ -361,14 +367,14 @@
 </ol>
 <p><strong>并行存储器的加速比N的计算</strong></p>
 <p>N也是每个存储周期能够访问到的平均有效字的个数</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625191727648.png" alt="image-20220625191727648" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/BoiEMPuq4QgZetf.png" alt="image-20220625191727648" style="zoom:80%;" />
 
 <p>假设转移概率为g：存储体越多，转移概率越小，加速比越大！</p>
 <p>但是随着存储体个数不断增大，存储体个数对有效字长的影响会逐渐减小，例如g=0.2，每五条出现一条转移,即便提高存储体个数,前五个也应当会出现一个转移指令,那么后面的指令冗余</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625192526088.png" alt="image-20220625192526088" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/mOfjyr46Cb7QZaK.png" alt="image-20220625192526088" style="zoom:80%;" />
 
 <h2 id="虚拟存储器工作原理（页，段，段页式）"><a href="#虚拟存储器工作原理（页，段，段页式）" class="headerlink" title="虚拟存储器工作原理（页，段，段页式）"></a>虚拟存储器工作原理（页，段，段页式）</h2><p>地址组成：</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625192814639.png" alt="image-20220625192814639" style="zoom:67%;" />
+<img src="https://s2.loli.net/2022/06/26/A2NMkZrYRCzDdnp.png" alt="image-20220625192814639" style="zoom:67%;" />
 
 <ul>
 <li><p>多用户虚拟地址Av变换成主存实地址A </p>
@@ -396,15 +402,13 @@
 </ol>
 </li>
 <li><p>==缺点==</p>
-<ol>
-<li><p>地址变换所花费的时间长，两次加法（先找到该用户的段表，找到后做一次加法得到段的起始地址，再做一次加法得到对应段内的具体位置）</p>
-</li>
-<li><p>主存储器的利用率往往比较低。</p>
-</li>
-</ol>
 </li>
 </ul>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625193716075.png" alt="image-20220625193716075" style="zoom:80%;" />
+<ol>
+<li>地址变换所花费的时间长，两次加法（先找到该用户的段表，找到后做一次加法得到段的起始地址，再做一次加法得到对应段内的具体位置）</li>
+<li>主存储器的利用率往往比较低。</li>
+</ol>
+<img src="https://s2.loli.net/2022/06/26/J6M3yIOkQwGCs2P.png" alt="image-20220625193716075" style="zoom:80%;" />
 
 <h3 id="页式虚拟存储器"><a href="#页式虚拟存储器" class="headerlink" title="页式虚拟存储器"></a><strong>页式虚拟存储器</strong></h3><ul>
 <li><p>地址映像：虚拟地址空间划分为大小固定的页，把主存的地址空间同样划分为大小相等的固定大小的页。</p>
@@ -431,7 +435,7 @@
 </ol>
 </li>
 </ul>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625194515080.png" alt="image-20220625194515080" style="zoom: 80%;" />
+<img src="https://s2.loli.net/2022/06/26/3rumFlLTCpK1aOz.png" alt="image-20220625194515080" style="zoom: 80%;" />
 
 
 
@@ -439,7 +443,7 @@
 <li><strong>地址映象方法</strong>：每个程序段在段表中占一行，在段表中给出页表长度和页表的起始地址，页表中给出每一页在主存储器中的实页号</li>
 <li><strong>地址变换方法：</strong>先查段表，得到页表起始地址和页表长度，再查页表找到要访问的主存实页号，把实页号p与页内偏移d拼接得到主存实地址。</li>
 </ul>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625195102120.png" alt="image-20220625195102120" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/FfRKk1EAI7Vgwbi.png" alt="image-20220625195102120" style="zoom:80%;" />
 
 
 
@@ -452,17 +456,17 @@
 </ul>
 <p>解决方法：<strong>多级页表</strong></p>
 <p>页表级数的计算公式：需要多少个页面(log转换为比特位)/一个页面能够存储多少页表项(log转换为bit位)</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625195516965.png" alt="image-20220625195516965" style="zoom:80%;" />
+<img src="https://s2.loli.net/2022/06/26/pRtAy7dKFvCzDWk.png" alt="image-20220625195516965" style="zoom:80%;" />
 
 <p>内存中必须保留一级页表，把调入到内存中的程序的相关页表保留在内存中，其他存储在磁盘中即可。但由此产生问题：<strong>访问内存的次数增加</strong>，需要加快查表速度。</p>
 <ul>
 <li><p>目录表法</p>
 <p>压缩页表的存储容量，用一个<strong>容量比较小的高速存储器</strong>来存放页表，从而加快页表的查表速度。</p>
 <p>缺点：随着主存容量增大，目录表的容量同样增大，可扩展性较差。且造价高，查表速度降低。</p>
-<img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625200147080.png" alt="image-20220625200147080" style="zoom:80%;" /></li>
+<img src="https://s2.loli.net/2022/06/26/v28imhErAOy4Wnp.png" alt="image-20220625200147080" style="zoom:80%;" /></li>
 <li><p>快慢表</p>
 <p>目录表为快表（硬件实现）,完整表页为慢表(可能是多级页表)，快表大小压缩,<strong>并不需要匹配整个内存</strong>,只需要8-16个存储字,内存转换速度非常快</p>
-<p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625200753861.png" alt="image-20220625200753861"></p>
+<p><img src="https://s2.loli.net/2022/06/26/rpuB3K8AHiqLEf1.png" alt="image-20220625200753861"></p>
 </li>
 <li><p>散列函数</p>
 <p>把<strong>按内容的相联访问</strong>变为<strong>按地址访问</strong>，从而支持更大的快表。</p>
@@ -498,20 +502,22 @@
 <p><strong>先进先出算法FIFO：</strong>选择最早装入主存的页作为被替换的页</p>
 <p>优点：容易实现，利用了历史信息但是没有利用局部性。</p>
 <h2 id="主存命中率影响"><a href="#主存命中率影响" class="headerlink" title="主存命中率影响"></a>主存命中率影响</h2><h3 id="页面大小"><a href="#页面大小" class="headerlink" title="页面大小"></a>页面大小</h3><p>当页面大小为某个值，结果存在最值。</p>
-<p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625204430706.png" alt="image-20220625204430706"></p>
+<img src="https://s2.loli.net/2022/06/26/S9f2FNTVy6ApLtH.png" alt="image-20220625204430706" style="zoom:80%;" />
+
 <p>页面大小导致的其他结果：</p>
 <ul>
 <li>页面增大：命中率可能下降（当d&gt;Sp），造成的空间浪费可能增大，内存空间利用率下降。可用页面减少。</li>
 <li>页面减小：命中率可能下降(d&lt;Sp)，页表和页面表在内存中占的比例将会增大。</li>
 </ul>
-<h3 id="主存容量"><a href="#主存容量" class="headerlink" title="主存容量"></a>主存容量</h3><img src="D:\Github_Hexo_test\source\_posts\CSA-Review.assets\image-20220625204811203.png" alt="image-20220625204811203" style="zoom:80%;" />
+<h3 id="主存容量"><a href="#主存容量" class="headerlink" title="主存容量"></a>主存容量</h3><img src="https://s2.loli.net/2022/06/26/FmHODP1ue7YKtdb.png" alt="image-20220625204811203" style="zoom:80%;" />
 
 
 
 <h3 id="页面调度"><a href="#页面调度" class="headerlink" title="页面调度"></a>页面调度</h3><p><strong>请求式</strong>：当使用到的时候，再调入主存</p>
 <p><strong>预取式</strong>：在程序重新开始运行之前，把上次停止运行前一段时间内用到的页面先调入到主存储器，然后才开始运行程序。其主要优点是可以避免在程序开始运行时，频繁发生页面失效的情况；</p>
 <p>其主要缺点：如果调入的页面用不上，浪费了调入的时间，占用了主存的资源。</p>
-<h2 id="Cache存储系统基本工作原理"><a href="#Cache存储系统基本工作原理" class="headerlink" title="Cache存储系统基本工作原理"></a>Cache存储系统基本工作原理</h2><p><img src="D:\Github_Hexo_test\source_posts\CSA-Review.assets\image-20220625205447342.png" alt="image-20220625205447342"></p>
+<h2 id="Cache存储系统基本工作原理"><a href="#Cache存储系统基本工作原理" class="headerlink" title="Cache存储系统基本工作原理"></a>Cache存储系统基本工作原理</h2><img src="https://s2.loli.net/2022/06/26/r2WaVdxqo9BTpzt.png" alt="image-20220625205447342" style="zoom:80%;" />
+
 <h2 id="地址映像"><a href="#地址映像" class="headerlink" title="地址映像"></a>地址映像</h2><h3 id="直接映像"><a href="#直接映像" class="headerlink" title="直接映像"></a>直接映像</h3><p>主存储器中一块只能映象到Cache的一个特定的块中，通常是对Cache的块数进行取模。因此，Cache地址与主存储器地址的低位部分完全相同。</p>
 <p>用主存地址中的块号B<strong>去访问区号存储器</strong>，把读出来的区号<strong>与主存地址中的区号E进行比较</strong>。只有比较相等并且有效位为1，才访问Cache，获得块内内容。为了提高Cache速度，可以将区号存储器和Cache合并成一个存储器。</p>
 <p>优点：硬件简单，不需要相联访问存储器；访问速度快实际上不需要进行地址变换。</p>
